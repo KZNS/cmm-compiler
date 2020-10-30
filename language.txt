@@ -1,0 +1,19 @@
+define words
+<type_name> int
+<if> if
+<else> else
+<while> while
+<op4> +
+<op4> -
+<op3> *
+<op3> /
+<op3> %
+<op1(> (
+<op1)> )
+<op14> =
+<;> ;
+<num>
+<id>
+
+define sentences
+
