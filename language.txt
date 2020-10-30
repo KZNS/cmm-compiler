@@ -12,8 +12,5 @@ define words
 <op1)> )
 <op14> =
 <;> ;
-<num>
-<id>
 
 define sentences
-
