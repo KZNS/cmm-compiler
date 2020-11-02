@@ -35,6 +35,7 @@ public:
     int append_keyword(const std::string &word, const std::string &type);
     int init();
     std::pair<std::string, std::string> get_word();
+    bool empty();
 };
 
 #include "automaton.cpp"

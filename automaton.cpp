@@ -213,7 +213,7 @@ std::pair<std::string, std::string> LexicalAutomaton::get_word()
     {
         if (!file.get(c))
         {
-            c = 0;
+            c = -1;
             break;
         }
     }
@@ -221,15 +221,22 @@ std::pair<std::string, std::string> LexicalAutomaton::get_word()
     {
         t = t->next[c - ' '];
         s += c;
-        if (!(file.get(c)))
+        if (!file.get(c))
         {
-            c = 0;
+            c = -1;
             break;
         }
     }
     last = c;
 
     return make_pair(t->type, s);
+}
+bool LexicalAutomaton::empty()
+{
+    if (last == -1)
+        return true;
+    else
+        return false;
 }
 
 #endif
