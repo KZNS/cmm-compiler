@@ -31,8 +31,13 @@ int GrammarTanslator::translate(const std::string &in_file_name,
                                 const std::string &out_file_name)
 {
     words.open(in_file_name);
-
+    fout.open(out_file_name);
+    while (!words.empty())
+    {
+        S();
+    }
     words.close();
+    fout.close();
     return 0;
 }
 #endif

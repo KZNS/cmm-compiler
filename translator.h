@@ -8,6 +8,7 @@ class GrammarTranslator
 private:
     LexicalAutomaton words;
     bool loaded_lex;
+    std::ofstream fout;
 
 public:
     GrammarTranslator();

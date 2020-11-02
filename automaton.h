@@ -21,7 +21,7 @@ public:
 class LexicalAutomaton
 {
 private:
-    std::ifstream file;
+    std::ifstream fin;
     AutomatonNode *root;
     std::vector<AutomatonNode*> node_list;
     char last;

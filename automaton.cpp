@@ -21,8 +21,8 @@ LexicalAutomaton::LexicalAutomaton()
 }
 LexicalAutomaton::~LexicalAutomaton()
 {
-    if (file.is_open())
-        file.close();
+    if (fin.is_open())
+        fin.close();
     for (int i = 0; i < node_list.size(); i++)
     {
         delete node_list[i];
@@ -30,15 +30,15 @@ LexicalAutomaton::~LexicalAutomaton()
 }
 int LexicalAutomaton::open(const std::string &file_name)
 {
-    if (file.is_open())
-        file.close();
-    file.open(file_name);
+    if (fin.is_open())
+        fin.close();
+    fin.open(file_name);
     return 0;
 }
 int LexicalAutomaton::close()
 {
-    if (file.is_open())
-        file.close();
+    if (fin.is_open())
+        fin.close();
     return 0;
 }
 int LexicalAutomaton::append_keyword(const std::string &word, const std::string &type)
@@ -211,7 +211,7 @@ std::pair<std::string, std::string> LexicalAutomaton::get_word()
     t = root;
     while (!(' ' <= c && c <= '~' && t->next[c - ' '] != NULL))
     {
-        if (!file.get(c))
+        if (!fin.get(c))
         {
             c = -1;
             break;
@@ -221,7 +221,7 @@ std::pair<std::string, std::string> LexicalAutomaton::get_word()
     {
         t = t->next[c - ' '];
         s += c;
-        if (!file.get(c))
+        if (!fin.get(c))
         {
             c = -1;
             break;
