@@ -11,3 +11,4 @@
 <op1)> )
 <op14> =
 <;> ;
+<print> print

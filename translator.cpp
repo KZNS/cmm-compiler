@@ -74,6 +74,10 @@ int GrammarTranslator::S()
     {
 
     }
+    else if (s == "<print>")
+    {
+
+    }
     else
     {
         return -1;
