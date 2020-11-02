@@ -25,12 +25,14 @@ private:
     AutomatonNode *root;
     std::vector<AutomatonNode*> node_list;
     char last;
+    bool inited;
 
 public:
     LexicalAutomaton();
     ~LexicalAutomaton();
     int open(const std::string &file_name);
-    int append_keywords(const std::string &word, const std::string &type);
+    int close();
+    int append_keyword(const std::string &word, const std::string &type);
     int init();
     std::pair<std::string, std::string> get_word();
 };
