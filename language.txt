@@ -1,4 +1,3 @@
-define words
 <type_name> int
 <if> if
 <else> else
@@ -12,5 +11,3 @@ define words
 <op1)> )
 <op14> =
 <;> ;
-
-define sentences
