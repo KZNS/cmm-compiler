@@ -4,6 +4,7 @@
 #include "translator.h"
 #include <string>
 #include <fstream>
+#include <iostream>
 
 GrammarTranslator::GrammarTranslator()
 {
@@ -32,12 +33,52 @@ int GrammarTanslator::translate(const std::string &in_file_name,
 {
     words.open(in_file_name);
     fout.open(out_file_name);
-    while (!words.empty())
+
+    int e;
+
+    last_word = words.get_word();
+    while (last_word.first != "")
     {
-        S();
+        e = S();
+        if (e == -1)
+        {
+            std::cout << "ERROR: " << last_word.second << std::endl;
+            break;
+        }
     }
     words.close();
     fout.close();
+    return 0;
+}
+
+int GrammarTranslator::S()
+{
+    std::string &s = last_word.first;
+    if (s == "<id>")
+    {
+        
+    }
+    else if (s == "<type_name>")
+    {
+
+    }
+    else if (s == "<if>")
+    {
+
+    }
+    else if (s == "<for>")
+    {
+
+    }
+    else if (s == "<while>")
+    {
+
+    }
+    else
+    {
+        return -1;
+    }
+
     return 0;
 }
 #endif

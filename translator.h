@@ -2,6 +2,7 @@
 #define TRANSLATOR_H
 
 #include "automaton.h"
+#include <utility>
 
 class GrammarTranslator
 {
@@ -9,6 +10,9 @@ private:
     LexicalAutomaton words;
     bool loaded_lex;
     std::ofstream fout;
+    std::pair<std::string, std::string> last_word;
+
+    int S();
 
 public:
     GrammarTranslator();
