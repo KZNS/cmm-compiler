@@ -1,0 +1,81 @@
+digraph G {
+    code        -> subgraph cluster_cd1     {codeblock}
+    code        -> subgraph cluster_cd2     {S_6}
+    codeblock   -> subgraph cluster_cb2     {"<\{>" Ss "<\}>"}
+    Ss          -> subgraph cluster_Ss1     {S Ss_2}
+    Ss          -> subgraph cluster_Ss0     {e_2}
+
+    S           -> subgraph cluster_S1      {equation}             
+    equation    -> subgraph cluster_eq1     {"<id>" "<op14>" expression}
+    expression  -> subgraph cluster_exp1    {term "<op4>" expression_2} 
+    expression  -> subgraph cluster_exp2    {term_2} 
+    term        -> subgraph cluster_tm1     {factor "<op3>" term_3}
+    term        -> subgraph cluster_tm2     {factor_2}
+    factor      -> subgraph cluster_fac1    {"<num>"}
+    factor      -> subgraph cluster_fac2    {"<id>_3"}
+    factor      -> subgraph cluster_fac3    {"<op1(>" expression_3 "<op1)>"}
+
+    S           -> subgraph cluster_S2      {branch_if}             
+    branch_if   -> subgraph cluster_bif1    {"<if>" "<op1(>_2" expression_4 "<op1)>_2" code_2 branch_else}
+    branch_else -> subgraph cluster_bel1    {"<else>" code_3}       
+    branch_else -> subgraph cluster_bel0    {e}       
+
+    S           -> subgraph cluster_S3      {loop_while}                  
+
+
+
+    code            [label="code",     shape=circle,   fixedsize=true, width=0.6]
+    codeblock       [label="codeblock",     shape=circle,   fixedsize=true, width=0.6]
+    Ss              [label="Ss",            shape=circle,   fixedsize=true, width=0.6]
+    S               [label="S",             shape=circle,   fixedsize=true, width=0.6]
+    equation        [label="equation",      shape=circle,   fixedsize=true, width=0.6]
+    expression      [label="expression",    shape=circle,   fixedsize=true, width=0.6]
+    term            [label="term",          shape=circle,   fixedsize=true, width=0.6]
+    factor          [label="factor",        shape=circle,   fixedsize=true, width=0.6]
+    branch_if       [label="branch_if",     shape=circle,   fixedsize=true, width=0.6]
+    branch_else     [label="branch_else",     shape=circle,   fixedsize=true, width=0.6]
+    loop_while      [label="loop_while",    shape=circle,   fixedsize=true, width=0.6]
+    e               [label="e",             shape=circle,   fixedsize=true, width=0.6]
+    "<if>"          [shape=doublecircle, fixedsize=true, width=0.6]
+    "<else>"        [shape=doublecircle, fixedsize=true, width=0.6]
+    "<while>"       [shape=doublecircle, fixedsize=true, width=0.6]
+    "<type_name>"   [shape=doublecircle, fixedsize=true, width=0.6]
+    "<print>"       [shape=doublecircle, fixedsize=true, width=0.6]
+    "<op4>"         [shape=doublecircle, fixedsize=true, width=0.6]
+    "<op4>"         [shape=doublecircle, fixedsize=true, width=0.6]
+    "<op3>"         [shape=doublecircle, fixedsize=true, width=0.6]
+    "<op3>"         [shape=doublecircle, fixedsize=true, width=0.6]
+    "<op3>"         [shape=doublecircle, fixedsize=true, width=0.6]
+    "<op1(>"        [shape=doublecircle, fixedsize=true, width=0.6]
+    "<op1)>"        [shape=doublecircle, fixedsize=true, width=0.6]
+    "<op14>"        [shape=doublecircle, fixedsize=true, width=0.6]
+    "<;>"           [shape=doublecircle, fixedsize=true, width=0.6]
+    "<\{>"          [shape=doublecircle, fixedsize=true, width=0.6]
+    "<\}>"          [shape=doublecircle, fixedsize=true, width=0.6]
+    "<id>"          [shape=doublecircle, fixedsize=true, width=0.6]
+    "<num>"         [shape=doublecircle, fixedsize=true, width=0.6]
+
+    code_2          [label="code",     shape=circle,   fixedsize=true, width=0.6]
+    code_3          [label="code",     shape=circle,   fixedsize=true, width=0.6]
+    codeblock_2     [label="codeblock",     shape=circle,   fixedsize=true, width=0.6]
+    Ss_2            [label="Ss",            shape=circle,   fixedsize=true, width=0.6]
+    Ss_3            [label="Ss",            shape=circle,   fixedsize=true, width=0.6]
+    S_2             [label="S",             shape=circle,   fixedsize=true, width=0.6]
+    S_3             [label="S",             shape=circle,   fixedsize=true, width=0.6]
+    S_4             [label="S",             shape=circle,   fixedsize=true, width=0.6]
+    S_5             [label="S",             shape=circle,   fixedsize=true, width=0.6]
+    S_6             [label="S",             shape=circle,   fixedsize=true, width=0.6]
+    expression_2    [label="expression",    shape=circle,   fixedsize=true, width=0.6]
+    expression_3    [label="expression",    shape=circle,   fixedsize=true, width=0.6]
+    expression_4    [label="expression",    shape=circle,   fixedsize=true, width=0.6]
+    term_2          [label="term",          shape=circle,   fixedsize=true, width=0.6]
+    term_3          [label="term",          shape=circle,   fixedsize=true, width=0.6]
+    factor_2        [label="factor",        shape=circle,   fixedsize=true, width=0.6]
+    e_2             [label="e",             shape=circle,   fixedsize=true, width=0.6]
+    e_3             [label="e",             shape=circle,   fixedsize=true, width=0.6]
+    "<op1(>_2"      [label="<op1(>", shape=doublecircle, fixedsize=true, width=0.6]
+    "<op1)>_2"      [label="<op1)>", shape=doublecircle, fixedsize=true, width=0.6]
+    "<id>_2"        [label="<id>" shape=doublecircle, fixedsize=true, width=0.6]
+    "<id>_3"        [label="<id>" shape=doublecircle, fixedsize=true, width=0.6]
+    "<id>_4"        [label="<id>" shape=doublecircle, fixedsize=true, width=0.6]
+}
