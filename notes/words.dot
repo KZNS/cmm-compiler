@@ -2,10 +2,18 @@ digraph G{
     S [shape="circle", fixedsize=true, width=0.6]
     "<num>" [shape="doublecircle", fixedsize=true, width=0.6]
     "<id>" [shape="doublecircle", fixedsize=true, width=0.6]
-    "<other>" [shape="doublecircle", fixedsize=true, width=0.6]
+    i [shape="circle", fixedsize=true, width=0.6]
+    "<if>" [shape="doublecircle", fixedsize=true, width=0.6] 
+    "<op1(>" [shape="doublecircle", fixedsize=true, width=0.6] 
+
     S -> "<num>" [label="0~9"]
     "<num>" -> "<num>" [label="0~9"]
     S -> "<id>" [label="A~Za~z_"]
     "<id>" -> "<id>" [label="A~Za~z_0~9"]
-    S -> "<other>" [label="+-*/%();"]
+    S -> i [label="i"]
+    i -> "<if>" [label="f"]
+    i -> "<id>" [label="A~Za~z_0~9"]
+    "<if>" -> "<id>" [label="A~Za~z_0~9"]
+    
+    S -> "<op1(>" [label="("]
 }
