@@ -38,12 +38,12 @@ int GrammarTranslator::load_lexical(const std::string &file_name)
     words.init();
     return 0;
 }
-int GrammarTanslator::translate(const std::string &in_file_name,
-                                const std::string &out_file_name)
+int GrammarTranslator::translate(const std::string &in_file_name,
+                                 const std::string &out_file_name)
 {
     words.open(in_file_name);
     fout.open(out_file_name);
-
+    line_number = 0;
     int e;
 
     last_word = words.get_word();

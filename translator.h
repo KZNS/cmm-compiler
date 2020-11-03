@@ -11,6 +11,7 @@ private:
     bool loaded_lex;
     std::ofstream fout;
     std::pair<std::string, std::string> last_word;
+    int line_number;
 
     int code();
     int codeblock();
