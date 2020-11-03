@@ -12,7 +12,17 @@ private:
     std::ofstream fout;
     std::pair<std::string, std::string> last_word;
 
+    int code();
+    int codeblock();
+    int sentences();
     int S();
+    int equation();
+    int branch_if();
+    int branch_else();
+    int branch_while();
+    int difinition();
+
+    int expression();
 
 public:
     GrammarTranslator();
