@@ -17,10 +17,12 @@ LexicalAutomaton::LexicalAutomaton()
     root = new AutomatonNode;
     node_list.push_back(root);
     last = ' ' - 1;
+    inited = false;
 }
 LexicalAutomaton::~LexicalAutomaton()
 {
-    file.close();
+    if (fin.is_open())
+        fin.close();
     for (int i = 0; i < node_list.size(); i++)
     {
         delete node_list[i];
@@ -28,11 +30,21 @@ LexicalAutomaton::~LexicalAutomaton()
 }
 int LexicalAutomaton::open(const std::string &file_name)
 {
-    file.open(file_name);
+    if (fin.is_open())
+        fin.close();
+    fin.open(file_name);
     return 0;
 }
-int LexicalAutomaton::append_keywords(const std::string &word, const std::string &type)
+int LexicalAutomaton::close()
 {
+    if (fin.is_open())
+        fin.close();
+    return 0;
+}
+int LexicalAutomaton::append_keyword(const std::string &word, const std::string &type)
+{
+    if (inited)
+        return -1;
     AutomatonNode *t;
     char c;
     t = root;
@@ -51,6 +63,9 @@ int LexicalAutomaton::append_keywords(const std::string &word, const std::string
 }
 int LexicalAutomaton::init()
 {
+    if (inited)
+        return -1;
+    inited = true;
     AutomatonNode *t, *x;
     std::queue<AutomatonNode *> ls;
     //num
@@ -196,9 +211,9 @@ std::pair<std::string, std::string> LexicalAutomaton::get_word()
     t = root;
     while (!(' ' <= c && c <= '~' && t->next[c - ' '] != NULL))
     {
-        if (!file.get(c))
+        if (!fin.get(c))
         {
-            c = 0;
+            c = -1;
             break;
         }
     }
@@ -206,15 +221,22 @@ std::pair<std::string, std::string> LexicalAutomaton::get_word()
     {
         t = t->next[c - ' '];
         s += c;
-        if (!(file.get(c)))
+        if (!fin.get(c))
         {
-            c = 0;
+            c = -1;
             break;
         }
     }
     last = c;
 
     return make_pair(t->type, s);
+}
+bool LexicalAutomaton::empty()
+{
+    if (last == -1)
+        return true;
+    else
+        return false;
 }
 
 #endif
