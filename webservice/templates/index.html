@@ -4,21 +4,163 @@
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>compiler</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-    </head>
-    <body>
-        <!--[if lt IE 7]>
-            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
-        <hr>
-        {{ info }}
-        <hr>
-        <script src="" async defer></script>
-    </body>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>test</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+    <style>
+        .model {
+            height: calc(100% - 112px);
+        }
+
+        .left {
+            width: 50%;
+            height: 100%;
+            float: left;
+            background-color: black;
+        }
+
+        .right {
+            width: 50%;
+            height: 100%;
+            float: right;
+            background-color: antiquewhite;
+        }
+
+        .codeinput {
+            width: 90%;
+            margin-left: 15px;
+            margin-right: 10px;
+            height: 100%;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        .options {
+            float: left;
+        }
+
+        .submit {
+            float: right;
+        }
+
+        .textout {
+            min-height: 400px;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="height: 100%;">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="">
+            <a class="navbar-brand" href="/">CMM COMPILER</a>
+        </nav>
+        <div class="model">
+            <div class="left">
+                <!--左半边-->
+                <div contenteditable="true" style="color:rgb(86,156,179)" class="codeinput" id="codeinput"
+                    aria-placeholder="hello">这是一个div。是可编辑的。尝试修改文本。</div>
+            </div>
+            <div class="right">
+                <!--右半边-->
+                <div class="textout">
+                    <h2>
+                        输出
+                    </h2>
+                    <p id="outputContent">
+
+                    </p>
+                </div>
+                <hr>
+                <div class="imgout">
+                    graph out
+                    <img src="" alt="graph output" id="graph" style="display: none;height:200px">
+                </div>
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-lg fixed-bottom navbar-light bg-light" style="height:56px;text-align:left">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <span style="float:left;">
+                        <label>logging</label>
+                        <input type="radio" name="loggingToggle" value="on" onchange="toggleLevel()">on
+                        <input type="radio" name="loggingToggle" value="off" checked="checked"
+                            onchange="toggleLevel()">off
+                    </span>
+                </li>
+                <li class="nav-item" style="margin-left:10px;">
+                    <span style="float:right;margin-right:10px;">
+                        <select id="loggingLevel" style="display:none">
+                            <option value="debug">debug</option>
+                            <option value="info" selected="selected">info</option>
+                            <option value="warn">warn</option>
+                            <option value="error">error</option>
+                            <option value="fatal">fatal</option>
+                        </select>
+                    </span>
+                </li>
+                
+            </ul>
+            <ul class="navbar-nav  ml-auto" style="margin-right:51%;">
+                <li class="nav-item">
+
+                    <span>
+                        <button onclick="save()">保存</button>
+                    </span>
+                    <span>
+                        <button onclick="submit()">提交</button>
+                    </span>
+                </li>
+            </ul>
+
+        </nav>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
+    <script>
+        toggleLevel = () => {
+            $("#loggingLevel").toggle()
+        }
+        submit = () => {
+            let codeinput = $("#codeinput").text()
+            let logging = $('input[name="loggingToggle"]:checked').val();
+            let loggingLevel = $("#loggingLevel").val()
+            let result = {
+                codeinput: codeinput,
+                logging: logging,
+                loggingLevel: loggingLevel
+            }
+            console.log(result)
+            fetch('/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(result)
+            }).then(res => res.json()).then(
+                r => {
+                    console.log(r)
+                    $("#outputContent").text(r.data)
+                    $("#graph").attr("src", r.img)
+                    $("#graph").show()
+                }
+            ).catch(err => {
+                console.log(err)
+            })
+        }
+    </script>
+</body>
+
 </html>
