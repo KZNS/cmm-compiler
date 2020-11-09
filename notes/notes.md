@@ -94,7 +94,11 @@ define keywords
 ### 2.3. GUI
 
 编译器参数(后端python调用)  
-`./compiler.exe <input> [-l [level]]`   
--l [debug|info|warn|error|fatal]  
+
+```text
+./compiler.exe <input> [-l <level>]
+<level>: debug|info|warn|error|fatal
+```
+
 中间代码输出到./middle.txt (运行结果？)  
 样例调用：`./compiler.exe input.txt -l info`
