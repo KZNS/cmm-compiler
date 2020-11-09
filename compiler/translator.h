@@ -2,7 +2,10 @@
 #define TRANSLATOR_H
 
 #include "automaton.h"
+#include "cLogger/clogger.h"
 #include <utility>
+
+extern Logger logger;
 
 class GrammarTranslator
 {
