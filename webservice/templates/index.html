@@ -69,8 +69,9 @@
         <div class="model">
             <div class="left">
                 <!--左半边-->
-                <div contenteditable="true" style="color:rgb(86,156,179)" class="codeinput" id="codeinput"
-                    aria-placeholder="hello">这是一个div。是可编辑的。尝试修改文本。</div>
+                <div contenteditable="plaintext-only" style="color:rgb(86,156,179)" onchange="handleChange()"
+                    class="codeinput" id="codeinput" aria-placeholder="hello" tabindex="-1" onkeydown="handlekeydown()">
+                </div>
             </div>
             <div class="right">
                 <!--右半边-->
@@ -110,7 +111,7 @@
                         </select>
                     </span>
                 </li>
-                
+
             </ul>
             <ul class="navbar-nav  ml-auto" style="margin-right:51%;">
                 <li class="nav-item">
@@ -129,6 +130,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
+    <script src="{{url_for('static',filename='comp.js')}}"></script>
     <script>
         toggleLevel = () => {
             $("#loggingLevel").toggle()
@@ -159,6 +161,9 @@
             ).catch(err => {
                 console.log(err)
             })
+        }
+        handlekeydown = (e) => {
+            console.log(e)
         }
     </script>
 </body>
