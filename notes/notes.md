@@ -94,8 +94,7 @@ define keywords
 ### 2.3. GUI
 
 编译器参数(后端python调用)  
-`./compiler.exe -f <input> [-s]`  
--f 指定输入文件  
-*-s 显示全部输出（可选，不加则只显示可能的报错）  
+`./compiler.exe <input> [-l [level]]`   
+-l [debug|info|warn|error|fatal]  
 中间代码输出到./middle.txt (运行结果？)  
-样例调用：`./compiler.exe -f input.txt -s`
+样例调用：`./compiler.exe input.txt -l info`
