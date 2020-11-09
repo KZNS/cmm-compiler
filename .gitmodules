@@ -1,0 +1,3 @@
+[submodule "compiler/cLogger"]
+	path = compiler/cLogger
+	url = https://github.com/KZNS/cLogger.git
