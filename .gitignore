@@ -2,3 +2,4 @@ test*
 /grave
 /.vscode
 .DS_Store
+*.exe
