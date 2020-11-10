@@ -61,9 +61,18 @@ int GrammarTranslator::translate(const std::string &in_file_name,
     return 0;
 }
 
-int GrammarTranslator::code() {}
-int GrammarTranslator::codeblock() {}
-int GrammarTranslator::sentences() {}
+int GrammarTranslator::code()
+{
+    return 0;
+}
+int GrammarTranslator::codeblock()
+{
+    return 0;
+}
+int GrammarTranslator::sentences()
+{
+    return 0;
+}
 
 int GrammarTranslator::S()
 {
@@ -93,12 +102,30 @@ int GrammarTranslator::S()
 
     return 0;
 }
-int GrammarTranslator::equation() {}
-int GrammarTranslator::branch_if() {}
-int GrammarTranslator::branch_else() {}
-int GrammarTranslator::branch_while() {}
-int GrammarTranslator::difinition() {}
+int GrammarTranslator::equation()
+{
+    return 0;
+}
+int GrammarTranslator::branch_if()
+{
+    return 0;
+}
+int GrammarTranslator::branch_else()
+{
+    return 0;
+}
+int GrammarTranslator::branch_while()
+{
+    return 0;
+}
+int GrammarTranslator::difinition()
+{
+    return 0;
+}
 
-int GrammarTranslator::expression() {}
+int GrammarTranslator::expression()
+{
+    return 0;
+}
 
 #endif
