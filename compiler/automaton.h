@@ -6,8 +6,11 @@
 #include <utility>
 #include <fstream>
 #include <vector>
+#include "cLogger/clogger.h"
 
 #define CHAR_NUM 95
+
+extern Logger logger;
 
 class AutomatonNode
 {
