@@ -13,7 +13,10 @@ GrammarTranslator::GrammarTranslator()
 int GrammarTranslator::load_lexical(const std::string &file_name)
 {
     if (loaded_lex)
+    {
+        logger.error("loaded lexical before");
         return -1;
+    }
     std::ifstream file;
     file.open(file_name);
 
@@ -52,7 +55,7 @@ int GrammarTranslator::translate(const std::string &in_file_name,
         e = S();
         if (e == -1)
         {
-            std::cout << "ERROR: " << last_word.second << std::endl;
+            logger.error("unknow \"%s\"", last_word.second);
             break;
         }
     }
