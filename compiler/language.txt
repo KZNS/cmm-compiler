@@ -1,23 +1,44 @@
 define words
 
-<type_name> int
-<if> if
-<else> else
-<while> while
-<print> print
+CONSTTK const
+INTTK int
+CHARTK char
+VOIDTK void
+MAINTK main
 
-<op4> +
-<op4> -
-<op3> *
-<op3> /
-<op3> %
-<op1(> (
-<op1)> )
-<op14> =
+IFTK if
+ELSETK else
+DOTK do
+WHILETK while
+FORTK for
+SCANFTK scanf
+PRINTFTK printf
+RETURNTK return
+PLUS +
+MINU -
+MULT *
+DIV /
+LSS <
+LEQ <=
+GRE >
+GEQ >=
+EQL ==
+NEQ !=
 
-<;> ;
-<{> {
-<}> }
+ASSIGN =
+SEMICN ;
+COMMA ,
+LPARENT (
+RPARENT )
+LBRACK [
+RBRACK ]
+LBRACE {
+RBRACE }
+
+IDENFR IDENFR
+INTCON INTCON
+CHARCON CHARCON
+STRCON STRCON
 
 define sentences
 
