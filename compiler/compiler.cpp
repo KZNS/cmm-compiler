@@ -21,6 +21,11 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+int help()
+{
+    cout << "usage: ./compiler.exe <input> [-l <level>] [-o <output>]" << endl;
+    return 0;
+}
 int option(int argc, char *argv[], int &x)
 {
     if (strlen(argv[x]) > 2)
@@ -58,6 +63,9 @@ int option(int argc, char *argv[], int &x)
             return -1;
         }
         break;
+    case 'h':
+        help();
+        return 1;
 
     default:
         logger.log("fatal", "unknow option \"%s\"", argv[x]);
@@ -67,20 +75,22 @@ int option(int argc, char *argv[], int &x)
 }
 int load_option(int argc, char *argv[])
 {
-    cout << "load_option" << endl;
+    logger.debug("in load_option");
+    int e;
     for (int i = 1; i < argc; i++)
     {
         if (argv[i][0] == '-')
         {
-            if (option(argc, argv, i))
+            logger.debug("in load_option -");
+            e = option(argc, argv, i);
+            if (e)
             {
-            cout << "1" << endl;
-                return -1;
+                return e;
             }
         }
         else
         {
-            cout << "2" << endl;
+            logger.debug("in load_option file_name");
             if (in_file_name == "")
             {
                 in_file_name = argv[i];
