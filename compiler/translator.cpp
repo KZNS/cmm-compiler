@@ -12,6 +12,7 @@ GrammarTranslator::GrammarTranslator()
 }
 int GrammarTranslator::load_lexical(const std::string &file_name)
 {
+    logger.debug("load lexical");
     if (loaded_lex)
     {
         logger.error("loaded lexical before");
@@ -20,6 +21,7 @@ int GrammarTranslator::load_lexical(const std::string &file_name)
     std::ifstream file;
     file.open(file_name);
 
+    logger.debug("loading keyword and type");
     std::string type, keyword;
     while (!loaded_lex && file >> type >> keyword)
     {
