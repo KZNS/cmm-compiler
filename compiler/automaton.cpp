@@ -21,6 +21,47 @@ int AutomatonNode::link_to(const std::string &s, AutomatonNode *t)
     }
     return true;
 }
+std::string LexicalAutomaton::expand_rel(const std::string &rel)
+{
+    logger.debug("expand_rel %s", rel.c_str());
+    using namespace std;
+
+    bool range = false;
+    char cu;
+    string rule = "";
+    for (int i = 0; i < rel.length(); i++)
+    {
+        if (rel[i] == '\\')
+        {
+            cu = (rel[i + 1] - '0') * 100 + (rel[i + 2] - '0') * 10 + rel[i + 3] - '0';
+            i += 3;
+        }
+        else if (rel[i] == '~')
+        {
+            range = true;
+            continue;
+        }
+        else
+        {
+            cu = rel[i];
+        }
+
+        if (range)
+        {
+            for (char k = rule[rule.length() - 1] + 1; k <= cu; k++)
+            {
+                rule += k;
+            }
+            range = false;
+        }
+        else
+        {
+            rule += cu;
+        }
+    }
+    logger.debug("expand_rel to %s", rule.c_str());
+    return rule;
+}
 LexicalAutomaton::LexicalAutomaton()
 {
     root = new AutomatonNode;
