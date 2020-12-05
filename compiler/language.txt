@@ -38,7 +38,7 @@ RBRACE }
 IDENFR _a~zA~Z|_a~zA~Z0~9
 INTCON 0~9
 CHARCON '|+-*/_a~zA~Z0~9|'
-STRCON "|\32\33\35~\126|"
+STRCON "|\032\033\035~\126|"
 
 define sentences
 

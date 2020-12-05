@@ -25,14 +25,16 @@ int GrammarTranslator::load_lexical(const std::string &file_name)
     std::string type, keyword;
     while (!loaded_lex && file >> type >> keyword)
     {
+        logger.debug("get %s %s", keyword.c_str(), type.c_str());
         if (type == "define" && keyword == "words")
         {
             while (file >> type >> keyword)
             {
+                logger.debug("get %s %s", keyword.c_str(), type.c_str());
                 if (type == "define")
                 {
-                    break;
                     loaded_lex = true;
+                    break;
                 }
                 words.append_keyword(keyword, type);
             }
@@ -40,7 +42,7 @@ int GrammarTranslator::load_lexical(const std::string &file_name)
     }
     file.close();
 
-    words.init();
+    logger.debug("load lexical done");
     return 0;
 }
 int GrammarTranslator::translate(const std::string &in_file_name,
