@@ -12,6 +12,15 @@ AutomatonNode::AutomatonNode()
     for (int i = 0; i < CHAR_NUM; i++)
         next[i] = NULL;
 }
+int AutomatonNode::link_to(const std::string &s, AutomatonNode *t)
+{
+    for (int i = 0; i < s.length(); i++)
+    {
+        if (!next[s[i] - ' '])
+            next[s[i] - ' '] = t;
+    }
+    return true;
+}
 LexicalAutomaton::LexicalAutomaton()
 {
     root = new AutomatonNode;
