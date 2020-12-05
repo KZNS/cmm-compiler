@@ -73,6 +73,51 @@ int LexicalAutomaton::split_str(std::string s, std::vector<std::string> &result)
     result.push_back(s);
     return result.size();
 }
+int LexicalAutomaton::link_rule(std::queue<AutomatonNode *> &ls, std::queue<AutomatonNode *> &nextls,
+                                const std::string &rerule, const std::string &nextrule,
+                                AutomatonNode *s, AutomatonNode *t, const std::string &type)
+{
+    logger.debug("link_rule");
+    AutomatonNode *x;
+    while (!ls.empty())
+    {
+        x = ls.front();
+        ls.pop();
+
+        if (x == s)
+            continue;
+        for (int i = 0; i < rerule.length(); i++)
+        {
+            AutomatonNode *&u = x->next[rerule[i] - ' '];
+            if (u)
+            {
+                ls.push(u);
+            }
+            else
+            {
+                u = s;
+            }
+        }
+        for (int i = 0; i < nextrule.length(); i++)
+        {
+            AutomatonNode *&u = x->next[nextrule[i] - ' '];
+            if (u)
+            {
+                nextls.push(u);
+                if (u->type == "")
+                {
+                    u->type = type;
+                }
+            }
+            else
+            {
+                u = t;
+            }
+        }
+    }
+    logger.debug("link_rule done");
+    return 0;
+}
 LexicalAutomaton::LexicalAutomaton()
 {
     root = new AutomatonNode;
