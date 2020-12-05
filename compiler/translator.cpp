@@ -10,17 +10,8 @@ GrammarTranslator::GrammarTranslator()
 {
     loaded_lex = false;
 }
-int GrammarTranslator::load_lexical(const std::string &file_name)
+int GrammarTranslator::load_lexical(std::istream &file)
 {
-    logger.debug("load lexical");
-    if (loaded_lex)
-    {
-        logger.error("loaded lexical before");
-        return -1;
-    }
-    std::ifstream file;
-    file.open(file_name);
-
     logger.debug("loading keyword and type");
     std::string type, keyword;
     while (!loaded_lex && file >> type >> keyword)
@@ -40,9 +31,24 @@ int GrammarTranslator::load_lexical(const std::string &file_name)
             }
         }
     }
+    logger.debug("load lexical done");
+    return 0;
+}
+int GrammarTranslator::load_lexical(const std::string &file_name)
+{
+    logger.debug("load lexical file name");
+    if (loaded_lex)
+    {
+        logger.error("loaded lexical before");
+        return -1;
+    }
+    std::ifstream file;
+    file.open(file_name);
+
+    load_lexical(file);
+
     file.close();
 
-    logger.debug("load lexical done");
     return 0;
 }
 int GrammarTranslator::translate(const std::string &in_file_name,
