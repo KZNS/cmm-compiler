@@ -118,6 +118,112 @@ int LexicalAutomaton::link_rule(std::queue<AutomatonNode *> &ls, std::queue<Auto
     logger.debug("link_rule done");
     return 0;
 }
+
+int LexicalAutomaton::append_keyword_IDENFR(const std::string &rel, const std::string &type)
+{
+    logger.debug("append keyword IDENFR %s by %s", type.c_str(), rel.c_str());
+    using namespace std;
+    vector<string> rules;
+    split_str(rel, rules);
+    for (int i = 0; i < rules.size(); i++)
+    {
+        rules[i] = expand_rel(rules[i]);
+    }
+
+    AutomatonNode *s, *t;
+    s = new AutomatonNode;
+    t = new AutomatonNode;
+    s->link_to(rules[1], t);
+    t->link_to(rules[1], t);
+    s->type = type;
+    t->type = type;
+
+    // add in automation
+    std::queue<AutomatonNode *> ls[2];
+    ls[0].push(root);
+    link_rule(ls[0], ls[1], "", rules[0], NULL, s, type);
+    link_rule(ls[1], ls[0], rules[1], rules[1], t, t, type);
+
+    return 0;
+}
+int LexicalAutomaton::append_keyword_INTCON(const std::string &rel, const std::string &type)
+{
+    logger.debug("append keyword INTCON %s by %s", type.c_str(), rel.c_str());
+    using namespace std;
+    vector<string> rules;
+    split_str(rel, rules);
+    for (int i = 0; i < rules.size(); i++)
+    {
+        rules[i] = expand_rel(rules[i]);
+    }
+
+    AutomatonNode *s;
+    s = new AutomatonNode;
+    s->link_to(rules[0], s);
+    s->type = type;
+
+    // add in automation
+    std::queue<AutomatonNode *> ls[2];
+    ls[0].push(root);
+    link_rule(ls[0], ls[1], rules[0], rules[0], s, NULL, type);
+
+    return 0;
+}
+int LexicalAutomaton::append_keyword_CHARCON(const std::string &rel, const std::string &type)
+{
+    logger.debug("append keyword CHARCON %s by %s", type.c_str(), rel.c_str());
+    using namespace std;
+    vector<string> rules;
+    split_str(rel, rules);
+    for (int i = 0; i < rules.size(); i++)
+    {
+        rules[i] = expand_rel(rules[i]);
+    }
+    AutomatonNode *s, *m, *t;
+    s = new AutomatonNode;
+    m = new AutomatonNode;
+    t = new AutomatonNode;
+    s->link_to(rules[1], m);
+    m->link_to(rules[2], t);
+    t->type = type;
+
+    // add in automation
+    std::queue<AutomatonNode *> ls[3];
+    ls[0].push(root);
+    link_rule(ls[0], ls[1], "", rules[0], NULL, s, "");
+    link_rule(ls[1], ls[2], "", rules[1], NULL, m, "");
+    link_rule(ls[2], ls[0], "", rules[2], NULL, t, type);
+
+    return 0;
+}
+int LexicalAutomaton::append_keyword_STRCON(const std::string &rel, const std::string &type)
+{
+    logger.debug("append keyword STRCON %s by %s", type.c_str(), rel.c_str());
+    using namespace std;
+    vector<string> rules;
+    split_str(rel, rules);
+    for (int i = 0; i < rules.size(); i++)
+    {
+        rules[i] = expand_rel(rules[i]);
+    }
+    AutomatonNode *s, *m, *t;
+    s = new AutomatonNode;
+    m = new AutomatonNode;
+    t = new AutomatonNode;
+    s->link_to(rules[1], m);
+    m->link_to(rules[1], m);
+    m->link_to(rules[2], t);
+    t->type = type;
+
+    // add in automation
+    std::queue<AutomatonNode *> ls[3];
+    ls[0].push(root);
+    link_rule(ls[0], ls[1], "", rules[0], NULL, s, "");
+    link_rule(ls[1], ls[2], "", rules[1], NULL, m, "");
+    link_rule(ls[2], ls[0], rules[1], rules[2], m, t, type);
+
+    return 0;
+}
 LexicalAutomaton::LexicalAutomaton()
 {
     root = new AutomatonNode;
