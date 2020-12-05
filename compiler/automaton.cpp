@@ -325,6 +325,11 @@ std::pair<std::string, std::string> LexicalAutomaton::get_word()
         }
     }
     last = c;
+    
+    if (t->type == "CHARCON" || t->type == "STRCON")
+    {
+        s = s.substr(1, s.length()-2);
+    }
 
     return make_pair(t->type, s);
 }
