@@ -56,7 +56,6 @@ int GrammarTranslator::translate_lexical(const std::string &in_file_name, const 
     words.open(in_file_name);
     fout.open(out_file_name);
     line_number = 0;
-    int e;
 
     last_word = words.get_word();
     while (last_word.first != "")
@@ -83,7 +82,7 @@ int GrammarTranslator::translate(const std::string &in_file_name,
         e = S();
         if (e == -1)
         {
-            logger.error("unknow \"%s\"", last_word.second);
+            logger.error("unknow \"%s\"", last_word.second.c_str());
             break;
         }
     }

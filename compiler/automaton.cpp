@@ -14,7 +14,7 @@ AutomatonNode::AutomatonNode()
 }
 int AutomatonNode::link_to(const std::string &s, AutomatonNode *t)
 {
-    for (int i = 0; i < s.length(); i++)
+    for (int i = 0; i < (int)s.length(); i++)
     {
         if (!next[s[i] - ' '])
             next[s[i] - ' '] = t;
@@ -29,7 +29,7 @@ std::string LexicalAutomaton::expand_rel(const std::string &rel)
     bool range = false;
     char cu;
     string rule = "";
-    for (int i = 0; i < rel.length(); i++)
+    for (int i = 0; i < (int)rel.length(); i++)
     {
         if (rel[i] == '\\')
         {
@@ -65,7 +65,7 @@ std::string LexicalAutomaton::expand_rel(const std::string &rel)
 int LexicalAutomaton::split_str(std::string s, std::vector<std::string> &result)
 {
     int pos;
-    while (pos = s.find('|'), pos != s.npos)
+    while (pos = s.find('|'), pos != (int)std::string::npos)
     {
         result.push_back(s.substr(0, pos));
         s = s.substr(pos + 1);
@@ -86,7 +86,7 @@ int LexicalAutomaton::link_rule(std::queue<AutomatonNode *> &ls, std::queue<Auto
 
         if (x == s)
             continue;
-        for (int i = 0; i < rerule.length(); i++)
+        for (int i = 0; i < (int)rerule.length(); i++)
         {
             AutomatonNode *&u = x->next[rerule[i] - ' '];
             if (u)
@@ -98,7 +98,7 @@ int LexicalAutomaton::link_rule(std::queue<AutomatonNode *> &ls, std::queue<Auto
                 u = s;
             }
         }
-        for (int i = 0; i < nextrule.length(); i++)
+        for (int i = 0; i < (int)nextrule.length(); i++)
         {
             AutomatonNode *&u = x->next[nextrule[i] - ' '];
             if (u)
@@ -125,7 +125,7 @@ int LexicalAutomaton::append_keyword_IDENFR(const std::string &rel, const std::s
     using namespace std;
     vector<string> rules;
     split_str(rel, rules);
-    for (int i = 0; i < rules.size(); i++)
+    for (int i = 0; i < (int)rules.size(); i++)
     {
         rules[i] = expand_rel(rules[i]);
     }
@@ -152,7 +152,7 @@ int LexicalAutomaton::append_keyword_INTCON(const std::string &rel, const std::s
     using namespace std;
     vector<string> rules;
     split_str(rel, rules);
-    for (int i = 0; i < rules.size(); i++)
+    for (int i = 0; i < (int)rules.size(); i++)
     {
         rules[i] = expand_rel(rules[i]);
     }
@@ -175,7 +175,7 @@ int LexicalAutomaton::append_keyword_CHARCON(const std::string &rel, const std::
     using namespace std;
     vector<string> rules;
     split_str(rel, rules);
-    for (int i = 0; i < rules.size(); i++)
+    for (int i = 0; i < (int)rules.size(); i++)
     {
         rules[i] = expand_rel(rules[i]);
     }
@@ -202,7 +202,7 @@ int LexicalAutomaton::append_keyword_STRCON(const std::string &rel, const std::s
     using namespace std;
     vector<string> rules;
     split_str(rel, rules);
-    for (int i = 0; i < rules.size(); i++)
+    for (int i = 0; i < (int)rules.size(); i++)
     {
         rules[i] = expand_rel(rules[i]);
     }
@@ -235,7 +235,7 @@ LexicalAutomaton::~LexicalAutomaton()
 {
     if (fin.is_open())
         fin.close();
-    for (int i = 0; i < node_list.size(); i++)
+    for (int i = 0; i < (int)node_list.size(); i++)
     {
         delete node_list[i];
     }
@@ -280,9 +280,9 @@ int LexicalAutomaton::append_keyword(const std::string &word, const std::string 
     }
 
     AutomatonNode *t;
-    char c;
+    int c;
     t = root;
-    for (int i = 0; i < word.length(); i++)
+    for (int i = 0; i < (int)word.length(); i++)
     {
         c = word[i] - ' ';
         if (t->next[c] == NULL)
