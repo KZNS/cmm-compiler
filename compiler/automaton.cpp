@@ -62,6 +62,17 @@ std::string LexicalAutomaton::expand_rel(const std::string &rel)
     logger.debug("expand_rel to %s", rule.c_str());
     return rule;
 }
+int LexicalAutomaton::split_str(std::string s, std::vector<std::string> &result)
+{
+    int pos;
+    while (pos = s.find('|'), pos != s.npos)
+    {
+        result.push_back(s.substr(0, pos));
+        s = s.substr(pos + 1);
+    }
+    result.push_back(s);
+    return result.size();
+}
 LexicalAutomaton::LexicalAutomaton()
 {
     root = new AutomatonNode;
