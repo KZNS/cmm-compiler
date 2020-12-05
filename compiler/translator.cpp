@@ -10,8 +10,33 @@ GrammarTranslator::GrammarTranslator()
 {
     loaded_lex = false;
 }
+int GrammarTranslator::load_lexical(std::istream &file)
+{
+    logger.debug("loading keyword and type");
+    std::string type, keyword;
+    while (!loaded_lex && file >> type >> keyword)
+    {
+        logger.debug("get %s %s", keyword.c_str(), type.c_str());
+        if (type == "define" && keyword == "words")
+        {
+            while (file >> type >> keyword)
+            {
+                logger.debug("get %s %s", keyword.c_str(), type.c_str());
+                if (type == "define")
+                {
+                    loaded_lex = true;
+                    break;
+                }
+                words.append_keyword(keyword, type);
+            }
+        }
+    }
+    logger.debug("load lexical done");
+    return 0;
+}
 int GrammarTranslator::load_lexical(const std::string &file_name)
 {
+    logger.debug("load lexical file name");
     if (loaded_lex)
     {
         logger.error("loaded lexical before");
@@ -20,26 +45,29 @@ int GrammarTranslator::load_lexical(const std::string &file_name)
     std::ifstream file;
     file.open(file_name);
 
-    std::string type, keyword;
-    while (!loaded_lex && file >> type >> keyword)
-    {
-        if (type == "define" && keyword == "words")
-        {
-            while (file >> type >> keyword)
-            {
-                if (type == "define")
-                {
-                    break;
-                    loaded_lex = true;
-                }
-                words.append_keyword(keyword, type);
-            }
-        }
-    }
+    load_lexical(file);
+
     file.close();
 
-    words.init();
     return 0;
+}
+int GrammarTranslator::translate_lexical(const std::string &in_file_name, const std::string &out_file_name)
+{
+    words.open(in_file_name);
+    fout.open(out_file_name);
+    line_number = 0;
+    int e;
+
+    last_word = words.get_word();
+    while (last_word.first != "")
+    {
+        fout << last_word.first << " " << last_word.second << std::endl;
+        last_word = words.get_word();
+    }
+    words.close();
+    fout.close();
+    return 0;
+
 }
 int GrammarTranslator::translate(const std::string &in_file_name,
                                  const std::string &out_file_name)

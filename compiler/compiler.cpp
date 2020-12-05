@@ -15,9 +15,9 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    //GrammarTranslator trans;
+    GrammarTranslator trans;
 
-    //trans.load_lexical("language.txt");
+    trans.load_lexical("language.txt");
 
     return 0;
 }
