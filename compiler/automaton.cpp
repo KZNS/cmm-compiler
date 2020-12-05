@@ -255,8 +255,30 @@ int LexicalAutomaton::close()
 }
 int LexicalAutomaton::append_keyword(const std::string &word, const std::string &type)
 {
+    logger.debug("addend keyword %s as %s", word.c_str(), type.c_str());
     if (inited)
         return -1;
+    if (type == "IDENFR")
+    {
+        append_keyword_IDENFR(word, type);
+        return 0;
+    }
+    else if (type == "INTCON")
+    {
+        append_keyword_INTCON(word, type);
+        return 0;
+    }
+    else if (type == "CHARCON")
+    {
+        append_keyword_CHARCON(word, type);
+        return 0;
+    }
+    else if (type == "STRCON")
+    {
+        append_keyword_STRCON(word, type);
+        return 0;
+    }
+
     AutomatonNode *t;
     char c;
     t = root;
