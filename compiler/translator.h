@@ -16,17 +16,56 @@ private:
     Word last_word;
     int line_number;
 
-    int code();
-    int codeblock();
-    int sentences();
-    int S();
-    int equation();
-    int branch_if();
-    int branch_else();
-    int branch_while();
-    int difinition();
+    int add_op();
+    int mult_op();
+    int rel_op();
+    int letter();
 
-    int expression();
+    int udigit();
+    int digit();
+    int ch();
+    int str();
+
+    int type();
+    int ident();
+
+    int prog();
+
+    int declare_const();
+    int def_const();
+    int declare_var();
+    int def_var();
+
+    int uinteger();
+    int integer();
+
+    int declare_h();
+    int f_ret();
+    int f_void();
+    int param_table();
+
+    int main_f();
+
+    int comp_stmt();
+    int stmt_list();
+    int stmt();
+    int eval();
+    int cond_stmt();
+    int cond();
+    int loop_stmt();
+    int step();
+
+    int exp();
+    int term();
+    int factor();
+
+    int f_ret_call();
+    int f_void_call();
+    int arg_list();
+
+    int r_stmt();
+    int w_stmt();
+    int ret_stmt();
 
 public:
     GrammarTranslator();

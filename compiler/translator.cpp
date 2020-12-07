@@ -6,6 +6,57 @@
 #include <fstream>
 #include <iostream>
 
+int GrammarTranslator::add_op() { return 0; }
+int GrammarTranslator::mult_op() { return 0; }
+int GrammarTranslator::rel_op() { return 0; }
+int GrammarTranslator::letter() { return 0; }
+
+int GrammarTranslator::udigit() { return 0; }
+int GrammarTranslator::digit() { return 0; }
+int GrammarTranslator::ch() { return 0; }
+int GrammarTranslator::str() { return 0; }
+
+int GrammarTranslator::type() { return 0; }
+int GrammarTranslator::ident() { return 0; }
+
+int GrammarTranslator::prog() { return 0; }
+
+int GrammarTranslator::declare_const() { return 0; }
+int GrammarTranslator::def_const() { return 0; }
+int GrammarTranslator::declare_var() { return 0; }
+int GrammarTranslator::def_var() { return 0; }
+
+int GrammarTranslator::uinteger() { return 0; }
+int GrammarTranslator::integer() { return 0; }
+
+int GrammarTranslator::declare_h() { return 0; }
+int GrammarTranslator::f_ret() { return 0; }
+int GrammarTranslator::f_void() { return 0; }
+int GrammarTranslator::param_table() { return 0; }
+
+int GrammarTranslator::main_f() { return 0; }
+
+int GrammarTranslator::comp_stmt() { return 0; }
+int GrammarTranslator::stmt_list() { return 0; }
+int GrammarTranslator::stmt() { return 0; }
+int GrammarTranslator::eval() { return 0; }
+int GrammarTranslator::cond_stmt() { return 0; }
+int GrammarTranslator::cond() { return 0; }
+int GrammarTranslator::loop_stmt() { return 0; }
+int GrammarTranslator::step() { return 0; }
+
+int GrammarTranslator::exp() { return 0; }
+int GrammarTranslator::term() { return 0; }
+int GrammarTranslator::factor() { return 0; }
+
+int GrammarTranslator::f_ret_call() { return 0; }
+int GrammarTranslator::f_void_call() { return 0; }
+int GrammarTranslator::arg_list() { return 0; }
+
+int GrammarTranslator::r_stmt() { return 0; }
+int GrammarTranslator::w_stmt() { return 0; }
+int GrammarTranslator::ret_stmt() { return 0; }
+
 GrammarTranslator::GrammarTranslator()
 {
     loaded_lex = false;
@@ -66,7 +117,6 @@ int GrammarTranslator::translate_lexical(const std::string &in_file_name, const 
     words.close();
     fout.close();
     return 0;
-
 }
 int GrammarTranslator::translate(const std::string &in_file_name,
                                  const std::string &out_file_name)
@@ -77,84 +127,14 @@ int GrammarTranslator::translate(const std::string &in_file_name,
     int e;
 
     last_word = words.get_word();
-    while (last_word.first != "")
+    e = prog();
+    if (e == -1)
     {
-        e = S();
-        if (e == -1)
-        {
-            logger.error("unknow \"%s\"", last_word.second.c_str());
-            break;
-        }
+        logger.error("unknow \"%s\"", last_word.second.c_str());
+        break;
     }
     words.close();
     fout.close();
-    return 0;
-}
-
-int GrammarTranslator::code()
-{
-    return 0;
-}
-int GrammarTranslator::codeblock()
-{
-    return 0;
-}
-int GrammarTranslator::sentences()
-{
-    return 0;
-}
-
-int GrammarTranslator::S()
-{
-    std::string &s = last_word.first;
-    if (s == "<id>")
-    {
-    }
-    else if (s == "<type_name>")
-    {
-    }
-    else if (s == "<if>")
-    {
-    }
-    else if (s == "<for>")
-    {
-    }
-    else if (s == "<while>")
-    {
-    }
-    else if (s == "<print>")
-    {
-    }
-    else
-    {
-        return -1;
-    }
-
-    return 0;
-}
-int GrammarTranslator::equation()
-{
-    return 0;
-}
-int GrammarTranslator::branch_if()
-{
-    return 0;
-}
-int GrammarTranslator::branch_else()
-{
-    return 0;
-}
-int GrammarTranslator::branch_while()
-{
-    return 0;
-}
-int GrammarTranslator::difinition()
-{
-    return 0;
-}
-
-int GrammarTranslator::expression()
-{
     return 0;
 }
 
