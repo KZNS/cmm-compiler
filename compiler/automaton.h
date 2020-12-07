@@ -23,6 +23,8 @@ public:
     int link_to(const std::string &s, AutomatonNode *t);
 };
 
+typedef std::pair<std::string, std::string> Word;
+
 class LexicalAutomaton
 {
 private:
@@ -47,7 +49,7 @@ public:
     int open(const std::string &file_name);
     int close();
     int append_keyword(const std::string &word, const std::string &type);
-    std::pair<std::string, std::string> get_word();
+    Word get_word();
     bool empty();
 };
 

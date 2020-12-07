@@ -295,7 +295,7 @@ int LexicalAutomaton::append_keyword(const std::string &word, const std::string 
     t->type = type;
     return 0;
 }
-std::pair<std::string, std::string> LexicalAutomaton::get_word()
+Word LexicalAutomaton::get_word()
 {
     if (last == 0)
     {
