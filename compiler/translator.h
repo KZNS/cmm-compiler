@@ -13,7 +13,7 @@ private:
     LexicalAutomaton words;
     bool loaded_lex;
     std::ofstream fout;
-    Word last_word;
+    Word word, next_word;
     int line_number;
 
     int add_op();
@@ -66,6 +66,8 @@ private:
     int r_stmt();
     int w_stmt();
     int ret_stmt();
+
+    int get_word();
 
 public:
     GrammarTranslator();

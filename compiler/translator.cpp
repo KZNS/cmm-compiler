@@ -57,6 +57,13 @@ int GrammarTranslator::r_stmt() { return 0; }
 int GrammarTranslator::w_stmt() { return 0; }
 int GrammarTranslator::ret_stmt() { return 0; }
 
+int GrammarTranslator::get_word()
+{
+    word = next_word;
+    next_word = words.get_word();
+    return 0;
+}
+
 GrammarTranslator::GrammarTranslator()
 {
     loaded_lex = false;
@@ -108,11 +115,12 @@ int GrammarTranslator::translate_lexical(const std::string &in_file_name, const 
     fout.open(out_file_name);
     line_number = 0;
 
-    last_word = words.get_word();
-    while (last_word.first != "")
+    get_word();
+    get_word();
+    while (word.first != "")
     {
-        fout << last_word.first << " " << last_word.second << std::endl;
-        last_word = words.get_word();
+        fout << word.first << " " << word.second << std::endl;
+        get_word();
     }
     words.close();
     fout.close();
@@ -126,12 +134,13 @@ int GrammarTranslator::translate(const std::string &in_file_name,
     line_number = 0;
     int e;
 
-    last_word = words.get_word();
+    get_word();
+    get_word();
     e = prog();
     if (e == -1)
     {
-        logger.error("unknow \"%s\"", last_word.second.c_str());
-        break;
+        logger.error("unknow \"%s\"", word.second.c_str());
+        return -1;
     }
     words.close();
     fout.close();
