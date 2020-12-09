@@ -59,14 +59,40 @@ int GrammarTranslator::ret_stmt() { return 0; }
 
 int GrammarTranslator::get_word()
 {
-    word = next_word;
-    next_word = words.get_word();
+    if (now_word_id == top_word_id)
+    {
+        if (bottom_word_id <= top_word_id - WORD_BUFFER_SZ + 1)
+            bottom_word_id++;
+        top_word_id++;
+        word_buffer[top_word_id % WORD_BUFFER_SZ] = words.get_word();
+    }
+    now_word_id++;
+    word = word_buffer[now_word_id % WORD_BUFFER_SZ];
+    return 0;
+}
+int GrammarTranslator::roll_back(int stap)
+{
+    if (stap < 0)
+    {
+        logger.error("wrong roll back stap %d", stap);
+        return -1;
+    }
+    if (now_word_id - stap <= bottom_word_id)
+    {
+        logger.error("roll back too much");
+        return -1;
+    }
+    now_word_id -= stap;
+    word = word_buffer[now_word_id];
     return 0;
 }
 
 GrammarTranslator::GrammarTranslator()
 {
     loaded_lex = false;
+    bottom_word_id = 0;
+    top_word_id = -1;
+    now_word_id = -1;
 }
 int GrammarTranslator::load_lexical(std::istream &file)
 {
@@ -134,7 +160,6 @@ int GrammarTranslator::translate(const std::string &in_file_name,
     line_number = 0;
     int e;
 
-    get_word();
     get_word();
     e = prog();
     if (e == -1)

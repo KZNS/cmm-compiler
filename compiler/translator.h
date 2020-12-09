@@ -5,6 +5,8 @@
 #include "cLogger/clogger.h"
 #include <utility>
 
+#define WORD_BUFFER_SZ 10
+
 extern Logger logger;
 
 class GrammarTranslator
@@ -13,7 +15,9 @@ private:
     LexicalAutomaton words;
     bool loaded_lex;
     std::ofstream fout;
-    Word word, next_word;
+    Word word;
+    Word word_buffer[WORD_BUFFER_SZ];
+    int bottom_word_id, now_word_id, top_word_id;
     int line_number;
 
     int add_op();
@@ -68,6 +72,7 @@ private:
     int ret_stmt();
 
     int get_word();
+    int roll_back(int stap);
 
 public:
     GrammarTranslator();
