@@ -73,7 +73,7 @@ private:
     int ret_stmt();
 
     int get_word();
-    int roll_back(int stap);
+    int roll_back(int step);
 
 public:
     GrammarTranslator();

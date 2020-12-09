@@ -134,10 +134,10 @@ int GrammarTranslator::roll_back(int step)
 {
     if (step < 0)
     {
-        logger.error("wrong roll back stap %d", step);
+        logger.error("wrong roll back step %d", step);
         return -1;
     }
-    if (now_word_id - stap <= bottom_word_id)
+    if (now_word_id - step <= bottom_word_id)
     {
         logger.error("roll back too much");
         return -1;
