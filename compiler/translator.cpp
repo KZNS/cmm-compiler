@@ -70,11 +70,11 @@ int GrammarTranslator::get_word()
     word = word_buffer[now_word_id % WORD_BUFFER_SZ];
     return 0;
 }
-int GrammarTranslator::roll_back(int stap)
+int GrammarTranslator::roll_back(int step)
 {
-    if (stap < 0)
+    if (step < 0)
     {
-        logger.error("wrong roll back stap %d", stap);
+        logger.error("wrong roll back stap %d", step);
         return -1;
     }
     if (now_word_id - stap <= bottom_word_id)
@@ -82,7 +82,7 @@ int GrammarTranslator::roll_back(int stap)
         logger.error("roll back too much");
         return -1;
     }
-    now_word_id -= stap;
+    now_word_id -= step;
     word = word_buffer[now_word_id];
     return 0;
 }
