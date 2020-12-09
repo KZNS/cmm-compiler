@@ -19,7 +19,67 @@ int GrammarTranslator::str() { return 0; }
 int GrammarTranslator::type() { return 0; }
 int GrammarTranslator::ident() { return 0; }
 
-int GrammarTranslator::prog() { return 0; }
+int GrammarTranslator::prog()
+{
+    if (word.first == "CONSTTK")
+    {
+        declare_const();
+    }
+    if (word.first == "INTTK" || word.first == "CHARTK")
+    {
+        get_word();
+        if (word.first == "IDENFR")
+        {
+            get_word();
+            if (word.first != "LPARENT")
+            {
+                roll_back(2);
+                declare_var();
+            }
+            else
+            {
+                roll_back(2);
+            }
+        }
+        else
+        {
+            roll_back(1);
+        }
+    }
+    while (true)
+    {
+        if (word.first == "VOIDTK")
+        {
+            get_word();
+            if (word.first == "MAINTK")
+            {
+                roll_back(1);
+                main_f();
+                break;
+            }
+            else
+            {
+                roll_back(1);
+                f_void();
+            }
+        }
+        else if (word.first == "INTTK" || word.first == "CHARTK")
+        {
+            f_ret();
+        }
+        else
+        {
+            logger.error("unknow \"%s\"", word.second.c_str());
+            return -1;
+        }
+    }
+
+    if (translate_type == "grammar")
+    {
+        fout << "<程序>" << std::endl;
+    }
+    return 0;
+}
 
 int GrammarTranslator::declare_const() { return 0; }
 int GrammarTranslator::def_const() { return 0; }
