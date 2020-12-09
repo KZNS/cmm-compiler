@@ -142,7 +142,6 @@ int GrammarTranslator::translate_lexical(const std::string &in_file_name, const 
     line_number = 0;
 
     get_word();
-    get_word();
     while (word.first != "")
     {
         fout << word.first << " " << word.second << std::endl;
