@@ -19,6 +19,7 @@ private:
     Word word_buffer[WORD_BUFFER_SZ];
     int bottom_word_id, now_word_id, top_word_id;
     int line_number;
+    std::string translate_type;
 
     int add_op();
     int mult_op();
@@ -79,7 +80,8 @@ public:
     int load_lexical(std::istream &file);
     int load_lexical(const std::string &file_name);
     int translate_lexical(const std::string &in_file_name, const std::string &out_file_name);
-    int translate(const std::string &in_file_name, const std::string &out_file_name);
+    int translate(const std::string &in_file_name, const std::string &out_file_name,
+                  const std::string &type = "PCODE");
 };
 
 #include "translator.cpp"

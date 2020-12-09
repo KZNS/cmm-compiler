@@ -152,10 +152,11 @@ int GrammarTranslator::translate_lexical(const std::string &in_file_name, const 
     return 0;
 }
 int GrammarTranslator::translate(const std::string &in_file_name,
-                                 const std::string &out_file_name)
+                                 const std::string &out_file_name, const std::string &type)
 {
     words.open(in_file_name);
     fout.open(out_file_name);
+    translate_type = type;
     line_number = 0;
     int e;
 
