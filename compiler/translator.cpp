@@ -12,6 +12,10 @@
  * 
  **********************************/
 
+/**
+ * 程序
+ * <prog> ::= [<declare_const>][<declare_var>]{<f_ret>|<f_void>}<main_f>
+ */
 int GrammarTranslator::prog()
 {
     if (word.first == "CONSTTK")
@@ -48,6 +52,10 @@ int GrammarTranslator::prog()
     return 0;
 }
 
+/**
+ * 常量说明
+ * <declare_const> ::= const<def_const>;{const<def_const>;}
+ */
 int GrammarTranslator::declare_const()
 {
     while (word.first == "CONSTTK")
@@ -67,6 +75,11 @@ int GrammarTranslator::declare_const()
     print_grammar("<常量说明>");
     return 0;
 }
+/**
+ * 常量定义
+ * <def_const> ::= int<ident>=<integer>{,<ident>=<integer>}
+ *                 char<ident>=<ch>{,<ident>=<ch>}
+ */
 int GrammarTranslator::def_const()
 {
     Word type;
@@ -126,6 +139,10 @@ int GrammarTranslator::def_const()
     print_grammar("<常量定义>");
     return 0;
 }
+/**
+ * 变量说明
+ * <declare_var> ::= <def_var>;{<def_var>;}
+ */
 int GrammarTranslator::declare_var()
 {
     while (!(detect(3, "INTTK", "IDENFR", "LPARENT") || detect(3, "CHARTK", "IDENFR", "LPARENT")))
@@ -144,133 +161,257 @@ int GrammarTranslator::declare_var()
     print_grammar("<变量说明>");
     return 0;
 }
+/**
+ * 变量定义
+ * <def_var> ::= <type>(<ident>|<ident>'['<uinteger>']'){,(<ident>|<ident>'['<uinteger>']')}
+ */
 int GrammarTranslator::def_var()
 {
     print_grammar("<变量定义>");
     return 0;
 }
 
+/**
+ * 无符号整数
+ * <uinteger> ::= <udigit>{<digit>}
+ *                0
+ */
 int GrammarTranslator::uinteger()
 {
     print_grammar("<无符号整数>");
     return 0;
 }
+/**
+ * 整数
+ * <integer> ::= [+|-]<uinteger>
+ */
 int GrammarTranslator::integer()
 {
     print_grammar("<整数>");
     return 0;
 }
 
+/**
+ * 声明头部
+ * <declare_h> ::= int<ident>
+ *                 char<ident>
+ */
 int GrammarTranslator::declare_h()
 {
     print_grammar("<声明头部>");
     return 0;
 }
+/**
+ * 有返回值函数定义
+ * <f_ret> ::= <declare_h>'('<param_table>')''{'<comp_stmt>'}'
+ */
 int GrammarTranslator::f_ret()
 {
     print_grammar("<有返回值函数定义>");
     return 0;
 }
+/**
+ * 无返回值函数定义
+ * <f_void> ::= void<ident>'('<param_table>')''{'<comp_stmt>'}'
+ */
 int GrammarTranslator::f_void()
 {
     print_grammar("<无返回值函数定义>");
     return 0;
 }
+/**
+ * 参数表
+ * <param_table> ::= <type><ident>{,<type><ident>}
+ *                   <空>
+ */
 int GrammarTranslator::param_table()
 {
     print_grammar("<参数表>");
     return 0;
 }
 
+/**
+ * 主函数
+ * <main_f> ::= voidmain‘(’‘)’‘{’<comp_stmt>‘}’
+ */
 int GrammarTranslator::main_f()
 {
     print_grammar("<主函数>");
     return 0;
 }
 
+/**
+ * 复合语句
+ * <comp_stmt> ::= [<declare_const>][<declare_var>]<stmt_list>
+ */
 int GrammarTranslator::comp_stmt()
 {
     print_grammar("<复合语句>");
     return 0;
 }
+/**
+ * 语句列
+ * <stmt_list> ::= {<stmt>}
+ */
 int GrammarTranslator::stmt_list()
 {
     print_grammar("<语句列>");
     return 0;
 }
+/**
+ * 语句
+ * <stmt> ::= <cond_stmt>
+ *            <loop_stmt>
+ *            '{'<stmt_list>'}'
+ *            <f_ret_call>;
+ *            <f_void_call>;
+ *            <eval>;
+ *            <r_stmt>;
+ *            <w_stmt>;
+ *            <空>;
+ *            <ret_stmt>;
+ */
 int GrammarTranslator::stmt()
 {
     print_grammar("<语句>");
     return 0;
 }
+/**
+ * 赋值语句
+ * <eval> ::= <ident>=<exp>
+ *            <ident>'['<exp>']'=<exp>
+ */
 int GrammarTranslator::eval()
 {
     print_grammar("<赋值语句>");
     return 0;
 }
+/**
+ * 条件语句
+ * <cond_stmt> ::= if'('<cond>')'<stmt>[else<stmt>]
+ */
 int GrammarTranslator::cond_stmt()
 {
     print_grammar("<条件语句>");
     return 0;
 }
+/**
+ * 条件
+ * <cond> ::= <exp><rel_op><exp>
+ *            <exp>
+ */
 int GrammarTranslator::cond()
 {
     print_grammar("<条件>");
     return 0;
 }
+/**
+ * 循环语句
+ * <loop_stmt> ::= while'('<cond>')'<stmt>
+ *                 do<stmt>while'('<cond>')'
+ *                 for'('<ident>=<exp>;<cond>;<ident>=<ident>(+|-)<step>')'<stmt>
+ */
 int GrammarTranslator::loop_stmt()
 {
     print_grammar("<循环语句>");
     return 0;
 }
+/**
+ * 步长
+ * <step> ::= <uinteger>
+ */
 int GrammarTranslator::step()
 {
     print_grammar("<步长>");
     return 0;
 }
 
+/**
+ * 表达式
+ * <exp> ::= [+|-]<term>{<add_op><term>}
+ */
 int GrammarTranslator::exp()
 {
     print_grammar("<表达式>");
     return 0;
 }
+/**
+ * 项
+ * <term> ::= <factor>{<mult_op><factor>}
+ */
 int GrammarTranslator::term()
 {
     print_grammar("<项>");
     return 0;
 }
+/**
+ * 因子
+ * <factor> ::= <ident>
+ *              <ident>'['<exp>']'
+ *              '('<exp>')'
+ *              <integer>
+ *              <ch>
+ *              <f_ret_call>
+ */
 int GrammarTranslator::factor()
 {
     print_grammar("<因子>");
     return 0;
 }
 
+/**
+ * 有返回值函数调用语句
+ * <f_ret_call> ::= <ident>'('<arg_list>')'
+ */
 int GrammarTranslator::f_ret_call()
 {
     print_grammar("<有返回值函数调用语句>");
     return 0;
 }
+/**
+ * 无返回值函数调用语句
+ * <f_void_call> ::= <ident>'('<arg_list>')'
+ */
 int GrammarTranslator::f_void_call()
 {
     print_grammar("<无返回值函数调用语句>");
     return 0;
 }
+/**
+ * 值参数表
+ * <arg_list> ::= <exp>{,<exp>}
+ *                <空>
+ */
 int GrammarTranslator::arg_list()
 {
     print_grammar("<值参数表>");
     return 0;
 }
 
+/**
+ * 读语句
+ * <r_stmt> ::= scanf'('<ident>{,<ident>}')'
+ */
 int GrammarTranslator::r_stmt()
 {
     print_grammar("<读语句>");
     return 0;
 }
+/**
+ * 写语句
+ * <w_stmt> ::= printf'('<str>,<exp>')'
+ *              printf'('<str>')'
+ *              printf'('<exp>')'
+ */
 int GrammarTranslator::w_stmt()
 {
     print_grammar("<写语句>");
     return 0;
 }
+/**
+ * 返回语句
+ * <ret_stmt> ::= return['('<exp>')']
+ */
 int GrammarTranslator::ret_stmt()
 {
     print_grammar("<返回语句>");
