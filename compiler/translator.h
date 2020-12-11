@@ -21,19 +21,6 @@ private:
     int line_number;
     std::string translate_type;
 
-    int add_op();  // 加法运算符
-    int mult_op(); // 乘法运算符
-    int rel_op();  // 关系运算符
-    int letter();  // 字母
-
-    int udigit(); // 非零数字
-    int digit();  // 数字
-    int ch();     // 字符
-    int str();    // 字符串
-
-    int type();  // 类型标识符
-    int ident(); // 标识符
-
     int prog(); // 程序
 
     int declare_const(); // 常量说明
@@ -87,6 +74,9 @@ private:
     int e_right_bracket();       //应为右中括号’]’
     int e_do_while();            //do-while应为语句中缺少while
     int e_const_define_type();   //常量定义中=后面只能是整型或字符型常量
+
+    int print_grammar(const std::string &info);                                   //输出语法信息
+    int print_error(const int &error_line_number, const std::string &error_type); //输出错误信息
 
     int get_word();
     int roll_back(int step);

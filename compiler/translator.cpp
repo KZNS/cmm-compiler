@@ -6,18 +6,11 @@
 #include <fstream>
 #include <iostream>
 
-int GrammarTranslator::add_op() { return 0; }
-int GrammarTranslator::mult_op() { return 0; }
-int GrammarTranslator::rel_op() { return 0; }
-int GrammarTranslator::letter() { return 0; }
-
-int GrammarTranslator::udigit() { return 0; }
-int GrammarTranslator::digit() { return 0; }
-int GrammarTranslator::ch() { return 0; }
-int GrammarTranslator::str() { return 0; }
-
-int GrammarTranslator::type() { return 0; }
-int GrammarTranslator::ident() { return 0; }
+/**********************************
+ * 
+ * grammartical analysis
+ * 
+ **********************************/
 
 int GrammarTranslator::prog()
 {
@@ -74,48 +67,163 @@ int GrammarTranslator::prog()
         }
     }
 
-    if (translate_type == "grammar")
-    {
-        fout << "<程序>" << std::endl;
-    }
+    print_grammar("<程序>");
     return 0;
 }
 
-int GrammarTranslator::declare_const() { return 0; }
-int GrammarTranslator::def_const() { return 0; }
-int GrammarTranslator::declare_var() { return 0; }
-int GrammarTranslator::def_var() { return 0; }
+int GrammarTranslator::declare_const()
+{
+    print_grammar("<常量说明>");
+    return 0;
+}
+int GrammarTranslator::def_const()
+{
+    print_grammar("<常量定义>");
+    return 0;
+}
+int GrammarTranslator::declare_var()
+{
+    print_grammar("<变量说明>");
+    return 0;
+}
+int GrammarTranslator::def_var()
+{
+    print_grammar("<变量定义>");
+    return 0;
+}
 
-int GrammarTranslator::uinteger() { return 0; }
-int GrammarTranslator::integer() { return 0; }
+int GrammarTranslator::uinteger()
+{
+    print_grammar("<无符号整数>");
+    return 0;
+}
+int GrammarTranslator::integer()
+{
+    print_grammar("<整数>");
+    return 0;
+}
 
-int GrammarTranslator::declare_h() { return 0; }
-int GrammarTranslator::f_ret() { return 0; }
-int GrammarTranslator::f_void() { return 0; }
-int GrammarTranslator::param_table() { return 0; }
+int GrammarTranslator::declare_h()
+{
+    print_grammar("<声明头部>");
+    return 0;
+}
+int GrammarTranslator::f_ret()
+{
+    print_grammar("<有返回值函数定义>");
+    return 0;
+}
+int GrammarTranslator::f_void()
+{
+    print_grammar("<无返回值函数定义>");
+    return 0;
+}
+int GrammarTranslator::param_table()
+{
+    print_grammar("<参数表>");
+    return 0;
+}
 
-int GrammarTranslator::main_f() { return 0; }
+int GrammarTranslator::main_f()
+{
+    print_grammar("<主函数>");
+    return 0;
+}
 
-int GrammarTranslator::comp_stmt() { return 0; }
-int GrammarTranslator::stmt_list() { return 0; }
-int GrammarTranslator::stmt() { return 0; }
-int GrammarTranslator::eval() { return 0; }
-int GrammarTranslator::cond_stmt() { return 0; }
-int GrammarTranslator::cond() { return 0; }
-int GrammarTranslator::loop_stmt() { return 0; }
-int GrammarTranslator::step() { return 0; }
+int GrammarTranslator::comp_stmt()
+{
+    print_grammar("<复合语句>");
+    return 0;
+}
+int GrammarTranslator::stmt_list()
+{
+    print_grammar("<语句列>");
+    return 0;
+}
+int GrammarTranslator::stmt()
+{
+    print_grammar("<语句>");
+    return 0;
+}
+int GrammarTranslator::eval()
+{
+    print_grammar("<赋值语句>");
+    return 0;
+}
+int GrammarTranslator::cond_stmt()
+{
+    print_grammar("<条件语句>");
+    return 0;
+}
+int GrammarTranslator::cond()
+{
+    print_grammar("<条件>");
+    return 0;
+}
+int GrammarTranslator::loop_stmt()
+{
+    print_grammar("<循环语句>");
+    return 0;
+}
+int GrammarTranslator::step()
+{
+    print_grammar("<步长>");
+    return 0;
+}
 
-int GrammarTranslator::exp() { return 0; }
-int GrammarTranslator::term() { return 0; }
-int GrammarTranslator::factor() { return 0; }
+int GrammarTranslator::exp()
+{
+    print_grammar("<表达式>");
+    return 0;
+}
+int GrammarTranslator::term()
+{
+    print_grammar("<项>");
+    return 0;
+}
+int GrammarTranslator::factor()
+{
+    print_grammar("<因子>");
+    return 0;
+}
 
-int GrammarTranslator::f_ret_call() { return 0; }
-int GrammarTranslator::f_void_call() { return 0; }
-int GrammarTranslator::arg_list() { return 0; }
+int GrammarTranslator::f_ret_call()
+{
+    print_grammar("<有返回值函数调用语句>");
+    return 0;
+}
+int GrammarTranslator::f_void_call()
+{
+    print_grammar("<无返回值函数调用语句>");
+    return 0;
+}
+int GrammarTranslator::arg_list()
+{
+    print_grammar("<值参数表>");
+    return 0;
+}
 
-int GrammarTranslator::r_stmt() { return 0; }
-int GrammarTranslator::w_stmt() { return 0; }
-int GrammarTranslator::ret_stmt() { return 0; }
+int GrammarTranslator::r_stmt()
+{
+    print_grammar("<读语句>");
+    return 0;
+}
+int GrammarTranslator::w_stmt()
+{
+    print_grammar("<写语句>");
+    return 0;
+}
+int GrammarTranslator::ret_stmt()
+{
+    print_grammar("<返回语句>");
+    return 0;
+}
+
+/*******************************
+ * 
+ * error handling
+ * 
+ *******************************/
 
 int GrammarTranslator::e_word()
 {
@@ -190,6 +298,23 @@ int GrammarTranslator::e_do_while()
 int GrammarTranslator::e_const_define_type()
 {
     logger.error("e_const_define_type");
+    return 0;
+}
+
+int GrammarTranslator::print_grammar(const std::string &info)
+{
+    if (translate_type == "grammar")
+    {
+        fout << info << std::endl;
+    }
+    return 0;
+}
+int GrammarTranslator::print_error(const int &error_line_number, const std::string &error_type)
+{
+    if (translate_type == "error")
+    {
+        fout << error_line_number << ' ' << error_type << std::endl;
+    }
     return 0;
 }
 
