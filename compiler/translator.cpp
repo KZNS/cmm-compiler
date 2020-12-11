@@ -73,6 +73,20 @@ int GrammarTranslator::prog()
 
 int GrammarTranslator::declare_const()
 {
+    while (word.first == "CONSTTK")
+    {
+        get_word();
+        def_const();
+        if (word.first == "SEMICN")
+        {
+            get_word();
+        }
+        else
+        {
+            e_semicolon();
+        }
+    }
+
     print_grammar("<常量说明>");
     return 0;
 }
