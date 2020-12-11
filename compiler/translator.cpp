@@ -92,6 +92,61 @@ int GrammarTranslator::declare_const()
 }
 int GrammarTranslator::def_const()
 {
+    Word type;
+    Word idenfr;
+    if (word.first == "INTTK" || word.first == "CHARTK")
+    {
+        type = word;
+    }
+    else
+    {
+        logger.error("wrong type %s", word.second.c_str());
+        return -1;
+    }
+    get_word();
+
+    while (true)
+    {
+        if (word.first == "IDENFR")
+        {
+            idenfr = word;
+        }
+        else
+        {
+            logger.error("missing identifier after %s", type.second.c_str());
+            return -1;
+        }
+        get_word();
+
+        if (word.first != "ASSIGN")
+        {
+            logger.error("missing '=' after %s", idenfr.second.c_str());
+            return -1;
+        }
+        get_word();
+
+
+        if (word.first == "INTCON" || word.first == "CHARCON")
+        {
+            //gmc type idenfr=word
+        }
+        else
+        {
+            e_const_define_type();
+        }
+        get_word();
+        
+        if (word.first == "COMMA")
+        {
+            get_word();
+            continue;
+        }
+        else
+        {
+            break;
+        }
+    }
+
     print_grammar("<常量定义>");
     return 0;
 }
