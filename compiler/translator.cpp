@@ -128,6 +128,19 @@ int GrammarTranslator::def_const()
 }
 int GrammarTranslator::declare_var()
 {
+    while (!(detect(3, "INTTK", "IDENFR", "LPARENT") || detect(3, "CHARTK", "IDENFR", "LPARENT")))
+    {
+        def_var();
+        if (word.first == "SEMICN")
+        {
+            get_word();
+        }
+        else
+        {
+            e_semicolon();
+        }
+    }
+
     print_grammar("<变量说明>");
     return 0;
 }
