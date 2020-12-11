@@ -21,56 +21,56 @@ private:
     int line_number;
     std::string translate_type;
 
-    int add_op();
-    int mult_op();
-    int rel_op();
-    int letter();
+    int add_op();  // 加法运算符
+    int mult_op(); // 乘法运算符
+    int rel_op();  // 关系运算符
+    int letter();  // 字母
 
-    int udigit();
-    int digit();
-    int ch();
-    int str();
+    int udigit(); // 非零数字
+    int digit();  // 数字
+    int ch();     // 字符
+    int str();    // 字符串
 
-    int type();
-    int ident();
+    int type();  // 类型标识符
+    int ident(); // 标识符
 
-    int prog();
+    int prog(); // 程序
 
-    int declare_const();
-    int def_const();
-    int declare_var();
-    int def_var();
+    int declare_const(); // 常量说明
+    int def_const();     // 常量定义
+    int declare_var();   // 变量说明
+    int def_var();       // 变量定义
 
-    int uinteger();
-    int integer();
+    int uinteger(); // 无符号整数
+    int integer();  // 整数
 
-    int declare_h();
-    int f_ret();
-    int f_void();
-    int param_table();
+    int declare_h();   // 声明头部
+    int f_ret();       // 有返回值函数定义
+    int f_void();      // 无返回值函数定义
+    int param_table(); // 参数表
 
-    int main_f();
+    int main_f(); // 主函数
 
-    int comp_stmt();
-    int stmt_list();
-    int stmt();
-    int eval();
-    int cond_stmt();
-    int cond();
-    int loop_stmt();
-    int step();
+    int comp_stmt(); // 复合语句
+    int stmt_list(); // 语句列
+    int stmt();      // 语句
+    int eval();      // 赋值语句
+    int cond_stmt(); // 条件语句
+    int cond();      // 条件
+    int loop_stmt(); // 循环语句
+    int step();      // 步长
 
-    int exp();
-    int term();
-    int factor();
+    int exp();    // 表达式
+    int term();   // 项
+    int factor(); // 因子
 
-    int f_ret_call();
-    int f_void_call();
-    int arg_list();
+    int f_ret_call();  // 有返回值函数调用语句
+    int f_void_call(); // 无返回值函数调用语句
+    int arg_list();    // 值参数表
 
-    int r_stmt();
-    int w_stmt();
-    int ret_stmt();
+    int r_stmt();   // 读语句
+    int w_stmt();   // 写语句
+    int ret_stmt(); // 返回语句
 
     int e_word();                //非法符号或不符合词法
     int e_redifine_identifier(); //名字重定义
