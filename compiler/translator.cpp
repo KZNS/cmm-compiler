@@ -117,6 +117,82 @@ int GrammarTranslator::r_stmt() { return 0; }
 int GrammarTranslator::w_stmt() { return 0; }
 int GrammarTranslator::ret_stmt() { return 0; }
 
+int GrammarTranslator::e_word()
+{
+    logger.error("e_word");
+    return 0;
+}
+int GrammarTranslator::e_redifine_identifier()
+{
+    logger.error("e_redifine_identifier");
+    return 0;
+}
+int GrammarTranslator::e_undifine_identifier()
+{
+    logger.error("e_undifine_identifier");
+    return 0;
+}
+int GrammarTranslator::e_func_param_type()
+{
+    logger.error("e_func_param_type");
+    return 0;
+}
+int GrammarTranslator::e_func_param_n()
+{
+    logger.error("e_func_param_n");
+    return 0;
+}
+int GrammarTranslator::e_condition_type()
+{
+    logger.error("e_condition_type");
+    return 0;
+}
+int GrammarTranslator::e_return_void()
+{
+    logger.error("e_return_void");
+    return 0;
+}
+int GrammarTranslator::e_return_val()
+{
+    logger.error("e_return_val");
+    return 0;
+}
+int GrammarTranslator::e_array_index()
+{
+    logger.error("e_array_index");
+    return 0;
+}
+int GrammarTranslator::e_change_const_value()
+{
+    logger.error("e_change_const_value");
+    return 0;
+}
+int GrammarTranslator::e_semicolon()
+{
+    logger.error("e_semicolon");
+    return 0;
+}
+int GrammarTranslator::e_right_parenthesis()
+{
+    logger.error("e_right_parenthesis");
+    return 0;
+}
+int GrammarTranslator::e_right_bracket()
+{
+    logger.error("e_right_bracket");
+    return 0;
+}
+int GrammarTranslator::e_do_while()
+{
+    logger.error("e_do_while");
+    return 0;
+}
+int GrammarTranslator::e_const_define_type()
+{
+    logger.error("e_const_define_type");
+    return 0;
+}
+
 int GrammarTranslator::get_word()
 {
     if (now_word_id == top_word_id)

@@ -72,6 +72,22 @@ private:
     int w_stmt();
     int ret_stmt();
 
+    int e_word();                //非法符号或不符合词法
+    int e_redifine_identifier(); //名字重定义
+    int e_undifine_identifier(); //未定义的名字
+    int e_func_param_type();     //函数参数个数不匹配
+    int e_func_param_n();        //函数参数类型不匹配
+    int e_condition_type();      //条件判断中出现不合法的类型
+    int e_return_void();         //无返回值的函数存在不匹配的return语句
+    int e_return_val();          //有返回值的函数缺少return语句或存在不匹配的return语句
+    int e_array_index();         //数组元素的下标只能是整型表达式
+    int e_change_const_value();  //不能改变常量的值
+    int e_semicolon();           //应为分号
+    int e_right_parenthesis();   //应为右小括号’)’
+    int e_right_bracket();       //应为右中括号’]’
+    int e_do_while();            //do-while应为语句中缺少while
+    int e_const_define_type();   //常量定义中=后面只能是整型或字符型常量
+
     int get_word();
     int roll_back(int step);
 

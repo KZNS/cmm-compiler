@@ -235,23 +235,23 @@ define keywords
 
 ##### 2.1.2.3. 错误信息表
 
-| Code | Grammar | Semantic | Error Describe                                       |
-| ---- | ------- | -------- | ---------------------------------------------------- |
-| a    | 1       |          | 非法符号或不符合词法                                 |
-| b    |         | 1        | 名字重定义                                           |
-| c    |         | 1        | 未定义的名字                                         |
-| d    |         | 1        | 函数参数个数不匹配                                   |
-| e    |         | 1        | 函数参数类型不匹配                                   |
-| f    |         | 1        | 条件判断中出现不合法的类型                           |
-| g    | 1       | 1        | 无返回值的函数存在不匹配的return语句                 |
-| h    | 1       | 1        | 有返回值的函数缺少return语句或存在不匹配的return语句 |
-| i    |         | 1        | 数组元素的下标只能是整型表达式                       |
-| j    |         | 1        | 不能改变常量的值                                     |
-| k    | 1       |          | 应为分号                                             |
-| l    | 1       |          | 应为右小括号’)’                                      |
-| m    | 1       |          | 应为右中括号’]’                                      |
-| n    | 1       |          | do-while应为语句中缺少while                          |
-| o    | 1       |          | 常量定义中=后面只能是整型或字符型常量                |
+| Code | Grammar | Semantic | Error                 | Describe                                             |
+| ---- | ------- | -------- | --------------------- | ---------------------------------------------------- |
+| a    | 1       |          | e_word                | 非法符号或不符合词法                                 |
+| b    |         | 1        | e_redifine_identifier | 名字重定义                                           |
+| c    |         | 1        | e_undifine_identifier | 未定义的名字                                         |
+| d    |         | 1        | e_func_param_type     | 函数参数个数不匹配                                   |
+| e    |         | 1        | e_func_param_n        | 函数参数类型不匹配                                   |
+| f    |         | 1        | e_condition_type      | 条件判断中出现不合法的类型                           |
+| g    | 1       | 1        | e_return_void         | 无返回值的函数存在不匹配的return语句                 |
+| h    | 1       | 1        | e_return_val          | 有返回值的函数缺少return语句或存在不匹配的return语句 |
+| i    |         | 1        | e_array_index         | 数组元素的下标只能是整型表达式                       |
+| j    |         | 1        | e_change_const_value  | 不能改变常量的值                                     |
+| k    | 1       |          | e_semicolon           | 应为分号                                             |
+| l    | 1       |          | e_right_parenthesis   | 应为右小括号’)’                                      |
+| m    | 1       |          | e_right_bracket       | 应为右中括号’]’                                      |
+| n    | 1       |          | e_do_while            | do-while应为语句中缺少while                          |
+| o    | 1       |          | e_const_define_type   | 常量定义中=后面只能是整型或字符型常量                |
 
 ##### 2.1.2.4. 语法部分工作说明
 
