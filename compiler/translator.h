@@ -4,6 +4,7 @@
 #include "automaton.h"
 #include "cLogger/clogger.h"
 #include <utility>
+#include <cstdarg>
 
 #define WORD_BUFFER_SZ 10
 
@@ -80,6 +81,7 @@ private:
 
     int get_word();
     int roll_back(int step);
+    bool detect(int step, ...);
 
 public:
     GrammarTranslator();

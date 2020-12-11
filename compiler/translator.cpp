@@ -18,43 +18,20 @@ int GrammarTranslator::prog()
     {
         declare_const();
     }
-    if (word.first == "INTTK" || word.first == "CHARTK")
+    if (!(detect(3, "INTTK", "IDENFR", "LPARENT") || detect(3, "CHARTK", "IDENFR", "LPARENT")))
     {
-        get_word();
-        if (word.first == "IDENFR")
-        {
-            get_word();
-            if (word.first != "LPARENT")
-            {
-                roll_back(2);
-                declare_var();
-            }
-            else
-            {
-                roll_back(2);
-            }
-        }
-        else
-        {
-            roll_back(1);
-        }
+        declare_var();
     }
     while (true)
     {
-        if (word.first == "VOIDTK")
+        if (detect(2, "VOIDTK", "MAINTK"))
         {
-            get_word();
-            if (word.first == "MAINTK")
-            {
-                roll_back(1);
-                main_f();
-                break;
-            }
-            else
-            {
-                roll_back(1);
-                f_void();
-            }
+            main_f();
+            break;
+        }
+        else if (word.first == "VOIDTK")
+        {
+            f_void();
         }
         else if (word.first == "INTTK" || word.first == "CHARTK")
         {
@@ -125,7 +102,6 @@ int GrammarTranslator::def_const()
         }
         get_word();
 
-
         if (word.first == "INTCON" || word.first == "CHARCON")
         {
             //gmc type idenfr=word
@@ -135,7 +111,7 @@ int GrammarTranslator::def_const()
             e_const_define_type();
         }
         get_word();
-        
+
         if (word.first == "COMMA")
         {
             get_word();
@@ -415,6 +391,32 @@ int GrammarTranslator::roll_back(int step)
     now_word_id -= step;
     word = word_buffer[now_word_id];
     return 0;
+}
+bool GrammarTranslator::detect(int step, ...)
+{
+    char *rule;
+    va_list args;
+    va_start(args, step);
+
+    rule = va_arg(args, char *);
+    if (word.first != rule)
+    {
+        return false;
+    }
+    for (int i = 1; i < step; i++)
+    {
+        rule = va_arg(args, char *);
+        get_word();
+        if (word.first != rule)
+        {
+            roll_back(i);
+            return false;
+        }
+    }
+
+    va_end(args);
+    roll_back(step - 1);
+    return true;
 }
 
 GrammarTranslator::GrammarTranslator()
