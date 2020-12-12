@@ -236,6 +236,61 @@ int GrammarTranslator::param_table()
  */
 int GrammarTranslator::main_f()
 {
+    if (word.first == "VOIDTK")
+    {
+        get_word();
+    }
+    else
+    {
+        logger.error("VOIDTK missing in main_f");
+        return -1;
+    }
+    if (word.first == "MAINTK")
+    {
+        get_word();
+    }
+    else
+    {
+        logger.error("MAINTK missing in main_f");
+        return -1;
+    }
+    if (word.first == "LPARENT")
+    {
+        get_word();
+    }
+    else
+    {
+        logger.error("LPARENT missing in main_f");
+        return -1;
+    }
+    if (word.first == "RPARENT")
+    {
+        get_word();
+    }
+    else
+    {
+        logger.error("RPARENT missing in main_f");
+        return -1;
+    }
+    if (word.first == "LBRACE")
+    {
+        get_word();
+    }
+    else
+    {
+        logger.error("LBRACE missing in main_f");
+        return -1;
+    }
+    comp_stmt();
+    if (word.first == "RBRACE")
+    {
+        get_word();
+    }
+    else
+    {
+        logger.error("RBRACE missing in main_f");
+        return -1;
+    }
     print_grammar("<主函数>");
     return 0;
 }
