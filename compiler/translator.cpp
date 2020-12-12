@@ -43,7 +43,7 @@ int GrammarTranslator::prog()
         }
         else
         {
-            logger.error("unknow \"%s\"", word.second.c_str());
+            logger.error("unknown \"%s\"", word.second.c_str());
             return -1;
         }
     }
@@ -301,6 +301,15 @@ int GrammarTranslator::main_f()
  */
 int GrammarTranslator::comp_stmt()
 {
+    if (word.first == "CONSTTK")
+    {
+        declare_const();
+    }
+    if (!(detect(3, "INTTK", "IDENFR", "LPARENT") || detect(3, "CHARTK", "IDENFR", "LPARENT")))
+    {
+        declare_var();
+    }
+    stmt_list();
     print_grammar("<复合语句>");
     return 0;
 }
@@ -310,6 +319,10 @@ int GrammarTranslator::comp_stmt()
  */
 int GrammarTranslator::stmt_list()
 {
+    while (false)
+    { //??????
+        stmt();
+    }
     print_grammar("<语句列>");
     return 0;
 }
@@ -338,6 +351,39 @@ int GrammarTranslator::stmt()
  */
 int GrammarTranslator::eval()
 {
+    if (word.first == "IDENFR")
+    {
+        get_word();
+    }
+    else
+    {
+        logger.error("missing idenfer in eval");
+        return -1;
+    }
+    if (word.first == "LBRACK")
+    {
+        get_word();
+        exp();
+        if (word.first == "RBRACK")
+        {
+            get_word();
+        }
+        else
+        {
+            logger.error("missing right bracket in eval");
+            return -1;
+        }
+    }
+    if (word.first == "ASSIGN")
+    {
+        get_word();
+        exp();
+    }
+    else
+    {
+        logger.error("missing assign in eval");
+        return -1;
+    }
     print_grammar("<赋值语句>");
     return 0;
 }
@@ -347,6 +393,40 @@ int GrammarTranslator::eval()
  */
 int GrammarTranslator::cond_stmt()
 {
+    if (word.first == "IFTK")
+    {
+        get_word();
+    }
+    else
+    {
+        logger.error("`if` missing in cond_stmt");
+        return -1;
+    }
+    if (word.first == "LPARENT")
+    {
+        get_word();
+    }
+    else
+    {
+        logger.error("`lparent` missing in cond_stmt");
+        return -1;
+    }
+    cond();
+    if (word.first == "RPARENT")
+    {
+        get_word();
+    }
+    else
+    {
+        logger.error("`rparent` missing in cond_stmt");
+        return -1;
+    }
+    stmt();
+    if (detect(1, "ELSETK"))
+    {
+        get_word();
+        stmt();
+    }
     print_grammar("<条件语句>");
     return 0;
 }
@@ -357,6 +437,11 @@ int GrammarTranslator::cond_stmt()
  */
 int GrammarTranslator::cond()
 {
+    exp();
+    if(word.first=="LSS"||word.first=="LEQ"||word.first=="GRE"||word.first=="GEQ"||word.first=="EQL"||word.first=="NEQ"){
+        get_word();//rel_op();
+        exp();
+    }
     print_grammar("<条件>");
     return 0;
 }
