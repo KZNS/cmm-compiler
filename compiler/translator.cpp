@@ -185,7 +185,7 @@ int GrammarTranslator::uinteger()
  * 整数
  * <integer> ::= [+|-]<uinteger>
  */
-int GrammarTranslator::integer()
+int GrammarTranslator::integer(int &x)
 {
     print_grammar("<整数>");
     return 0;
@@ -319,9 +319,16 @@ int GrammarTranslator::comp_stmt()
  */
 int GrammarTranslator::stmt_list()
 {
-    while (false)
+    while (true)
     { //??????
-        stmt();
+        if(word.first=="IFTK"||word.first=="DOTK"||word.first=="WHILETK"||\
+        word.first=="FORTK"||word.first=="LBRACE"||word.first=="IDENFR"||\
+        word.first=="SCANFTK"||word.first=="PRINTFTK"||word.first=="RETURNTK"||\
+        word.first=="SEMICN"){
+            stmt();
+        } else {
+            break;
+        }
     }
     print_grammar("<语句列>");
     return 0;
@@ -341,6 +348,81 @@ int GrammarTranslator::stmt_list()
  */
 int GrammarTranslator::stmt()
 {
+    if (word.first == "IFTK")
+    {
+        cond_stmt();
+    }
+    else if (word.first == "DOTK" || word.first == "WHILETK" || word.first == "FORTK")
+    {
+        loop_stmt();
+    }
+    else if (word.first == "LBRACE")
+    {
+        get_word();
+        stmt_list();
+        if (word.first == "RBRACE")
+        {
+            get_word();
+        }
+        else
+        {
+            logger.error("rbrace missing in stmt() {stmt_list}");
+            return -1;
+        }
+    }
+    else if (detect(2, "IDENFR", "LPARENT"))
+    {
+        //??如何区分有无返回值
+    }
+    else if (word.first == "IDENFR")
+    {
+        eval();
+        if (word.first != "SEMICN")
+        {
+            logger.error("semicn missing in stmt eval");
+            return -1;
+        }
+        get_word();
+    }
+    else if (word.first == "SCANFTK")
+    {
+        r_stmt();
+        if (word.first != "SEMICN")
+        {
+            logger.error("semicn missing in stmt scanftk");
+            return -1;
+        }
+        get_word();
+    }
+    else if (word.first == "PRINTFTK")
+    {
+        w_stmt();
+        if (word.first != "SEMICN")
+        {
+            logger.error("semicn missing in stmt printftk");
+            return -1;
+        }
+        get_word();
+    }
+    else if (word.first == "RETURNTK")
+    {
+        ret_stmt();
+        if (word.first != "SEMICN")
+        {
+            logger.error("semicn missing in stmt returntk");
+            return -1;
+        }
+        get_word();
+    }
+    else if (word.first == "SEMICN")
+    {
+        get_word();
+    }
+    else
+    {
+        logger.error("invalid syntax in stmt");
+        return -1;
+    }
     print_grammar("<语句>");
     return 0;
 }
@@ -642,32 +724,49 @@ int GrammarTranslator::term()
  */
 int GrammarTranslator::factor()
 {
-    if(word.first=="IDENFR"){
+    if (word.first == "IDENFR")
+    {
         get_word();
-        if(word.first=="LBRACK"){
+        if (word.first == "LBRACK")
+        {
             get_word();
             exp();
-            if(word.first=="RBRACK"){
+            if (word.first == "RBRACK")
+            {
                 get_word();
-            } else {
+            }
+            else
+            {
                 logger.error("missing rbrack in factor <ident>");
                 return -1;
             }
         }
-    } else if(word.first=="LPARENT"){
+    }
+    else if (word.first == "LPARENT")
+    {
         get_word();
         exp();
-        if(word.first=="RPARENT"){
+        if (word.first == "RPARENT")
+        {
             get_word();
-        } else {
+        }
+        else
+        {
             logger.error("missing rparent in factor <(exp)>");
             return -1;
         }
-    } else if(word.first=="CHARCON"){
+    }
+    else if (word.first == "CHARCON")
+    {
         get_word();
-    } else if(word.first=="") {//??integer is broken
-
-    }else {
+    }
+    else if (word.first == "PLUS" || word.first == "MINU" || word.first == "INTCON")
+    { //??integer is broken
+        int x;
+        integer(x);
+    }
+    else
+    {
         f_ret_call();
     }
     print_grammar("<因子>");
