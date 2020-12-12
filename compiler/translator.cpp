@@ -615,12 +615,16 @@ int GrammarTranslator::exp()
  */
 int GrammarTranslator::term()
 {
-    while(true){
-        factor()
-        if(word.first=="MULT"||word.first=="DIV"){
+    while (true)
+    {
+        factor();
+        if (word.first == "MULT" || word.first == "DIV")
+        {
             get_word();
             continue;
-        } else {
+        }
+        else
+        {
             break;
         }
     }
@@ -638,6 +642,34 @@ int GrammarTranslator::term()
  */
 int GrammarTranslator::factor()
 {
+    if(word.first=="IDENFR"){
+        get_word();
+        if(word.first=="LBRACK"){
+            get_word();
+            exp();
+            if(word.first=="RBRACK"){
+                get_word();
+            } else {
+                logger.error("missing rbrack in factor <ident>");
+                return -1;
+            }
+        }
+    } else if(word.first=="LPARENT"){
+        get_word();
+        exp();
+        if(word.first=="RPARENT"){
+            get_word();
+        } else {
+            logger.error("missing rparent in factor <(exp)>");
+            return -1;
+        }
+    } else if(word.first=="CHARCON"){
+        get_word();
+    } else if(word.first=="") {//??integer is broken
+
+    }else {
+        f_ret_call();
+    }
     print_grammar("<因子>");
     return 0;
 }
@@ -780,7 +812,8 @@ int GrammarTranslator::w_stmt()
         logger.error("printtk missing in w_stmt");
         return -1;
     }
-    get_word() : if (word.first != "LPARENT")
+    get_word();
+    if (word.first != "LPARENT")
     {
         logger.error("lparent missing in w_stmt");
         return -1;
