@@ -29,8 +29,8 @@ private:
     int declare_var();   // 变量说明
     int def_var();       // 变量定义
 
-    int uinteger(); // 无符号整数
-    int integer(int& x);  // 整数
+    int uinteger(unsigned int &x); // 无符号整数
+    int integer(int &x);           // 整数
 
     int declare_h();   // 声明头部
     int f_ret();       // 有返回值函数定义

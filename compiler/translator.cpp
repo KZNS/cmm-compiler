@@ -176,8 +176,27 @@ int GrammarTranslator::def_var()
  * <uinteger> ::= <udigit>{<digit>}
  *                0
  */
-int GrammarTranslator::uinteger()
+int GrammarTranslator::uinteger(unsigned int &x)
 {
+    if (word.first == "INTCON")
+    {
+        if (word.second.length() < 1 || (word.second.length() > 1 && word.second[0] == '0'))
+        {
+            e_word();
+            return -1;
+        }
+        else
+        {
+            sscanf(word.second.c_str(), "%u", &x);
+        }
+    }
+    else
+    {
+        logger.error("missing uinteger");
+        return -1;
+    }
+    get_word();
+
     print_grammar("<无符号整数>");
     return 0;
 }
@@ -187,6 +206,27 @@ int GrammarTranslator::uinteger()
  */
 int GrammarTranslator::integer(int &x)
 {
+    if (word.first == "PLUS")
+    {
+        x = 1;
+        get_word();
+    }
+    else if (word.first == "MINU")
+    {
+        x = -1;
+        get_word();
+    }
+
+    unsigned int ux;
+    int e;
+    e = uinteger(ux);
+    if (e)
+    {
+        return -1;
+    }
+    x *= ux;
+    get_word();
+
     print_grammar("<整数>");
     return 0;
 }
@@ -675,7 +715,14 @@ int GrammarTranslator::loop_stmt()
  */
 int GrammarTranslator::step()
 {
-    uinteger();
+    unsigned int x;
+    int e;
+    e = uinteger(x);
+    if (e)
+    {
+        return -1;
+    }
+
     print_grammar("<步长>");
     return 0;
 }
