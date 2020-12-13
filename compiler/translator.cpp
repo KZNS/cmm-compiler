@@ -167,6 +167,68 @@ int GrammarTranslator::declare_var()
  */
 int GrammarTranslator::def_var()
 {
+    Word type;
+    Word idenfr;
+    unsigned int size;
+    int e;
+    if (word.first == "INTTK" || word.first == "CHARTK")
+    {
+        type = word;
+    }
+    else
+    {
+        logger.error("wrong type %s", word.second.c_str());
+        return -1;
+    }
+    get_word();
+
+    while (true)
+    {
+        if (word.first == "IDENFR")
+        {
+            idenfr = word;
+        }
+        else
+        {
+            logger.error("missing identifier after %s", type.second.c_str());
+            return -1;
+        }
+        get_word();
+
+        if (word.first == "LBRACK")
+        {
+            get_word();
+            e = uinteger(size);
+            if (e)
+            {
+                return -1;
+            }
+            if (word.first == "RBRACK")
+            {
+                get_word();
+            }
+            else
+            {
+                e_right_bracket();
+            }
+            //gmc type idenfr size
+        }
+        else
+        {
+            //gmc type idenfr
+        }
+
+        if (word.first == ",")
+        {
+            get_word();
+            continue;
+        }
+        else
+        {
+            break;
+        }
+    }
+
     print_grammar("<变量定义>");
     return 0;
 }
