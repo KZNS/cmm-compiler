@@ -1349,6 +1349,12 @@ int GrammarTranslator::print_error(const int &error_line_number, const std::stri
 
 int GrammarTranslator::get_word()
 {
+    print_lexical(word);
+    get_new_word();
+    return 0;
+}
+int GrammarTranslator::get_new_word()
+{
     if (now_word_id == top_word_id)
     {
         if (bottom_word_id <= top_word_id - WORD_BUFFER_SZ + 1)
@@ -1390,7 +1396,7 @@ bool GrammarTranslator::detect(int step, ...)
     for (int i = 1; i < step; i++)
     {
         rule = va_arg(args, char *);
-        get_word();
+        get_new_word();
         if (word.first != rule)
         {
             roll_back(i);

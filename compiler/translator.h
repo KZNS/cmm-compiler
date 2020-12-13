@@ -81,6 +81,7 @@ private:
     int print_error(const int &error_line_number, const std::string &error_type); //输出错误信息
 
     int get_word();
+    int get_new_word();
     int roll_back(int step);
     bool detect(int step, ...);
 
