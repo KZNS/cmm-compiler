@@ -76,6 +76,7 @@ private:
     int e_do_while();            //do-while应为语句中缺少while
     int e_const_define_type();   //常量定义中=后面只能是整型或字符型常量
 
+    int print_lexical(const Word &p_word);                                        //输出词法信息
     int print_grammar(const std::string &info);                                   //输出语法信息
     int print_error(const int &error_line_number, const std::string &error_type); //输出错误信息
 

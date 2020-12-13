@@ -1322,6 +1322,14 @@ int GrammarTranslator::e_const_define_type()
     return 0;
 }
 
+int GrammarTranslator::print_lexical(const Word &p_word)
+{
+    if (translate_type == "lexical" || translate_type == "grammar")
+    {
+        fout << word.first << " " << word.second << std::endl;
+    }
+    return 0;
+}
 int GrammarTranslator::print_grammar(const std::string &info)
 {
     if (translate_type == "grammar")
