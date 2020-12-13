@@ -82,48 +82,72 @@ int GrammarTranslator::declare_const()
  */
 int GrammarTranslator::def_const()
 {
-    Word type;
-    Word idenfr;
+    std::string const_type;
+    std::string idenfr;
+    int x;
+    char c;
+
+    // int
+    // char
     if (word.first == "INTTK" || word.first == "CHARTK")
     {
-        type = word;
+        const_type = word.first;
+        get_word();
     }
     else
     {
         logger.error("wrong type %s", word.second.c_str());
         return -1;
     }
-    get_word();
 
+    // <ident>=<integer>{,<ident>=<integer>}
+    // <ident>=<ch>{,<ident>=<ch>}
     while (true)
     {
         if (word.first == "IDENFR")
         {
-            idenfr = word;
+            idenfr = word.second;
+            get_word();
         }
         else
         {
-            logger.error("missing identifier after %s", type.second.c_str());
+            logger.error("missing identifier after %s", const_type.c_str());
             return -1;
         }
-        get_word();
 
-        if (word.first != "ASSIGN")
+        if (word.first == "ASSIGN")
         {
-            logger.error("missing '=' after %s", idenfr.second.c_str());
+            get_word();
+        }
+        else
+        {
+            logger.error("missing '=' after %s", idenfr.c_str());
             return -1;
         }
-        get_word();
 
-        if (word.first == "INTCON" || word.first == "CHARCON")
+        if (word.first == "PLUS" || word.first == "MINU" ||
+            word.first == "INTCON" || word.first == "CHARCON")
         {
-            //gmc type idenfr=word
+            if (const_type == "INTTK")
+            {
+                integer(x);
+            }
+            else if (const_type == "CHARTK")
+            {
+                c = word.second[0];
+            }
+            else
+            {
+                logger.error("wrong type");
+                return -1;
+            }
+            //gmc const_type idenfr=data
         }
         else
         {
             e_const_define_type();
+            get_word();
         }
-        get_word();
 
         if (word.first == "COMMA")
         {
@@ -287,7 +311,6 @@ int GrammarTranslator::integer(int &x)
         return -1;
     }
     x *= ux;
-    get_word();
 
     print_grammar("<整数>");
     return 0;
