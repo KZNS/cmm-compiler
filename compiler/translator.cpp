@@ -321,12 +321,15 @@ int GrammarTranslator::stmt_list()
 {
     while (true)
     { //??????
-        if(word.first=="IFTK"||word.first=="DOTK"||word.first=="WHILETK"||\
-        word.first=="FORTK"||word.first=="LBRACE"||word.first=="IDENFR"||\
-        word.first=="SCANFTK"||word.first=="PRINTFTK"||word.first=="RETURNTK"||\
-        word.first=="SEMICN"){
+        if (word.first == "IFTK" || word.first == "DOTK" || word.first == "WHILETK" ||
+            word.first == "FORTK" || word.first == "LBRACE" || word.first == "IDENFR" ||
+            word.first == "SCANFTK" || word.first == "PRINTFTK" || word.first == "RETURNTK" ||
+            word.first == "SEMICN")
+        {
             stmt();
-        } else {
+        }
+        else
+        {
             break;
         }
     }
