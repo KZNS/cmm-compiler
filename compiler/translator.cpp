@@ -298,8 +298,25 @@ int GrammarTranslator::integer(int &x)
  * <declare_h> ::= int<ident>
  *                 char<ident>
  */
-int GrammarTranslator::declare_h()
+int GrammarTranslator::declare_h(std::string &type, std::string &f_name)
 {
+    if (word.first == "INTTK" || word.first == "CHARTK")
+    {
+        type = word.first;
+        get_word();
+
+        if (word.first == "IDENFR")
+        {
+            f_name = word.second;
+            get_word();
+        }
+        else
+        {
+            logger.error("missing function name");
+            return -1;
+        }
+    }
+
     print_grammar("<声明头部>");
     return 0;
 }
@@ -309,6 +326,58 @@ int GrammarTranslator::declare_h()
  */
 int GrammarTranslator::f_ret()
 {
+    std::string ret_type;
+    std::string f_name;
+    int e;
+
+    // <declare_h>
+    e = declare_h(ret_type, f_name);
+    if (e)
+    {
+        return -1;
+    }
+
+    // '('<param_table>')'
+    if (word.first == "LPARENT")
+    {
+        get_word();
+    }
+    else
+    {
+        logger.error("missing '('");
+        return -1;
+    }
+    param_table();
+    if (word.first == "RPARENT")
+    {
+        get_word();
+    }
+    else
+    {
+        e_right_parenthesis();
+    }
+
+    // '{'<comp_stmt>'}'
+    if (word.first == "LBRACE")
+    {
+        get_word();
+    }
+    else
+    {
+        logger.error("missing '{'");
+        return -1;
+    }
+    comp_stmt();
+    if (word.first == "RBRACE")
+    {
+        get_word();
+    }
+    else
+    {
+        logger.error("missing '}'");
+        return -1;
+    }
+
     print_grammar("<有返回值函数定义>");
     return 0;
 }
@@ -318,6 +387,70 @@ int GrammarTranslator::f_ret()
  */
 int GrammarTranslator::f_void()
 {
+    std::string f_name;
+    int e;
+
+    // void<ident>
+    if (word.first == "VOIDTK")
+    {
+        get_word();
+    }
+    else
+    {
+        return -1;
+    }
+    if (word.first == "IDENFR")
+    {
+        f_name = word.second;
+        get_word();
+    }
+    else
+    {
+        logger.error("missing function name");
+        return -1;
+    }
+
+    // '('<param_table>')'
+    if (word.first == "LPARENT")
+    {
+        get_word();
+    }
+    else
+    {
+        logger.error("missing '('");
+        return -1;
+    }
+    param_table();
+    if (word.first == "RPARENT")
+    {
+        get_word();
+    }
+    else
+    {
+        e_right_parenthesis();
+    }
+
+    // '{'<comp_stmt>'}'
+    if (word.first == "LBRACE")
+    {
+        get_word();
+    }
+    else
+    {
+        logger.error("missing '{'");
+        return -1;
+    }
+    comp_stmt();
+    if (word.first == "RBRACE")
+    {
+        get_word();
+    }
+    else
+    {
+        logger.error("missing '}'");
+        return -1;
+    }
+
     print_grammar("<无返回值函数定义>");
     return 0;
 }
@@ -328,6 +461,34 @@ int GrammarTranslator::f_void()
  */
 int GrammarTranslator::param_table()
 {
+    std::string param_type;
+    std::string param_name;
+    while (word.first == "INTTK" || word.first == "CHARTK")
+    {
+        param_type = word.first;
+        get_word();
+
+        if (word.first == "IDENFR")
+        {
+            param_name = word.second;
+            get_word();
+        }
+        else
+        {
+            logger.error("missing param_name");
+            return -1;
+        }
+        if (word.first == "COMMA")
+        {
+            get_word();
+            continue;
+        }
+        else
+        {
+            break;
+        }
+    }
+
     print_grammar("<参数表>");
     return 0;
 }

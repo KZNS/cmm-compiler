@@ -32,7 +32,7 @@ private:
     int uinteger(unsigned int &x); // 无符号整数
     int integer(int &x);           // 整数
 
-    int declare_h();   // 声明头部
+    int declare_h(std::string &type, std::string &f_name); // 声明头部
     int f_ret();       // 有返回值函数定义
     int f_void();      // 无返回值函数定义
     int param_table(); // 参数表
