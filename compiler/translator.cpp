@@ -641,15 +641,15 @@ int GrammarTranslator::stmt_list()
  */
 int GrammarTranslator::stmt()
 {
-    if (word.first == "IFTK")
+    if (word.first == "IFTK") // <cond_stmt>
     {
         cond_stmt();
     }
-    else if (word.first == "DOTK" || word.first == "WHILETK" || word.first == "FORTK")
+    else if (word.first == "DOTK" || word.first == "WHILETK" || word.first == "FORTK") // <loop_stmt>
     {
         loop_stmt();
     }
-    else if (word.first == "LBRACE")
+    else if (word.first == "LBRACE") // '{'<stmt_list>'}'
     {
         get_word();
         stmt_list();
@@ -663,59 +663,48 @@ int GrammarTranslator::stmt()
             return -1;
         }
     }
-    else if (detect(2, "IDENFR", "LPARENT"))
+    else // statement with ';'
     {
-        //??如何区分有无返回值
-    }
-    else if (word.first == "IDENFR")
-    {
-        eval();
-        if (word.first != "SEMICN")
+        if (detect(2, "IDENFR", "LPARENT")) // <f_ret_call> | <f_void_call>
         {
-            logger.error("semicn missing in stmt eval");
+            //??如何区分有无返回值
+        }
+        else if (word.first == "IDENFR") // <eval>
+        {
+            eval();
+        }
+        else if (word.first == "SCANFTK") // <r_stmt>
+        {
+            r_stmt();
+        }
+        else if (word.first == "PRINTFTK") // <w_stmt>
+        {
+            w_stmt();
+        }
+        else if (word.first == "RETURNTK") // <ret_stmt>
+        {
+            ret_stmt();
+        }
+        else if (word.first == "SEMICN") // <空>
+        {
+            ;
+        }
+        else
+        {
+            logger.error("invalid syntax in stmt");
             return -1;
         }
-        get_word();
-    }
-    else if (word.first == "SCANFTK")
-    {
-        r_stmt();
-        if (word.first != "SEMICN")
+
+        if (word.first == "SEMICN") // ;
         {
-            logger.error("semicn missing in stmt scanftk");
-            return -1;
+            get_word();
         }
-        get_word();
-    }
-    else if (word.first == "PRINTFTK")
-    {
-        w_stmt();
-        if (word.first != "SEMICN")
+        else
         {
-            logger.error("semicn missing in stmt printftk");
-            return -1;
+            e_semicolon();
         }
-        get_word();
     }
-    else if (word.first == "RETURNTK")
-    {
-        ret_stmt();
-        if (word.first != "SEMICN")
-        {
-            logger.error("semicn missing in stmt returntk");
-            return -1;
-        }
-        get_word();
-    }
-    else if (word.first == "SEMICN")
-    {
-        get_word();
-    }
-    else
-    {
-        logger.error("invalid syntax in stmt");
-        return -1;
-    }
+
     print_grammar("<语句>");
     return 0;
 }
