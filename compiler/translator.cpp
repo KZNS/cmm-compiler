@@ -1372,7 +1372,10 @@ int GrammarTranslator::print_error(const int &error_line_number, const std::stri
 
 int GrammarTranslator::get_word()
 {
-    print_lexical(word);
+    if (word.first != "")
+    {
+        print_lexical(word);
+    }
     get_new_word();
     return 0;
 }

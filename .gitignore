@@ -5,3 +5,5 @@ test*
 *.exe
 *.dSYM
 a.out
+testfile.txt
+output.txt
