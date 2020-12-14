@@ -1403,13 +1403,13 @@ int GrammarTranslator::roll_back(int step)
         logger.error("wrong roll back step %d", step);
         return -1;
     }
-    if (now_word_id - step <= bottom_word_id)
+    if (now_word_id - step < bottom_word_id)
     {
         logger.error("roll back too much");
         return -1;
     }
     now_word_id -= step;
-    word = word_buffer[now_word_id];
+    word = word_buffer[now_word_id % WORD_BUFFER_SZ];
     return 0;
 }
 bool GrammarTranslator::detect(int step, ...)
