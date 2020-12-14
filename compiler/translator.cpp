@@ -522,10 +522,11 @@ int GrammarTranslator::param_table()
 
 /**
  * 主函数
- * <main_f> ::= voidmain‘(’‘)’‘{’<comp_stmt>‘}’
+ * <main_f> ::= void main'('')''{'<comp_stmt>'}'
  */
 int GrammarTranslator::main_f()
 {
+    // void main'('')'
     if (word.first == "VOIDTK")
     {
         get_word();
@@ -559,9 +560,10 @@ int GrammarTranslator::main_f()
     }
     else
     {
-        logger.error("RPARENT missing in main_f");
-        return -1;
+        e_right_parenthesis();
     }
+
+    // '{'<comp_stmt>'}'
     if (word.first == "LBRACE")
     {
         get_word();
@@ -581,6 +583,7 @@ int GrammarTranslator::main_f()
         logger.error("RBRACE missing in main_f");
         return -1;
     }
+
     print_grammar("<主函数>");
     return 0;
 }
@@ -611,7 +614,7 @@ int GrammarTranslator::comp_stmt()
 int GrammarTranslator::stmt_list()
 {
     while (true)
-    { //??????
+    {
         if (word.first == "IFTK" || word.first == "DOTK" || word.first == "WHILETK" ||
             word.first == "FORTK" || word.first == "LBRACE" || word.first == "IDENFR" ||
             word.first == "SCANFTK" || word.first == "PRINTFTK" || word.first == "RETURNTK" ||
@@ -761,6 +764,7 @@ int GrammarTranslator::eval()
  */
 int GrammarTranslator::cond_stmt()
 {
+    // if'('<cond>')'<stmt>
     if (word.first == "IFTK")
     {
         get_word();
@@ -786,15 +790,17 @@ int GrammarTranslator::cond_stmt()
     }
     else
     {
-        logger.error("`rparent` missing in cond_stmt");
-        return -1;
+        e_right_parenthesis();
     }
     stmt();
-    if (detect(1, "ELSETK"))
+
+    // [else<stmt>]
+    if (word.first == "ELSETK")
     {
         get_word();
         stmt();
     }
+
     print_grammar("<条件语句>");
     return 0;
 }
@@ -822,7 +828,7 @@ int GrammarTranslator::cond()
  */
 int GrammarTranslator::loop_stmt()
 {
-    if (word.first == "WHILETK")
+    if (word.first == "WHILETK") // while'('<cond>')'<stmt>
     {
         get_word();
         if (word.first == "LPARENT")
@@ -841,12 +847,11 @@ int GrammarTranslator::loop_stmt()
         }
         else
         {
-            logger.error("rparent missing in while of loop_stmp");
-            return -1;
+            e_right_parenthesis();
         }
         stmt();
     }
-    else if (word.first == "DOTK")
+    else if (word.first == "DOTK") // do<stmt>while'('<cond>')'
     {
         stmt();
         if (word.first == "WHILETK")
@@ -874,74 +879,107 @@ int GrammarTranslator::loop_stmt()
         }
         else
         {
-            logger.error("rparent missing in dowhile of loop_stmp");
-            return -1;
+            e_right_parenthesis();
         }
     }
-    else if (word.first == "FORTK")
+    else if (word.first == "FORTK") // for'('<ident>=<exp>;<cond>;<ident>=<ident>(+|-)<step>')'<stmt>
     {
         get_word();
-        if (word.first != "LPARENT")
+        if (word.first == "LPARENT")
+        {
+            get_word();
+        }
+        else
         {
             logger.error("lparent missing in while of loop_stmp");
             return -1;
         }
-        get_word();
-        if (word.first != "IDENFR")
+        // <ident>=<exp>;
+        if (word.first == "IDENFR")
+        {
+            get_word();
+        }
+        else
         {
             logger.error("idenfer missing in part1 of for in loop_stmt");
             return -1;
         }
-        get_word();
-        if (word.first != "ASSIGN")
+        if (word.first == "ASSIGN")
+        {
+            get_word();
+        }
+        else
         {
             logger.error("assign missing in part1 of for in loop_stmt");
             return -1;
         }
-        get_word();
         exp();
-        if (word.first != "SEMICN")
+        if (word.first == "SEMICN")
+        {
+            get_word();
+        }
+        else
         {
             logger.error("semicn missing in part1 of for in loop_stmt");
         }
-        get_word();
+        // <cond>;
         cond();
-        if (word.first != "SEMICN")
+        if (word.first == "SEMICN")
         {
-            logger.error("semicn missing in part2 of for in loop_stmt");
+            get_word();
         }
-        get_word();
-        if (word.first != "IDENFR")
+        else
+        {
+            e_semicolon();
+        }
+        //<ident>=<ident>(+|-)<step>
+        if (word.first == "IDENFR")
+        {
+            get_word();
+        }
+        else
         {
             logger.error("idenfer missing in part3 of for in loop_stmt");
             return -1;
         }
-        get_word();
-        if (word.first != "ASSIGN")
+        if (word.first == "ASSIGN")
+        {
+            get_word();
+        }
+        else
         {
             logger.error("assign missing in part3 of for in loop_stmt");
             return -1;
         }
-        get_word();
-        if (word.first != "IDENFR")
+        if (word.first == "IDENFR")
+        {
+            get_word();
+        }
+        else
         {
             logger.error("idenfer missing in part3 of for in loop_stmt");
             return -1;
         }
-        get_word();
-        if (word.first != "PLUS" && word.first != "MINU")
+        if (word.first == "PLUS" || word.first == "MINU")
+        {
+            get_word();
+        }
+        else
         {
             logger.error("(+|-) missing in part3 of for in loop_stmt");
             return -1;
         }
-        get_word();
         step();
-        if (word.first != "RPARENT")
+        // ')'<stmt>
+        if (word.first == "RPARENT")
+        {
+            get_word();
+        }
+        else
         {
             logger.error("rparent missing in while of loop_stmp");
             return -1;
         }
-        get_word();
         stmt();
     }
     else
@@ -949,6 +987,7 @@ int GrammarTranslator::loop_stmt()
         logger.error("whiletk or dotk or fortk missing in loop_stmp");
         return -1;
     }
+
     print_grammar("<循环语句>");
     return 0;
 }
@@ -1079,25 +1118,34 @@ int GrammarTranslator::factor()
  */
 int GrammarTranslator::f_ret_call() //??没地方接返回值?
 {
-    if (word.first != "IDENFR")
+    if (word.first == "IDENFR")
+    {
+        get_word();
+    }
+    else
     {
         logger.error("ident missing in f_ret_call");
         return -1;
     }
-    get_word();
-    if (word.first != "LPARENT")
+    if (word.first == "LPARENT")
+    {
+        get_word();
+    }
+    else
     {
         logger.error("lparent missing in f_ret_call");
         return -1;
     }
-    get_word();
     arg_list();
-    if (word.first != "RPARENT")
+    if (word.first == "RPARENT")
     {
-        logger.error("rparent missing in f_ret_call");
-        return -1;
+        get_word();
     }
-    get_word();
+    else
+    {
+        e_right_parenthesis();
+    }
+
     print_grammar("<有返回值函数调用语句>");
     return 0;
 }
@@ -1107,25 +1155,34 @@ int GrammarTranslator::f_ret_call() //??没地方接返回值?
  */
 int GrammarTranslator::f_void_call()
 {
-    if (word.first != "IDENFR")
+    if (word.first == "IDENFR")
+    {
+        get_word();
+    }
+    else
     {
         logger.error("ident missing in f_void_call");
         return -1;
     }
-    get_word();
-    if (word.first != "LPARENT")
+    if (word.first == "LPARENT")
+    {
+        get_word();
+    }
+    else
     {
         logger.error("lparent missing in f_void_call");
         return -1;
     }
-    get_word();
     arg_list();
-    if (word.first != "RPARENT")
+    if (word.first == "RPARENT")
     {
-        logger.error("rparent missing in f_void_call");
-        return -1;
+        get_word();
     }
-    get_word();
+    else
+    {
+        e_right_parenthesis();
+    }
+
     print_grammar("<无返回值函数调用语句>");
     return 0;
 }
@@ -1189,12 +1246,15 @@ int GrammarTranslator::r_stmt()
             break;
         }
     }
-    if (word.first != "RPARENT")
+    if (word.first == "RPARENT")
     {
-        logger.error("rparent missing in r_stmt");
-        return -1;
+        get_word();
     }
-    get_word();
+    else
+    {
+        e_right_parenthesis();
+    }
+
     print_grammar("<读语句>");
     return 0;
 }
@@ -1264,17 +1324,22 @@ int GrammarTranslator::ret_stmt()
         return -1;
     }
     get_word();
-    if (word.first == "LPARENT")
+    if (word.first != "LPARENT")
+    {
+        logger.error("lparent missing in ret_stmt");
+        return -1;
+    }
+    get_word();
+    exp();
+    if (word.first == "RPARENT")
     {
         get_word();
-        exp();
-        if (word.first != "RPARENT")
-        {
-            logger.error("rparent missing in ret_stmt with parentheses");
-            return -1;
-        }
-        get_word();
     }
+    else
+    {
+        e_right_parenthesis();
+    }
+
     print_grammar("<返回语句>");
     return 0;
 }
