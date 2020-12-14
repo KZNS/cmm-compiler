@@ -33,9 +33,9 @@ private:
     int integer(int &x);           // 整数
 
     int declare_h(std::string &type, std::string &f_name); // 声明头部
-    int f_ret();       // 有返回值函数定义
-    int f_void();      // 无返回值函数定义
-    int param_table(); // 参数表
+    int f_ret();                                           // 有返回值函数定义
+    int f_void();                                          // 无返回值函数定义
+    int param_table();                                     // 参数表
 
     int main_f(); // 主函数
 
@@ -59,6 +59,8 @@ private:
     int r_stmt();   // 读语句
     int w_stmt();   // 写语句
     int ret_stmt(); // 返回语句
+
+    int str_const(); // 字符串
 
     int e_word();                //非法符号或不符合词法
     int e_redifine_identifier(); //名字重定义

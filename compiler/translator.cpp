@@ -1267,6 +1267,26 @@ int GrammarTranslator::ret_stmt()
     return 0;
 }
 
+/**
+ * 字符串
+ * <str> ::= "{十进制编码为32,33,35-126的ASCII字符}"
+ */
+int GrammarTranslator::str_const()
+{
+    if (word.first == "STRCON")
+    {
+        get_word();
+    }
+    else
+    {
+        logger.error("wrong string %s", word.second.c_str());
+        return -1;
+    }
+
+    print_grammar("<字符串>");
+    return 0;
+}
+
 /*******************************
  * 
  * error handling

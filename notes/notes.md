@@ -109,7 +109,6 @@ define keywords
 |             非零数字 | udigit        |
 |                 数字 | digit         |
 |                 字符 | ch            |
-|               字符串 | str           |
 |                      |               |
 |           类型标识符 | type          |
 |               标识符 | ident         |
@@ -152,6 +151,8 @@ define keywords
 |               读语句 | r_stmt        |
 |               写语句 | w_stmt        |
 |             返回语句 | ret_stmt      |
+|                      |               |
+|               字符串 | str           |
 
 ##### 2.1.2.2. 语法规则表
 
@@ -165,7 +166,6 @@ define keywords
 |        `<udigit>` | `1...9`                                                                        |
 |         `<digit>` | `0 | <udigit>`                                                                 |
 |            `<ch>` | `'<add_op>' | '<mult_op>' | '<letter>' | '<digit>'`                            |
-|           `<str>` | `"{十进制编码为32,33,35-126的ASCII字符}"`                                      |
 |                   |                                                                                |
 |          `<type>` | `int | char`                                                                   |
 |         `<ident>` | `<letter>{<letter>|<digit>}`                                                   |
@@ -232,6 +232,8 @@ define keywords
 |                   | `printf '('<str> ')'`                                                          |
 |                   | `printf '('<exp>')'`                                                           |
 |      `<ret_stmt>` | `return['('<exp>')']`                                                          |
+|                   |                                                                                |
+|           `<str>` | `"{十进制编码为32,33,35-126的ASCII字符}"`                                      |
 
 ##### 2.1.2.3. 错误信息表
 
