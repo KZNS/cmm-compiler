@@ -23,7 +23,8 @@ int GrammarTranslator::prog()
     {
         declare_const();
     }
-    if (!(detect(3, "INTTK", "IDENFR", "LPARENT") || detect(3, "CHARTK", "IDENFR", "LPARENT")))
+    if ((detect(2, "INTTK", "IDENFR") && !detect(3, "INTTK", "IDENFR", "LPARENT")) ||
+        (detect(2, "CHARTK", "IDENFR") && !detect(3, "CHARTK", "IDENFR", "LPARENT")))
     {
         declare_var();
     }
@@ -173,7 +174,8 @@ int GrammarTranslator::def_const()
  */
 int GrammarTranslator::declare_var()
 {
-    while (!(detect(3, "INTTK", "IDENFR", "LPARENT") || detect(3, "CHARTK", "IDENFR", "LPARENT")))
+    while ((detect(2, "INTTK", "IDENFR") && !detect(3, "INTTK", "IDENFR", "LPARENT")) ||
+           (detect(2, "CHARTK", "IDENFR") && !detect(3, "CHARTK", "IDENFR", "LPARENT")))
     {
         def_var();
         if (word.first == "SEMICN")
@@ -246,7 +248,7 @@ int GrammarTranslator::def_var()
             //gmc type idenfr
         }
 
-        if (word.first == ",")
+        if (word.first == "COMMA")
         {
             get_word();
             continue;
