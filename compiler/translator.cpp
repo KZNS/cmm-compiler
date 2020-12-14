@@ -595,7 +595,8 @@ int GrammarTranslator::comp_stmt()
     {
         declare_const();
     }
-    if (!(detect(3, "INTTK", "IDENFR", "LPARENT") || detect(3, "CHARTK", "IDENFR", "LPARENT")))
+    if ((detect(2, "INTTK", "IDENFR") && !detect(3, "INTTK", "IDENFR", "LPARENT")) ||
+        (detect(2, "CHARTK", "IDENFR") && !detect(3, "CHARTK", "IDENFR", "LPARENT")))
     {
         declare_var();
     }
@@ -715,6 +716,7 @@ int GrammarTranslator::stmt()
  */
 int GrammarTranslator::eval()
 {
+    // <ident> | <ident>'['<exp>']'
     if (word.first == "IDENFR")
     {
         get_word();
@@ -734,20 +736,22 @@ int GrammarTranslator::eval()
         }
         else
         {
-            logger.error("missing right bracket in eval");
-            return -1;
+            e_right_bracket();
         }
     }
+
+    // =<exp>
     if (word.first == "ASSIGN")
     {
         get_word();
-        exp();
     }
     else
     {
         logger.error("missing assign in eval");
         return -1;
     }
+    exp();
+
     print_grammar("<赋值语句>");
     return 0;
 }
@@ -972,11 +976,20 @@ int GrammarTranslator::step()
  */
 int GrammarTranslator::exp()
 {
+    // [+|-]<term>
     if (word.first == "PLUS" || word.first == "MINU")
     {
         get_word();
     }
     term();
+
+    // {<add_op><term>}
+    while (word.first == "PLUS" || word.first == "MINU")
+    {
+        get_word();
+        term();
+    }
+
     print_grammar("<表达式>");
     return 0;
 }
@@ -986,19 +999,13 @@ int GrammarTranslator::exp()
  */
 int GrammarTranslator::term()
 {
-    while (true)
+    factor();
+    while (word.first == "MULT" || word.first == "DIV")
     {
+        get_word();
         factor();
-        if (word.first == "MULT" || word.first == "DIV")
-        {
-            get_word();
-            continue;
-        }
-        else
-        {
-            break;
-        }
     }
+
     print_grammar("<项>");
     return 0;
 }
@@ -1013,7 +1020,11 @@ int GrammarTranslator::term()
  */
 int GrammarTranslator::factor()
 {
-    if (word.first == "IDENFR")
+    if (detect(2, "IDENFR", "LPARENT")) // <f_ret_call>
+    {
+        f_ret_call();
+    }
+    else if (word.first == "IDENFR") // <ident> | <ident>'['<exp>']'
     {
         get_word();
         if (word.first == "LBRACK")
@@ -1026,12 +1037,11 @@ int GrammarTranslator::factor()
             }
             else
             {
-                logger.error("missing rbrack in factor <ident>");
-                return -1;
+                e_right_bracket();
             }
         }
     }
-    else if (word.first == "LPARENT")
+    else if (word.first == "LPARENT") // '('<exp>')'
     {
         get_word();
         exp();
@@ -1041,23 +1051,24 @@ int GrammarTranslator::factor()
         }
         else
         {
-            logger.error("missing rparent in factor <(exp)>");
-            return -1;
+            e_right_parenthesis();
         }
     }
-    else if (word.first == "CHARCON")
+    else if (word.first == "PLUS" || word.first == "MINU" || word.first == "INTCON") // <integer>
     {
-        get_word();
-    }
-    else if (word.first == "PLUS" || word.first == "MINU" || word.first == "INTCON")
-    { //??integer is broken
         int x;
         integer(x);
     }
+    else if (word.first == "CHARCON") // <ch>
+    {
+        get_word();
+    }
     else
     {
-        f_ret_call();
+        logger.error("wrong factor %s", word.second.c_str());
+        return -1;
     }
+
     print_grammar("<因子>");
     return 0;
 }
