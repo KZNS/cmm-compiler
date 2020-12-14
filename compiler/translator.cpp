@@ -1206,21 +1206,29 @@ int GrammarTranslator::r_stmt()
  */
 int GrammarTranslator::w_stmt()
 {
-    if (word.first != "PRINTFTK")
+    if (word.first == "PRINTFTK")
+    {
+        get_word();
+    }
+    else
     {
         logger.error("printtk missing in w_stmt");
         return -1;
     }
-    get_word();
-    if (word.first != "LPARENT")
+    if (word.first == "LPARENT")
+    {
+        get_word();
+    }
+    else
     {
         logger.error("lparent missing in w_stmt");
         return -1;
     }
-    get_word();
+
+    // <str> | <str>,<exp> | <exp>
     if (word.first == "STRCON")
     {
-        get_word();
+        str_const();
         if (word.first == "COMMA")
         {
             get_word();
@@ -1231,12 +1239,16 @@ int GrammarTranslator::w_stmt()
     {
         exp();
     }
+
     if (word.first == "RPARENT")
     {
-        logger.error("rparent missing in w_stmt");
-        return -1;
+        get_word();
     }
-    get_word();
+    else
+    {
+        e_right_parenthesis();
+    }
+
     print_grammar("<写语句>");
     return 0;
 }
