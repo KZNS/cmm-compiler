@@ -18,6 +18,7 @@
  */
 int GrammarTranslator::prog()
 {
+    // [<declare_const>][<declare_var>]
     if (word.first == "CONSTTK")
     {
         declare_const();
@@ -26,6 +27,8 @@ int GrammarTranslator::prog()
     {
         declare_var();
     }
+
+    // {<f_ret>|<f_void>}<main_f>
     while (true)
     {
         if (detect(2, "VOIDTK", "MAINTK"))
@@ -135,6 +138,7 @@ int GrammarTranslator::def_const()
             else if (const_type == "CHARTK")
             {
                 c = word.second[0];
+                get_word();
             }
             else
             {
