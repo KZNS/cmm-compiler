@@ -771,8 +771,24 @@ int GrammarTranslator::stmt()
     {
         if (detect(2, "IDENFR", "LPARENT")) // <f_ret_call> | <f_void_call>
         {
-            //??如何区分有无返回值
-            f_ret_call();
+            FunctionProperty *fp;
+            fp = table.find_f(word.second);
+            if (fp == NULL)
+            {
+                e_undifine_identifier();
+            }
+            else if (fp->type == "VOIDTK")
+            {
+                f_void_call();
+            }
+            else if (fp->type == "INTTK" || fp->type == "CHARTK")
+            {
+                f_ret_call();
+            }
+            else
+            {
+                logger.error("unknow func type %s", fp->type.c_str());
+            }
         }
         else if (word.first == "IDENFR") // <eval>
         {
