@@ -5,6 +5,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
 /**********************************
  * 
@@ -393,6 +394,7 @@ int GrammarTranslator::f_ret()
 {
     std::string ret_type;
     std::string f_name;
+    std::vector<VarProperty> arg_list;
     int e;
 
     // <declare_h>
@@ -412,7 +414,7 @@ int GrammarTranslator::f_ret()
         logger.error("missing '('");
         return -1;
     }
-    param_table();
+    param_table(arg_list);
     if (word.first == "RPARENT")
     {
         get_word();
@@ -452,11 +454,15 @@ int GrammarTranslator::f_ret()
  */
 int GrammarTranslator::f_void()
 {
-    std::string f_name;
+    std::string name;
+    std::string type;
+    std::vector<VarProperty> arg_list;
 
+    table.set_local();
     // void<ident>
     if (word.first == "VOIDTK")
     {
+        type = word.first;
         get_word();
     }
     else
@@ -465,7 +471,7 @@ int GrammarTranslator::f_void()
     }
     if (word.first == "IDENFR")
     {
-        f_name = word.second;
+        name = word.second;
         get_word();
     }
     else
@@ -473,6 +479,7 @@ int GrammarTranslator::f_void()
         logger.error("missing function name");
         return -1;
     }
+    print_pcode("FUNC @%s:", name.c_str());
 
     // '('<param_table>')'
     if (word.first == "LPARENT")
@@ -484,7 +491,7 @@ int GrammarTranslator::f_void()
         logger.error("missing '('");
         return -1;
     }
-    param_table();
+    param_table(arg_list);
     if (word.first == "RPARENT")
     {
         get_word();
@@ -492,6 +499,19 @@ int GrammarTranslator::f_void()
     else
     {
         e_right_parenthesis();
+    }
+
+    table.insert_f(name, type, arg_list);
+    if (arg_list.size())
+    {
+        std::ostringstream tmp;
+
+        tmp << "arg " << arg_list[0].name << ":" << arg_list[0].type;
+        for (int i = 1; i < arg_list.size(); i++)
+        {
+            tmp << "," << arg_list[i].name << ":" << arg_list[i].type;
+        }
+        print_pcode(tmp.str().c_str());
     }
 
     // '{'<comp_stmt>'}'
@@ -514,6 +534,7 @@ int GrammarTranslator::f_void()
         logger.error("missing '}'");
         return -1;
     }
+    table.set_global();
 
     print_grammar("<无返回值函数定义>");
     return 0;
@@ -523,10 +544,12 @@ int GrammarTranslator::f_void()
  * <param_table> ::= <type><ident>{,<type><ident>}
  *                   <空>
  */
-int GrammarTranslator::param_table()
+int GrammarTranslator::param_table(std::vector<VarProperty> &arg_list)
 {
     std::string param_type;
     std::string param_name;
+    int e;
+
     while (word.first == "INTTK" || word.first == "CHARTK")
     {
         param_type = word.first;
@@ -542,6 +565,14 @@ int GrammarTranslator::param_table()
             logger.error("missing param_name");
             return -1;
         }
+
+        arg_list.push_back(VarProperty(param_name, param_type, false));
+        e = table.insert_var(param_name, param_type, false);
+        if (e)
+        {
+            e_redifine_identifier();
+        }
+
         if (word.first == "COMMA")
         {
             get_word();

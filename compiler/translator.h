@@ -37,7 +37,7 @@ private:
     int declare_h(std::string &type, std::string &f_name); // 声明头部
     int f_ret();                                           // 有返回值函数定义
     int f_void();                                          // 无返回值函数定义
-    int param_table();                                     // 参数表
+    int param_table(std::vector<VarProperty> &arg_list);   // 参数表
 
     int main_f(); // 主函数
 
