@@ -213,33 +213,33 @@ int GrammarTranslator::declare_var()
  */
 int GrammarTranslator::def_var()
 {
-    Word type;
-    Word idenfr;
+    std::string type;
+    std::string name;
     unsigned int size;
     int e;
     if (word.first == "INTTK" || word.first == "CHARTK")
     {
-        type = word;
+        type = word.first;
+        get_word();
     }
     else
     {
         logger.error("wrong type %s", word.second.c_str());
         return -1;
     }
-    get_word();
 
     while (true)
     {
         if (word.first == "IDENFR")
         {
-            idenfr = word;
+            name = word.second;
+            get_word();
         }
         else
         {
-            logger.error("missing identifier after %s", type.second.c_str());
+            logger.error("missing identifier after %s", type.c_str());
             return -1;
         }
-        get_word();
 
         if (word.first == "LBRACK")
         {
@@ -257,11 +257,27 @@ int GrammarTranslator::def_var()
             {
                 e_right_bracket();
             }
-            //gmc type idenfr size
+            e = table.insert_var(name, size, type, false);
+            if (!e)
+            {
+                print_pcode("var %s[%d]:%s", name.c_str(), size, type.c_str());
+            }
+            else
+            {
+                e_redifine_identifier();
+            }
         }
         else
         {
-            //gmc type idenfr
+            e = table.insert_var(name, type, false);
+            if (!e)
+            {
+                print_pcode("var %s:%s", name.c_str(), type.c_str());
+            }
+            else
+            {
+                e_redifine_identifier();
+            }
         }
 
         if (word.first == "COMMA")
