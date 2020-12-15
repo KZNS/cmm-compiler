@@ -88,16 +88,17 @@ int GrammarTranslator::declare_const()
  */
 int GrammarTranslator::def_const()
 {
-    std::string const_type;
-    std::string idenfr;
+    std::string type;
+    std::string name;
     int x;
     char c;
+    int e;
 
     // int
     // char
     if (word.first == "INTTK" || word.first == "CHARTK")
     {
-        const_type = word.first;
+        type = word.first;
         get_word();
     }
     else
@@ -112,13 +113,23 @@ int GrammarTranslator::def_const()
     {
         if (word.first == "IDENFR")
         {
-            idenfr = word.second;
+            name = word.second;
             get_word();
         }
         else
         {
-            logger.error("missing identifier after %s", const_type.c_str());
+            logger.error("missing identifier after %s", type.c_str());
             return -1;
+        }
+        //new var
+        e = table.insert_var(name, type, true);
+        if (!e)
+        {
+            print_pcode("var %s:%s", name.c_str(), type.c_str());
+        }
+        else
+        {
+            e_redifine_identifier();
         }
 
         if (word.first == "ASSIGN")
@@ -127,28 +138,31 @@ int GrammarTranslator::def_const()
         }
         else
         {
-            logger.error("missing '=' after %s", idenfr.c_str());
+            logger.error("missing '=' after %s", name.c_str());
             return -1;
         }
 
         if (word.first == "PLUS" || word.first == "MINU" ||
             word.first == "INTCON" || word.first == "CHARCON")
         {
-            if (const_type == "INTTK")
+            if (type == "INTTK")
             {
                 integer(x);
+                print_pcode("push %d", x);
+                print_pcode("pop %s", name.c_str());
             }
-            else if (const_type == "CHARTK")
+            else if (type == "CHARTK")
             {
                 c = word.second[0];
                 get_word();
+                print_pcode("push %d", (int)c);
+                print_pcode("pop %s", name.c_str());
             }
             else
             {
                 logger.error("wrong type");
                 return -1;
             }
-            //gmc const_type idenfr=data
         }
         else
         {
@@ -309,6 +323,10 @@ int GrammarTranslator::integer(int &x)
     {
         x = -1;
         get_word();
+    }
+    else
+    {
+        x = 1;
     }
 
     unsigned int ux;
