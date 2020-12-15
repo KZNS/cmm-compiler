@@ -674,6 +674,7 @@ int GrammarTranslator::stmt()
         if (detect(2, "IDENFR", "LPARENT")) // <f_ret_call> | <f_void_call>
         {
             //??如何区分有无返回值
+            f_ret_call();
         }
         else if (word.first == "IDENFR") // <eval>
         {
@@ -1196,19 +1197,24 @@ int GrammarTranslator::f_void_call()
  */
 int GrammarTranslator::arg_list()
 {
-    while (true)
+    if (word.first == "PLUS" || word.first == "MINU" || word.first == "IDENFR" ||
+        word.first == "LPARENT" || word.first == "INTCON" || word.first == "CHARCON")
     {
-        exp();
-        if (word.first == "COMMA")
+        while (true)
         {
-            get_word();
-            continue;
-        }
-        else
-        {
-            break;
+            exp();
+            if (word.first == "COMMA")
+            {
+                get_word();
+                continue;
+            }
+            else
+            {
+                break;
+            }
         }
     }
+
     print_grammar("<值参数表>");
     return 0;
 }
@@ -1327,20 +1333,18 @@ int GrammarTranslator::ret_stmt()
         return -1;
     }
     get_word();
-    if (word.first != "LPARENT")
-    {
-        logger.error("lparent missing in ret_stmt");
-        return -1;
-    }
-    get_word();
-    exp();
-    if (word.first == "RPARENT")
+    if (word.first == "LPARENT")
     {
         get_word();
-    }
-    else
-    {
-        e_right_parenthesis();
+        exp();
+        if (word.first == "RPARENT")
+        {
+            get_word();
+        }
+        else
+        {
+            e_right_parenthesis();
+        }
     }
 
     print_grammar("<返回语句>");
