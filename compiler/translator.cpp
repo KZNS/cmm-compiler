@@ -839,10 +839,20 @@ int GrammarTranslator::stmt()
  */
 int GrammarTranslator::eval()
 {
+    std::string name;
+    bool is_array;
+    VarProperty *vp;
+
     // <ident> | <ident>'['<exp>']'
     if (word.first == "IDENFR")
     {
+        name = word.second;
         get_word();
+        vp = table.find_var(name);
+        if (vp == NULL)
+        {
+            e_undifine_identifier();
+        }
     }
     else
     {
@@ -861,6 +871,21 @@ int GrammarTranslator::eval()
         {
             e_right_bracket();
         }
+        is_array = true;
+        if (vp && !vp->is_array())
+        {
+            logger.error("%s is not an array", name.c_str());
+            return -1;
+        }
+    }
+    else
+    {
+        is_array = false;
+        if (vp && vp->is_array())
+        {
+            logger.error("%s is an array", name.c_str());
+            return -1;
+        }
     }
 
     // =<exp>
@@ -874,6 +899,15 @@ int GrammarTranslator::eval()
         return -1;
     }
     exp();
+
+    if (is_array)
+    {
+        print_pcode("pop %s[]", name.c_str());
+    }
+    else
+    {
+        print_pcode("pop %s", name.c_str());
+    }
 
     print_grammar("<赋值语句>");
     return 0;
