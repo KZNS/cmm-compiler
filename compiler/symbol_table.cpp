@@ -10,9 +10,8 @@ VarProperty::VarProperty(const std::string &_name,
     : name(_name), size(0), type(_type), is_const(_is_const) {}
 VarProperty::VarProperty(const std::string &_name,
                          int _size,
-                         const std::string &_type,
-                         bool _is_const)
-    : name(_name), size(_size), type(_type), is_const(_is_const) {}
+                         const std::string &_type)
+    : name(_name), size(_size), type(_type), is_const(false) {}
 bool VarProperty::is_array()
 {
     return size;
@@ -25,61 +24,36 @@ FunctionProperty::FunctionProperty(const std::string &_name,
     : name(_name), type(_type), arg_list(_arg_list) {}
 
 SymbolTable::SymbolTable() : is_local(false) {}
-int SymbolTable::insert_var(const std::string &name,
-                            const std::string &type, bool is_const)
+int SymbolTable::insert_var(const VarProperty &var_p)
 {
     if (is_local)
     {
-        if (local_var_table.find(name) != global_var_table.end())
+        if (local_var_table.find(var_p.name) != global_var_table.end())
         {
-            logger.error("var %s already exists", name.c_str());
+            logger.error("var %s already exists", var_p.name.c_str());
             return -1;
         }
-        local_var_table[name] = VarProperty(name, type, is_const);
+        local_var_table[var_p.name] = var_p;
     }
     else
     {
-        if (global_var_table.find(name) != global_var_table.end())
+        if (global_var_table.find(var_p.name) != global_var_table.end())
         {
-            logger.error("var %s already exists", name.c_str());
+            logger.error("var %s already exists", var_p.name.c_str());
             return -1;
         }
-        global_var_table[name] = VarProperty(name, type, is_const);
+        global_var_table[var_p.name] = var_p;
     }
     return 0;
 }
-int SymbolTable::insert_var(const std::string &name, int size,
-                            const std::string &type, bool is_const)
+int SymbolTable::insert_f(const FunctionProperty &func_p)
 {
-    if (is_local)
+    if (f_table.find(func_p.name) != f_table.end())
     {
-        if (local_var_table.find(name) != global_var_table.end())
-        {
-            logger.error("var %s already exists", name.c_str());
-            return -1;
-        }
-        local_var_table[name] = VarProperty(name, size, type, is_const);
-    }
-    else
-    {
-        if (global_var_table.find(name) != global_var_table.end())
-        {
-            logger.error("var %s already exists", name.c_str());
-            return -1;
-        }
-        global_var_table[name] = VarProperty(name, size, type, is_const);
-    }
-    return 0;
-}
-int SymbolTable::insert_f(const std::string &name, const std::string &type,
-                          const std::vector<VarProperty> &arg_list)
-{
-    if (f_table.find(name) != f_table.end())
-    {
-        logger.error("function %s already exists", name.c_str());
+        logger.error("function %s already exists", func_p.name.c_str());
         return -1;
     }
-    f_table[name] = FunctionProperty(name, type, arg_list);
+    f_table[func_p.name] = func_p;
     return 0;
 }
 

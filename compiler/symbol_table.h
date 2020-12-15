@@ -20,11 +20,10 @@ public:
     VarProperty();
     VarProperty(const std::string &_name,
                 const std::string &_type,
-                bool _is_const);
+                bool _is_const = false);
     VarProperty(const std::string &_name,
                 int size,
-                const std::string &_type,
-                bool _is_const);
+                const std::string &_type);
     bool is_array();
 };
 
@@ -50,12 +49,8 @@ private:
 
 public:
     SymbolTable();
-    int insert_var(const std::string &name, const std::string &type,
-                   bool is_const);
-    int insert_var(const std::string &name, int size, const std::string &type,
-                   bool is_const);
-    int insert_f(const std::string &name, const std::string &type,
-                 const std::vector<VarProperty> &arg_list);
+    int insert_var(const VarProperty &var_p);
+    int insert_f(const FunctionProperty &func_p);
 
     VarProperty *find_var(const std::string &name);
     FunctionProperty *find_f(const std::string &name);

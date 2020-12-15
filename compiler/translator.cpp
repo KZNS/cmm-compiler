@@ -123,7 +123,7 @@ int GrammarTranslator::def_const()
             return -1;
         }
         //new var
-        e = table.insert_var(name, type, true);
+        e = table.insert_var(VarProperty(name, type, true));
         if (!e)
         {
             print_pcode("var %s:%s", name.c_str(), type.c_str());
@@ -258,7 +258,7 @@ int GrammarTranslator::def_var()
             {
                 e_right_bracket();
             }
-            e = table.insert_var(name, size, type, false);
+            e = table.insert_var(VarProperty(name, size, type));
             if (!e)
             {
                 print_pcode("var %s[%d]:%s", name.c_str(), size, type.c_str());
@@ -270,7 +270,7 @@ int GrammarTranslator::def_var()
         }
         else
         {
-            e = table.insert_var(name, type, false);
+            e = table.insert_var(VarProperty(name, type));
             if (!e)
             {
                 print_pcode("var %s:%s", name.c_str(), type.c_str());
@@ -501,7 +501,7 @@ int GrammarTranslator::f_void()
         e_right_parenthesis();
     }
 
-    table.insert_f(name, type, arg_list);
+    table.insert_f(FunctionProperty(name, type, arg_list));
     if (arg_list.size())
     {
         std::ostringstream tmp;
@@ -566,8 +566,8 @@ int GrammarTranslator::param_table(std::vector<VarProperty> &arg_list)
             return -1;
         }
 
-        arg_list.push_back(VarProperty(param_name, param_type, false));
-        e = table.insert_var(param_name, param_type, false);
+        arg_list.push_back(VarProperty(param_name, param_type));
+        e = table.insert_var(VarProperty(param_name, param_type));
         if (e)
         {
             e_redifine_identifier();
