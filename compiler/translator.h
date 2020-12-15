@@ -2,6 +2,7 @@
 #define TRANSLATOR_H
 
 #include "automaton.h"
+#include "symbol_table.h"
 #include "cLogger/clogger.h"
 #include <utility>
 #include <cstdarg>
@@ -14,6 +15,7 @@ class GrammarTranslator
 {
 private:
     LexicalAutomaton words;
+    SymbolTable table;
     bool loaded_lex;
     std::ofstream fout;
     Word word;

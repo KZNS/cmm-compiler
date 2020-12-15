@@ -19,6 +19,8 @@ int main(int argc, char *argv[])
 
     trans.load_lexical("language.txt");
 
+    trans.translate(in_file_name, out_file_name);
+
     return 0;
 }
 int help()

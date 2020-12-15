@@ -417,7 +417,6 @@ int GrammarTranslator::f_ret()
 int GrammarTranslator::f_void()
 {
     std::string f_name;
-    int e;
 
     // void<ident>
     if (word.first == "VOIDTK")
