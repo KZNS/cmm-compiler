@@ -855,6 +855,7 @@ int GrammarTranslator::loop_stmt()
     }
     else if (word.first == "DOTK") // do<stmt>while'('<cond>')'
     {
+        get_word();
         stmt();
         if (word.first == "WHILETK")
         {
