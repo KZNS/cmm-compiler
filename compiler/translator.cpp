@@ -1170,18 +1170,34 @@ int GrammarTranslator::step()
  */
 int GrammarTranslator::exp()
 {
+    std::string op;
+
     // [+|-]<term>
     if (word.first == "PLUS" || word.first == "MINU")
     {
+        op = word.first;
         get_word();
     }
     term();
+    if (op == "MINU")
+    {
+        print_pcode("neg");
+    }
 
     // {<add_op><term>}
     while (word.first == "PLUS" || word.first == "MINU")
     {
+        op = word.first;
         get_word();
         term();
+        if (op == "PLUS")
+        {
+            print_pcode("add");
+        }
+        else if (op == "MINU")
+        {
+            print_pcode("sub");
+        }
     }
 
     print_grammar("<表达式>");
@@ -1193,11 +1209,22 @@ int GrammarTranslator::exp()
  */
 int GrammarTranslator::term()
 {
+    std::string op;
+
     factor();
     while (word.first == "MULT" || word.first == "DIV")
     {
+        op = word.first;
         get_word();
         factor();
+        if (op == "MULT")
+        {
+            print_pcode("mul");
+        }
+        else if (op == "DIV")
+        {
+            print_pcode("div");
+        }
     }
 
     print_grammar("<项>");
@@ -1214,13 +1241,23 @@ int GrammarTranslator::term()
  */
 int GrammarTranslator::factor()
 {
+    VarProperty *vp;
+    std::string name;
+    bool is_array;
+
     if (detect(2, "IDENFR", "LPARENT")) // <f_ret_call>
     {
         f_ret_call();
     }
     else if (word.first == "IDENFR") // <ident> | <ident>'['<exp>']'
     {
+        name = word.second;
         get_word();
+        vp = table.find_var(name);
+        if (vp == NULL)
+        {
+            e_undifine_identifier();
+        }
         if (word.first == "LBRACK")
         {
             get_word();
@@ -1233,6 +1270,21 @@ int GrammarTranslator::factor()
             {
                 e_right_bracket();
             }
+            if (vp && !vp->is_array())
+            {
+                logger.error("%s is not an array", name.c_str());
+                return -1;
+            }
+            print_pcode("push %s[]", name.c_str());
+        }
+        else
+        {
+            if (vp && vp->is_array())
+            {
+                logger.error("%s is an array", name.c_str());
+                return -1;
+            }
+            print_pcode("push %s", name.c_str());
         }
     }
     else if (word.first == "LPARENT") // '('<exp>')'
@@ -1252,10 +1304,14 @@ int GrammarTranslator::factor()
     {
         int x;
         integer(x);
+        print_pcode("push %d", x);
     }
     else if (word.first == "CHARCON") // <ch>
     {
+        char c;
+        c = word.second[0];
         get_word();
+        print_pcode("push %d", (int)c);
     }
     else
     {
