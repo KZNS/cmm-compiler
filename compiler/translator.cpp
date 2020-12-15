@@ -1476,6 +1476,21 @@ int GrammarTranslator::print_error(const int &error_line_number, const std::stri
     }
     return 0;
 }
+int GrammarTranslator::print_pcode(std::string format, ...)
+{
+    if (translate_type == "PCODE")
+    {
+        char buffer[100];
+        va_list args;
+
+        va_start(args, format);
+        vsnprintf(buffer, 100, format.c_str(), args);
+        va_end(args);
+
+        fout << buffer << std::endl;
+    }
+    return 0;
+}
 
 int GrammarTranslator::get_word()
 {

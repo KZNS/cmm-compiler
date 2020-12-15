@@ -83,6 +83,7 @@ private:
     int print_lexical(const Word &p_word);                                        //输出词法信息
     int print_grammar(const std::string &info);                                   //输出语法信息
     int print_error(const int &error_line_number, const std::string &error_type); //输出错误信息
+    int print_pcode(std::string format, ...);                                     //输出pcode
 
     int get_word();
     int get_new_word();
