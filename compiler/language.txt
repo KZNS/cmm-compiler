@@ -41,18 +41,3 @@ CHARCON '|+-*/_a~zA~Z0~9|'
 STRCON "|\032\033\035~\126|"
 
 define sentences
-
-code -> codeblock | S
-codeblock -> <{> sentences <}>
-sentences -> S sentences | e
-S -> equation | branch_if | branch_while | definition
-
-equation -> <id> <op14> expression <;>
-branch_if -> <if> <op1(> expression <op1)> code branch_else
-branch_else -> <else> code | e
-branch_while -> <while> <op1(> expression <op1)> code
-definition -> <type_name> <id> <;>
-
-expression => expression <op4> term | term
-term => term <op3> factor | factor
-factor => <num> | <id> | <op1(> expression <op1)>
