@@ -12,13 +12,20 @@ class VarProperty
 {
 private:
 public:
+    std::string name;
+    int size;
+    std::string type;
+    bool is_const;
+
     VarProperty();
     VarProperty(const std::string &_name,
                 const std::string &_type,
                 bool _is_const);
-    std::string name;
-    std::string type;
-    bool is_const;
+    VarProperty(const std::string &_name,
+                int size,
+                const std::string &_type,
+                bool _is_const);
+    bool is_array();
 };
 
 class FunctionProperty
@@ -43,8 +50,10 @@ private:
 
 public:
     SymbolTable();
-    int insert_var(const std::string &_name, const std::string &_type,
-                   bool _is_const);
+    int insert_var(const std::string &name, const std::string &type,
+                   bool is_const);
+    int insert_var(const std::string &name, int size, const std::string &type,
+                   bool is_const);
     int insert_f(const std::string &name, const std::string &type,
                  const std::vector<VarProperty> &arg_list);
 
