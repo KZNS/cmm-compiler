@@ -364,7 +364,7 @@ int GrammarTranslator::integer(int &x)
  * <declare_h> ::= int<ident>
  *                 char<ident>
  */
-int GrammarTranslator::declare_h(std::string &type, std::string &f_name)
+int GrammarTranslator::declare_h(std::string &type, std::string &name)
 {
     if (word.first == "INTTK" || word.first == "CHARTK")
     {
@@ -373,7 +373,7 @@ int GrammarTranslator::declare_h(std::string &type, std::string &f_name)
 
         if (word.first == "IDENFR")
         {
-            f_name = word.second;
+            name = word.second;
             get_word();
         }
         else
@@ -381,6 +381,11 @@ int GrammarTranslator::declare_h(std::string &type, std::string &f_name)
             logger.error("missing function name");
             return -1;
         }
+    }
+    else
+    {
+        logger.error("missing declare_head");
+        return -1;
     }
 
     print_grammar("<声明头部>");
@@ -392,17 +397,20 @@ int GrammarTranslator::declare_h(std::string &type, std::string &f_name)
  */
 int GrammarTranslator::f_ret()
 {
-    std::string ret_type;
-    std::string f_name;
+    std::string type;
+    std::string name;
     std::vector<VarProperty> arg_list;
     int e;
 
+    table.set_local();
+
     // <declare_h>
-    e = declare_h(ret_type, f_name);
+    e = declare_h(type, name);
     if (e)
     {
         return -1;
     }
+    print_pcode("FUNC @%s:", name.c_str());
 
     // '('<param_table>')'
     if (word.first == "LPARENT")
@@ -422,6 +430,19 @@ int GrammarTranslator::f_ret()
     else
     {
         e_right_parenthesis();
+    }
+
+    table.insert_f(FunctionProperty(name, type, arg_list));
+    if (arg_list.size())
+    {
+        std::ostringstream tmp;
+
+        tmp << "arg " << arg_list[0].name << ":" << arg_list[0].type;
+        for (int i = 1; i < arg_list.size(); i++)
+        {
+            tmp << "," << arg_list[i].name << ":" << arg_list[i].type;
+        }
+        print_pcode(tmp.str().c_str());
     }
 
     // '{'<comp_stmt>'}'
@@ -444,6 +465,7 @@ int GrammarTranslator::f_ret()
         logger.error("missing '}'");
         return -1;
     }
+    table.set_global();
 
     print_grammar("<有返回值函数定义>");
     return 0;
