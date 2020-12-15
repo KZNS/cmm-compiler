@@ -24,6 +24,24 @@ void SplitString(const std::string& s, std::vector<std::string>& v, const std::s
   if(pos1 != s.length())
     v.push_back(s.substr(pos1));
 }
+bool isnum(string s)  
+{  
+        stringstream sin(s);  
+        double t;  
+        char p;  
+        if(!(sin >> t))  
+        /*解释： 
+            sin>>t表示把sin转换成double的变量（其实对于int和float型的都会接收），如果转换成功，则值为非0，如果转换不成功就返回为0 
+        */  
+               return false;  
+        if(sin >> p)  
+        /*解释：此部分用于检测错误输入中，数字加字符串的输入形式（例如：34.f），在上面的的部分（sin>>t）已经接收并转换了输入的数字部分，在stringstream中相应也会把那一部分给清除，如果此时传入字符串是数字加字符串的输入形式，则此部分可以识别并接收字符部分，例如上面所说的，接收的是.f这部分，所以条件成立，返回false;如果剩下的部分不是字符，那么则sin>>p就为0,则进行到下一步else里面 
+          */  
+                return false;  
+        else  
+                return true;  
+}  
+  
 string& trim(string &s) 
 {
     if (s.empty()) 
@@ -49,10 +67,13 @@ PcodeInterpreter::PcodeInterpreter(){
     this->cmdHandler["jmp"] = do_jmp;
     this->cmdHandler["jz"] = do_jz;
     this->cmdHandler["exit"] = do_exit;
+    this->cmdHandler["arg"] = do_arg;
+    this->cmdHandler["ret"] = do_ret;
 }
 //add / sub / mul / div / mod / cmpeq / cmpne / cmpgt 
 // cmplt / cmpge / cmple / and / or / not / neg
 int PcodeInterpreter::do_arg(const string cmd){
+    cout << "do_Arg:"<<cmd<<endl;
     vector<string> args;
     unordered_map<string,int> m;
     runtimeVarLookup.push(m);
@@ -65,17 +86,19 @@ int PcodeInterpreter::do_arg(const string cmd){
     for(auto a:args){
         runtimeVarLookup.top()[a] = runtimeVar.size();
         runtimeVar.push_back({"arg",a,runtimeStack.top()});//type,name,val
+        cout << "arg:"<<a<<"="<<runtimeStack.top()<<endl;
         runtimeStack.pop();
     }
     return 0;
 }
 int PcodeInterpreter::do_ret(const string cmd){
     if(cmd=="~"){
+        cout << "is~"<<endl;
         int t = runtimeStack.top();
         int n = old_sp.top();
         old_sp.pop();
         int o = old_sp.top();
-        for(int i=n;i>o;i--){
+        for(int i=n;i>=o;i--){
             runtimeVar.pop_back();
         }
         runtimeVarLookup.pop();
@@ -83,7 +106,7 @@ int PcodeInterpreter::do_ret(const string cmd){
         //需要pop和push里记录用了几次，最后在这里运行时栈
         eip.pop();
         return 0;
-    } else if(cmd==""){
+    } else if(cmd=="") {
         int n = old_sp.top();
         old_sp.pop();
         int o = old_sp.top();
@@ -155,6 +178,22 @@ int PcodeInterpreter::do_print(const string cmd){
     return 0;
 }
 int PcodeInterpreter::do_exit(const string cmd){
+    cout << "-labelMap---"<<endl;
+    for(auto iter=labelMap.begin();iter!=labelMap.end();iter++){
+        cout << iter->first << " : " << iter->second << endl;
+    }
+    cout << "-funcMap----"<<endl;
+    for(auto iter=funcMap.begin();iter!=funcMap.end();iter++){
+        cout << iter->first << " : " << iter->second << endl;
+    }
+    cout << "-variables--"<<endl;
+    for(auto i:this->runtimeVar){
+        cout << i.name << "("<<i.type<<")"<<"="<<i.val<<endl;
+    }
+    cout << "-rtvarlookupsize---"<<endl;
+    cout << runtimeVarLookup.size() << endl;
+    cout << "-eipsize----"<<endl;
+    cout << eip.size() << endl;
     exit(0);
 }
 int PcodeInterpreter::do_input(const string cmd){
@@ -201,7 +240,7 @@ int PcodeInterpreter::do_add(const string dummy){
     r += runtimeStack.top();
     runtimeStack.pop();
     runtimeStack.push(r);
-    cout <<"added to "<<r << endl;
+    cout <<"added to "<<r <<" eip:"<<eip.top()<< endl;
     return 0;
 }
 int PcodeInterpreter::do_var(const string cmd){
@@ -225,14 +264,13 @@ int PcodeInterpreter::do_var(const string cmd){
 int PcodeInterpreter::do_push(const string cmd){//如果发现是数组操作，去栈拿【i】：栈顶的是下标，运算数在第二个
     int a;
     if(runtimeVarLookup.top().find(cmd)!=runtimeVarLookup.top().end()){//这是个变量名，去找变量值
-        for(int i=old_sp.top();i<runtimeVar.size();i++){
-            if(runtimeVar[i].name==cmd){//暂时不考虑变量未初始化的问题，默认是0
-                a = runtimeVar[i].val;
-                cout << "variable detected:";
-            }
-            break;
-        }
+        a = runtimeVar[runtimeVarLookup.top()[cmd]].val;
+        cout << "pushd variable "<< cmd << " ";
     } else {
+        if(!isnum(cmd)){
+            cout << "invalid push input:"<<cmd<<endl;
+            exit(-3);
+        }
         stringstream ss;
         ss<<cmd;
         ss>>a;
@@ -249,25 +287,23 @@ int PcodeInterpreter::do_pop(const string cmd){//如果发现是数组操作，�
         return 0;
     }
     if(runtimeVarLookup.top().find(cmd)!=runtimeVarLookup.top().end()){//这是个变量名，去找变量值
-        for(int i=old_sp.top();i<runtimeVar.size();i++){
-            if(runtimeVar[i].name==cmd){
-                cout <<"indirect pop"<<endl;
-                runtimeVar[i].val = runtimeStack.top();
-                runtimeStack.pop();
-                return 0;
-            }
-        }
+        runtimeVar[runtimeVarLookup.top()[cmd]].val = runtimeStack.top();
+        runtimeStack.pop();
+        return 0;
+    } else {
+        cout << "not foudn"<<endl;
     }
     return -1;
 }
 int PcodeInterpreter::func_call(const string funcName){
-    string fname = funcName.substr(1,funcName.length());
+    string fname = funcName.substr(1,funcName.length()-1);
     if(funcMap.find(fname)!=funcMap.end()){
-        cout << fname<<" is not a valid funcname"<<endl;
-        return -1;
-    } else {
+        cout << "eip pushed "<<funcMap[fname]<< endl;
         eip.push(funcMap[fname]);
         old_sp.push(old_sp.top()+1);
+    } else {
+        cout << fname<<" is not a valid funcname"<<endl;
+        return -1;
     }
     return 0;
 }
@@ -295,16 +331,17 @@ int PcodeInterpreter::interpret(const std::string &in_file_name){
             }
             this->labelMap.insert(make_pair(labelName,this->code.size()));
         } else if(v.size()==2 && v[0]=="FUNC" && v[1].back()==':'){
-            string funcName = v[1].substr(1,v[1].size()-1);
+            string funcName = v[1].substr(1,v[1].size()-2);
             if(funcMap.find(funcName)!=funcMap.end()){
                 printf("duplicate funcname error");
                 return -1;
             }
-            this->funcMap.insert(make_pair(funcName,this->code.size()));//回退到函数入口
+            this->funcMap.insert(make_pair(funcName,this->code.size()-1));//回退到函数入口
         }
     }
+    myfile.close();
     int i=0;
-    while(i<12){
+    while(i<25){
         vector<string> cmd = code[eip.top()];
         if(cmd.size()>0){
             if(cmd[0].back()==':'){
@@ -329,21 +366,6 @@ int PcodeInterpreter::interpret(const std::string &in_file_name){
         i++;
         eip.top()++;
     }
-    cout << "-labelMap---"<<endl;
-    for(auto iter=labelMap.begin();iter!=labelMap.end();iter++){
-        cout << iter->first << " : " << iter->second << endl;
-    }
-    cout << "-funcMap----"<<endl;
-    for(auto iter=funcMap.begin();iter!=funcMap.end();iter++){
-        cout << iter->first << " : " << iter->second << endl;
-    }
-    cout << "-variables--"<<endl;
-    for(auto i:this->runtimeVar){
-        cout << i.name << "("<<i.type<<")"<<"="<<i.val<<endl;
-    }
-    cout << "-codeSize---"<<endl;
-    cout << this->code.size() << endl;
-    myfile.close();
     return 0;
 }
 #endif
