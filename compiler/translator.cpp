@@ -438,7 +438,7 @@ int GrammarTranslator::f_ret()
         std::ostringstream tmp;
 
         tmp << "arg " << arg_list[0].name << ":" << arg_list[0].type;
-        for (int i = 1; i < arg_list.size(); i++)
+        for (int i = 1; i < (int)arg_list.size(); i++)
         {
             tmp << "," << arg_list[i].name << ":" << arg_list[i].type;
         }
@@ -529,7 +529,7 @@ int GrammarTranslator::f_void()
         std::ostringstream tmp;
 
         tmp << "arg " << arg_list[0].name << ":" << arg_list[0].type;
-        for (int i = 1; i < arg_list.size(); i++)
+        for (int i = 1; i < (int)arg_list.size(); i++)
         {
             tmp << "," << arg_list[i].name << ":" << arg_list[i].type;
         }
@@ -616,9 +616,14 @@ int GrammarTranslator::param_table(std::vector<VarProperty> &arg_list)
  */
 int GrammarTranslator::main_f()
 {
+    std::string name;
+    std::string type;
+
+    table.set_local();
     // void main'('')'
     if (word.first == "VOIDTK")
     {
+        type = word.first;
         get_word();
     }
     else
@@ -628,6 +633,7 @@ int GrammarTranslator::main_f()
     }
     if (word.first == "MAINTK")
     {
+        name = word.second;
         get_word();
     }
     else
@@ -635,6 +641,9 @@ int GrammarTranslator::main_f()
         logger.error("MAINTK missing in main_f");
         return -1;
     }
+
+    print_pcode("FUNC @%s:", name.c_str());
+
     if (word.first == "LPARENT")
     {
         get_word();
@@ -673,6 +682,7 @@ int GrammarTranslator::main_f()
         logger.error("RBRACE missing in main_f");
         return -1;
     }
+    table.set_global();
 
     print_grammar("<主函数>");
     return 0;
