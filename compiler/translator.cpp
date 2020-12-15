@@ -465,6 +465,7 @@ int GrammarTranslator::f_ret()
         logger.error("missing '}'");
         return -1;
     }
+    print_pcode("ENDFUNC");
     table.set_global();
 
     print_grammar("<有返回值函数定义>");
@@ -556,6 +557,7 @@ int GrammarTranslator::f_void()
         logger.error("missing '}'");
         return -1;
     }
+    print_pcode("ENDFUNC");
     table.set_global();
 
     print_grammar("<无返回值函数定义>");
@@ -682,6 +684,7 @@ int GrammarTranslator::main_f()
         logger.error("RBRACE missing in main_f");
         return -1;
     }
+    print_pcode("ENDFUNC");
     table.set_global();
 
     print_grammar("<主函数>");
