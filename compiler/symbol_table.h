@@ -39,12 +39,12 @@ class SymbolTable
 private:
     std::map<std::string, VarProperty> global_var_table, local_var_table;
     std::map<std::string, FunctionProperty> f_table;
+    bool is_local;
 
 public:
-    int insert_global_var(const std::string &_name, const std::string &_type,
-                          bool _is_const);
-    int insert_local_var(const std::string &_name, const std::string &_type,
-                         bool _is_const);
+    SymbolTable();
+    int insert_var(const std::string &_name, const std::string &_type,
+                   bool _is_const);
     int insert_f(const std::string &name, const std::string &type,
                  const std::vector<VarProperty> &arg_list);
 
@@ -52,6 +52,8 @@ public:
     FunctionProperty *find_f(const std::string &name);
 
     int local_var_table_clear();
+    int set_local();
+    int set_global();
 };
 
 #include "symbol_table.cpp"

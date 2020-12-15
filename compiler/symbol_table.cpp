@@ -15,27 +15,28 @@ FunctionProperty::FunctionProperty(const std::string &_name,
                                    const std::vector<VarProperty> &_arg_list)
     : name(_name), type(_type), arg_list(_arg_list) {}
 
-int SymbolTable::insert_global_var(const std::string &name,
-                                   const std::string &type,
-                                   bool is_const)
+SymbolTable::SymbolTable() : is_local(false) {}
+int SymbolTable::insert_var(const std::string &name,
+                            const std::string &type, bool is_const)
 {
-    if (global_var_table.find(name) != global_var_table.end())
+    if (is_local)
     {
-        logger.error("var %s already exists", name.c_str());
-        return -1;
+        if (local_var_table.find(name) != global_var_table.end())
+        {
+            logger.error("var %s already exists", name.c_str());
+            return -1;
+        }
+        local_var_table[name] = VarProperty(name, type, is_const);
     }
-    global_var_table[name] = VarProperty(name, type, is_const);
-    return 0;
-}
-int SymbolTable::insert_local_var(const std::string &name,
-                                  const std::string &type, bool is_const)
-{
-    if (local_var_table.find(name) != global_var_table.end())
+    else
     {
-        logger.error("var %s already exists", name.c_str());
-        return -1;
+        if (global_var_table.find(name) != global_var_table.end())
+        {
+            logger.error("var %s already exists", name.c_str());
+            return -1;
+        }
+        global_var_table[name] = VarProperty(name, type, is_const);
     }
-    local_var_table[name] = VarProperty(name, type, is_const);
     return 0;
 }
 int SymbolTable::insert_f(const std::string &name, const std::string &type,
@@ -80,6 +81,17 @@ FunctionProperty *SymbolTable::find_f(const std::string &name)
 int SymbolTable::local_var_table_clear()
 {
     local_var_table.clear();
+    return 0;
+}
+int SymbolTable::set_local()
+{
+    is_local = true;
+    return 0;
+}
+int SymbolTable::set_global()
+{
+    is_local = false;
+    local_var_table_clear();
     return 0;
 }
 
