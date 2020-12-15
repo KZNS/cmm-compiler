@@ -28,6 +28,8 @@ int GrammarTranslator::prog()
     {
         declare_var();
     }
+    print_pcode("$main");
+    print_pcode("exit 0");
 
     // {<f_ret>|<f_void>}<main_f>
     while (true)
