@@ -788,7 +788,8 @@ int GrammarTranslator::stmt()
             }
             else if (fp->type == "INTTK" || fp->type == "CHARTK")
             {
-                f_ret_call();
+                std::string ret_type;
+                f_ret_call(ret_type);
                 print_pcode("pop");
             }
             else
@@ -1192,8 +1193,7 @@ int GrammarTranslator::step()
 int GrammarTranslator::exp(std::string &type)
 {
     std::string op;
-    std::string exp_type;
-    std::string exp_type_b;
+    std::string type_b;
 
     // [+|-]<term>
     if (word.first == "PLUS" || word.first == "MINU")
@@ -1201,7 +1201,7 @@ int GrammarTranslator::exp(std::string &type)
         op = word.first;
         get_word();
     }
-    term(exp_type);
+    term(type);
     if (op == "MINU")
     {
         print_pcode("neg");
@@ -1212,13 +1212,13 @@ int GrammarTranslator::exp(std::string &type)
     {
         op = word.first;
         get_word();
-        term(exp_type_b);
-        if (exp_type != exp_type_b)
+        term(type_b);
+        if (type != type_b)
         {
             logger.warn("different type");
-            if (exp_type_b == "INTTK")
+            if (type_b == "INTTK")
             {
-                exp_type = exp_type_b;
+                type = type_b;
             }
         }
         if (op == "PLUS")
@@ -1241,21 +1241,20 @@ int GrammarTranslator::exp(std::string &type)
 int GrammarTranslator::term(std::string &type)
 {
     std::string op;
-    std::string exp_type;
-    std::string exp_type_b;
+    std::string type_b;
 
-    factor(exp_type);
+    factor(type);
     while (word.first == "MULT" || word.first == "DIV")
     {
         op = word.first;
         get_word();
-        factor(exp_type_b);
-        if (exp_type != exp_type_b)
+        factor(type_b);
+        if (type != type_b)
         {
             logger.warn("different type");
-            if (exp_type_b == "INTTK")
+            if (type_b == "INTTK")
             {
-                exp_type = exp_type_b;
+                type = type_b;
             }
         }
         if (op == "MULT")
@@ -1280,16 +1279,16 @@ int GrammarTranslator::term(std::string &type)
  *              <ch>
  *              <f_ret_call>
  */
-int GrammarTranslator::factor(std::string &type) /////////////////////////////////////////////////////////////////////////////////////////////
+int GrammarTranslator::factor(std::string &type)
 {
     VarProperty *vp;
     std::string name;
     bool is_array;
-    std::string exp_type;
+    std::string index_type;
 
     if (detect(2, "IDENFR", "LPARENT")) // <f_ret_call>
     {
-        f_ret_call();
+        f_ret_call(type);
     }
     else if (word.first == "IDENFR") // <ident> | <ident>'['<exp>']'
     {
@@ -1300,10 +1299,14 @@ int GrammarTranslator::factor(std::string &type) ///////////////////////////////
         {
             e_undifine_identifier();
         }
+        else
+        {
+            type = vp->type;
+        }
         if (word.first == "LBRACK")
         {
             get_word();
-            exp(exp_type);
+            exp(index_type);
             if (word.first == "RBRACK")
             {
                 get_word();
@@ -1332,7 +1335,7 @@ int GrammarTranslator::factor(std::string &type) ///////////////////////////////
     else if (word.first == "LPARENT") // '('<exp>')'
     {
         get_word();
-        exp(exp_type);
+        exp(type);
         if (word.first == "RPARENT")
         {
             get_word();
@@ -1346,6 +1349,7 @@ int GrammarTranslator::factor(std::string &type) ///////////////////////////////
     {
         int x;
         integer(x);
+        type = "INTTK";
         print_pcode("push %d", x);
     }
     else if (word.first == "CHARCON") // <ch>
@@ -1353,6 +1357,7 @@ int GrammarTranslator::factor(std::string &type) ///////////////////////////////
         char c;
         c = word.second[0];
         get_word();
+        type = "CHARTK";
         print_pcode("push %d", (int)c);
     }
     else
@@ -1369,7 +1374,7 @@ int GrammarTranslator::factor(std::string &type) ///////////////////////////////
  * 有返回值函数调用语句
  * <f_ret_call> ::= <ident>'('<arg_list>')'
  */
-int GrammarTranslator::f_ret_call()
+int GrammarTranslator::f_ret_call(std::string &ret_type)
 {
     FunctionProperty *fp;
     std::string name;
@@ -1383,6 +1388,10 @@ int GrammarTranslator::f_ret_call()
         if (fp == NULL)
         {
             e_undifine_identifier();
+        }
+        else
+        {
+            ret_type = fp->type;
         }
     }
     else

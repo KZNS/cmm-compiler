@@ -56,7 +56,7 @@ private:
     int term(std::string &type);   // 项
     int factor(std::string &type); // 因子
 
-    int f_ret_call();                                 // 有返回值函数调用语句
+    int f_ret_call(std::string &ret_type);            // 有返回值函数调用语句
     int f_void_call();                                // 无返回值函数调用语句
     int arg_list(std::vector<VarProperty> &arg_list); // 值参数表
 
