@@ -434,17 +434,6 @@ int GrammarTranslator::f_ret()
     }
 
     table.insert_f(FunctionProperty(name, type, arg_list));
-    if (arg_list.size())
-    {
-        std::ostringstream tmp;
-
-        tmp << "arg " << arg_list[0].name << ":" << arg_list[0].type;
-        for (int i = 1; i < (int)arg_list.size(); i++)
-        {
-            tmp << "," << arg_list[i].name << ":" << arg_list[i].type;
-        }
-        print_pcode(tmp.str().c_str());
-    }
 
     // '{'<comp_stmt>'}'
     if (word.first == "LBRACE")
@@ -528,17 +517,6 @@ int GrammarTranslator::f_void()
     }
 
     table.insert_f(FunctionProperty(name, type, arg_list));
-    if (arg_list.size())
-    {
-        std::ostringstream tmp;
-
-        tmp << "arg " << arg_list[0].name << ":" << arg_list[0].type;
-        for (int i = 1; i < (int)arg_list.size(); i++)
-        {
-            tmp << "," << arg_list[i].name << ":" << arg_list[i].type;
-        }
-        print_pcode(tmp.str().c_str());
-    }
 
     // '{'<comp_stmt>'}'
     if (word.first == "LBRACE")
@@ -611,6 +589,22 @@ int GrammarTranslator::param_table(std::vector<VarProperty> &arg_list)
             break;
         }
     }
+    if (arg_list.size())
+    {
+        std::ostringstream tmp;
+        tmp << "arg " << arg_list[0].name << ":" << arg_list[0].type;
+        for (int i = 1; i < (int)arg_list.size(); i++)
+        {
+            tmp << "," << arg_list[i].name << ":" << arg_list[i].type;
+        }
+        print_pcode(tmp.str().c_str());
+        print_pcode("");
+    }
+    else
+    {
+        print_pcode("arg");
+        print_pcode("");
+    }
 
     print_grammar("<参数表>");
     return 0;
@@ -660,6 +654,8 @@ int GrammarTranslator::main_f()
         logger.error("LPARENT missing in main_f");
         return -1;
     }
+    print_pcode("arg");
+    print_pcode("");
     if (word.first == "RPARENT")
     {
         get_word();
