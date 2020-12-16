@@ -1055,11 +1055,19 @@ int GrammarTranslator::cond()
  */
 int GrammarTranslator::loop_stmt(std::string ret_type)
 {
+    std::string unique_label = get_unique_label();
     std::string exp_type;
+    std::string name;
+    std::string name_b;
+    std::string op;
+    VarProperty *vp;
+    unsigned int x;
 
     if (word.first == "WHILETK") // while'('<cond>')'<stmt>
     {
         get_word();
+        print_pcode("While%s:", unique_label.c_str());
+        change_pcode_indent_deep(1);
         if (word.first == "LPARENT")
         {
             get_word();
@@ -1078,11 +1086,19 @@ int GrammarTranslator::loop_stmt(std::string ret_type)
         {
             e_right_parenthesis();
         }
+        change_pcode_indent_deep(-1);
+        print_pcode("jz EndWhile%s", unique_label.c_str());
+        change_pcode_indent_deep(1);
         stmt(ret_type);
+        print_pcode("jmp While%s", unique_label.c_str());
+        change_pcode_indent_deep(-1);
+        print_pcode("EndWhile%s:", unique_label.c_str());
     }
     else if (word.first == "DOTK") // do<stmt>while'('<cond>')'
     {
         get_word();
+        print_pcode("Do%s:", unique_label.c_str());
+        change_pcode_indent_deep(1);
         stmt(ret_type);
         if (word.first == "WHILETK")
         {
@@ -1093,6 +1109,9 @@ int GrammarTranslator::loop_stmt(std::string ret_type)
             logger.error("whiletk missing in for of loop_stmp");
             return -1;
         }
+        change_pcode_indent_deep(-1);
+        print_pcode("While%s:", unique_label.c_str());
+        change_pcode_indent_deep(1);
         if (word.first == "LPARENT")
         {
             get_word();
@@ -1111,10 +1130,15 @@ int GrammarTranslator::loop_stmt(std::string ret_type)
         {
             e_right_parenthesis();
         }
+        print_pcode("jnz Do%s", unique_label.c_str());
+        change_pcode_indent_deep(-1);
+        print_pcode("EndDoWhile%s:", unique_label.c_str());
     }
     else if (word.first == "FORTK") // for'('<ident>=<exp>;<cond>;<ident>=<ident>(+|-)<step>')'<stmt>
     {
         get_word();
+        print_pcode("For%s:", unique_label.c_str());
+        change_pcode_indent_deep(1);
         if (word.first == "LPARENT")
         {
             get_word();
@@ -1127,7 +1151,20 @@ int GrammarTranslator::loop_stmt(std::string ret_type)
         // <ident>=<exp>;
         if (word.first == "IDENFR")
         {
+            name = word.second;
             get_word();
+            vp = table.find_var(name);
+            if (vp == NULL)
+            {
+                e_undifine_identifier();
+            }
+            else
+            {
+                if (vp->is_array())
+                {
+                    logger.error("%s is an array", name.c_str());
+                }
+            }
         }
         else
         {
@@ -1144,6 +1181,7 @@ int GrammarTranslator::loop_stmt(std::string ret_type)
             return -1;
         }
         exp(exp_type);
+        print_pcode("pop %s", name.c_str());
         if (word.first == "SEMICN")
         {
             get_word();
@@ -1153,6 +1191,9 @@ int GrammarTranslator::loop_stmt(std::string ret_type)
             logger.error("semicn missing in part1 of for in loop_stmt");
         }
         // <cond>;
+        change_pcode_indent_deep(-1);
+        print_pcode("Forcond%s:", unique_label.c_str());
+        change_pcode_indent_deep(1);
         cond();
         if (word.first == "SEMICN")
         {
@@ -1162,10 +1203,27 @@ int GrammarTranslator::loop_stmt(std::string ret_type)
         {
             e_semicolon();
         }
+        change_pcode_indent_deep(-1);
+        print_pcode("jz Endfor%s", unique_label.c_str());
+        change_pcode_indent_deep(1);
+
         //<ident>=<ident>(+|-)<step>
         if (word.first == "IDENFR")
         {
+            name = word.second;
             get_word();
+            vp = table.find_var(name);
+            if (vp == NULL)
+            {
+                e_undifine_identifier();
+            }
+            else
+            {
+                if (vp->is_array())
+                {
+                    logger.error("%s is an array", name.c_str());
+                }
+            }
         }
         else
         {
@@ -1183,7 +1241,21 @@ int GrammarTranslator::loop_stmt(std::string ret_type)
         }
         if (word.first == "IDENFR")
         {
+            name_b = word.second;
             get_word();
+            vp = table.find_var(name_b);
+            if (vp == NULL)
+            {
+                e_undifine_identifier();
+            }
+            else
+            {
+                if (vp->is_array())
+                {
+                    logger.error("%s is an array", name_b.c_str());
+                }
+            }
+            print_pcode("push %s", name_b.c_str());
         }
         else
         {
@@ -1192,6 +1264,7 @@ int GrammarTranslator::loop_stmt(std::string ret_type)
         }
         if (word.first == "PLUS" || word.first == "MINU")
         {
+            op = word.first;
             get_word();
         }
         else
@@ -1199,7 +1272,7 @@ int GrammarTranslator::loop_stmt(std::string ret_type)
             logger.error("(+|-) missing in part3 of for in loop_stmt");
             return -1;
         }
-        step();
+        step(x);
         // ')'<stmt>
         if (word.first == "RPARENT")
         {
@@ -1211,6 +1284,15 @@ int GrammarTranslator::loop_stmt(std::string ret_type)
             return -1;
         }
         stmt(ret_type);
+        change_pcode_indent_deep(-1);
+        print_pcode("Forupdate%s:", unique_label.c_str());
+        change_pcode_indent_deep(1);
+        print_pcode("push %d", x);
+        print_pcode("add");
+        print_pcode("pop %s", name.c_str());
+        change_pcode_indent_deep(-1);
+        print_pcode("jmp Forcond%s", unique_label.c_str());
+        print_pcode("Endif%s:", unique_label.c_str());
     }
     else
     {
@@ -1225,9 +1307,8 @@ int GrammarTranslator::loop_stmt(std::string ret_type)
  * 步长
  * <step> ::= <uinteger>
  */
-int GrammarTranslator::step()
+int GrammarTranslator::step(unsigned int &x)
 {
-    unsigned int x;
     int e;
     e = uinteger(x);
     if (e)

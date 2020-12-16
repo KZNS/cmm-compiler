@@ -50,7 +50,7 @@ private:
     int cond_stmt(std::string ret_type); // 条件语句
     int cond();                          // 条件
     int loop_stmt(std::string ret_type); // 循环语句
-    int step();                          // 步长
+    int step(unsigned int &x);           // 步长
 
     int exp(std::string &type);    // 表达式
     int term(std::string &type);   // 项
