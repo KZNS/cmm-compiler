@@ -43,14 +43,14 @@ private:
 
     int main_f(); // 主函数
 
-    int comp_stmt(); // 复合语句
-    int stmt_list(); // 语句列
-    int stmt();      // 语句
-    int eval();      // 赋值语句
-    int cond_stmt(); // 条件语句
-    int cond();      // 条件
-    int loop_stmt(); // 循环语句
-    int step();      // 步长
+    int comp_stmt(std::string ret_type); // 复合语句
+    int stmt_list(std::string ret_type); // 语句列
+    int stmt(std::string ret_type);      // 语句
+    int eval();                          // 赋值语句
+    int cond_stmt(std::string ret_type); // 条件语句
+    int cond();                          // 条件
+    int loop_stmt(std::string ret_type); // 循环语句
+    int step();                          // 步长
 
     int exp(std::string &type);    // 表达式
     int term(std::string &type);   // 项
@@ -60,9 +60,9 @@ private:
     int f_void_call();                                // 无返回值函数调用语句
     int arg_list(std::vector<VarProperty> &arg_list); // 值参数表
 
-    int r_stmt();   // 读语句
-    int w_stmt();   // 写语句
-    int ret_stmt(); // 返回语句
+    int r_stmt();                       // 读语句
+    int w_stmt();                       // 写语句
+    int ret_stmt(std::string ret_type); // 返回语句
 
     int str_const(std::string &str); // 字符串
 
