@@ -869,6 +869,10 @@ int GrammarTranslator::eval()
         {
             e_undifine_identifier();
         }
+        else if (vp->is_const)
+        {
+            e_change_const_value();
+        }
     }
     else
     {
