@@ -298,9 +298,9 @@ int LexicalAutomaton::append_keyword(const std::string &word, const std::string 
 }
 Word LexicalAutomaton::get_word(int &new_line_number)
 {
-    if (last == 0)
+    if (last == -1)
     {
-        return std::make_pair("", "");
+        return std::make_pair("-1", "");
     }
     char c;
     std::string s;
