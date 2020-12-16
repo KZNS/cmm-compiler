@@ -165,6 +165,10 @@ int GrammarTranslator::def_const()
                 return -1;
             }
         }
+        else if (word.first == "")
+        {
+            e_word();
+        }
         else
         {
             e_const_define_type();
@@ -1888,6 +1892,10 @@ int GrammarTranslator::e_word()
 {
     logger.error("e_word");
     print_error(line_number, "a");
+    while (word.first == "")
+    {
+        get_word();
+    }
     return 0;
 }
 int GrammarTranslator::e_redifine_identifier()
