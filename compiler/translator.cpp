@@ -1879,6 +1879,11 @@ int GrammarTranslator::change_pcode_indent_deep(int x)
     }
     return 0;
 }
+std::string GrammarTranslator::get_unique_label()
+{
+    static int unique_label_id = 0;
+    return std::to_string(unique_label_id++);
+}
 
 int GrammarTranslator::get_word()
 {

@@ -88,6 +88,7 @@ private:
     int print_pcode(std::string format, ...);                                     //输出pcode
 
     int change_pcode_indent_deep(int x);
+    std::string get_unique_label();
 
     int get_word();
     int get_new_word();
