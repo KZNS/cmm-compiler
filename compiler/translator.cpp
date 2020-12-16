@@ -1421,7 +1421,6 @@ int GrammarTranslator::factor(std::string &type)
 {
     VarProperty *vp;
     std::string name;
-    bool is_array;
     std::string index_type;
 
     if (detect(2, "IDENFR", "LPARENT")) // <f_ret_call>
