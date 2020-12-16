@@ -1535,6 +1535,11 @@ int GrammarTranslator::arg_list(std::vector<VarProperty> &arg_list)
  */
 int GrammarTranslator::r_stmt()
 {
+    VarProperty *vp;
+    std::string name;
+    std::stringstream tmp;
+    bool first_one = true;
+
     if (word.first != "SCANFTK")
     {
         logger.error("scanftk missing in r_stmt");
@@ -1549,12 +1554,30 @@ int GrammarTranslator::r_stmt()
     get_word();
     while (true)
     {
-        if (word.first != "IDENFR")
+        if (word.first == "IDENFR")
+        {
+            name = word.second;
+            get_word();
+            vp = table.find_var(name);
+            if (vp == NULL)
+            {
+                e_undifine_identifier();
+            }
+            if (first_one)
+            {
+                first_one = false;
+                tmp << "input " << name;
+            }
+            else
+            {
+                tmp << ", " << name;
+            }
+        }
+        else
         {
             logger.error("idenfr missing in r_stmt");
             return -1;
         }
-        get_word();
         if (word.first == "COMMA")
         {
             get_word();
@@ -1573,6 +1596,7 @@ int GrammarTranslator::r_stmt()
     {
         e_right_parenthesis();
     }
+    print_pcode(tmp.str().c_str());
 
     print_grammar("<读语句>");
     return 0;
