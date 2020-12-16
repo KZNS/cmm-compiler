@@ -787,6 +787,7 @@ int GrammarTranslator::stmt()
             else if (fp->type == "INTTK" || fp->type == "CHARTK")
             {
                 f_ret_call();
+                print_pcode("pop");
             }
             else
             {
@@ -842,6 +843,7 @@ int GrammarTranslator::eval()
     std::string name;
     bool is_array;
     VarProperty *vp;
+    std::string exp_type;
 
     // <ident> | <ident>'['<exp>']'
     if (word.first == "IDENFR")
@@ -862,7 +864,7 @@ int GrammarTranslator::eval()
     if (word.first == "LBRACK")
     {
         get_word();
-        exp();
+        exp(exp_type);
         if (word.first == "RBRACK")
         {
             get_word();
@@ -876,6 +878,10 @@ int GrammarTranslator::eval()
         {
             logger.error("%s is not an array", name.c_str());
             return -1;
+        }
+        if (exp_type != "INTTK")
+        {
+            e_array_index();
         }
     }
     else
@@ -898,7 +904,11 @@ int GrammarTranslator::eval()
         logger.error("missing assign in eval");
         return -1;
     }
-    exp();
+    exp(exp_type);
+    if (vp && vp->type != exp_type)
+    {
+        logger.warn("different type");
+    }
 
     if (is_array)
     {
@@ -965,11 +975,18 @@ int GrammarTranslator::cond_stmt()
  */
 int GrammarTranslator::cond()
 {
-    exp();
-    if (word.first == "LSS" || word.first == "LEQ" || word.first == "GRE" || word.first == "GEQ" || word.first == "EQL" || word.first == "NEQ")
+    std::string exp_type;
+    std::string exp_type_b;
+    exp(exp_type);
+    if (word.first == "LSS" || word.first == "LEQ" || word.first == "GRE" ||
+        word.first == "GEQ" || word.first == "EQL" || word.first == "NEQ")
     {
         get_word(); //rel_op();
-        exp();
+        exp(exp_type_b);
+    }
+    if (exp_type != "INTTK" || exp_type_b != "INTTK")
+    {
+        e_condition_type();
     }
     print_grammar("<条件>");
     return 0;
@@ -982,6 +999,8 @@ int GrammarTranslator::cond()
  */
 int GrammarTranslator::loop_stmt()
 {
+    std::string exp_type;
+
     if (word.first == "WHILETK") // while'('<cond>')'<stmt>
     {
         get_word();
@@ -1068,7 +1087,7 @@ int GrammarTranslator::loop_stmt()
             logger.error("assign missing in part1 of for in loop_stmt");
             return -1;
         }
-        exp();
+        exp(exp_type);
         if (word.first == "SEMICN")
         {
             get_word();
@@ -1168,9 +1187,11 @@ int GrammarTranslator::step()
  * 表达式
  * <exp> ::= [+|-]<term>{<add_op><term>}
  */
-int GrammarTranslator::exp()
+int GrammarTranslator::exp(std::string &type)
 {
     std::string op;
+    std::string exp_type;
+    std::string exp_type_b;
 
     // [+|-]<term>
     if (word.first == "PLUS" || word.first == "MINU")
@@ -1178,7 +1199,7 @@ int GrammarTranslator::exp()
         op = word.first;
         get_word();
     }
-    term();
+    term(exp_type);
     if (op == "MINU")
     {
         print_pcode("neg");
@@ -1189,7 +1210,15 @@ int GrammarTranslator::exp()
     {
         op = word.first;
         get_word();
-        term();
+        term(exp_type_b);
+        if (exp_type != exp_type_b)
+        {
+            logger.warn("different type");
+            if (exp_type_b == "INTTK")
+            {
+                exp_type = exp_type_b;
+            }
+        }
         if (op == "PLUS")
         {
             print_pcode("add");
@@ -1207,16 +1236,26 @@ int GrammarTranslator::exp()
  * 项
  * <term> ::= <factor>{<mult_op><factor>}
  */
-int GrammarTranslator::term()
+int GrammarTranslator::term(std::string &type)
 {
     std::string op;
+    std::string exp_type;
+    std::string exp_type_b;
 
-    factor();
+    factor(exp_type);
     while (word.first == "MULT" || word.first == "DIV")
     {
         op = word.first;
         get_word();
-        factor();
+        factor(exp_type_b);
+        if (exp_type != exp_type_b)
+        {
+            logger.warn("different type");
+            if (exp_type_b == "INTTK")
+            {
+                exp_type = exp_type_b;
+            }
+        }
         if (op == "MULT")
         {
             print_pcode("mul");
@@ -1239,11 +1278,12 @@ int GrammarTranslator::term()
  *              <ch>
  *              <f_ret_call>
  */
-int GrammarTranslator::factor()
+int GrammarTranslator::factor(std::string &type) /////////////////////////////////////////////////////////////////////////////////////////////
 {
     VarProperty *vp;
     std::string name;
     bool is_array;
+    std::string exp_type;
 
     if (detect(2, "IDENFR", "LPARENT")) // <f_ret_call>
     {
@@ -1261,7 +1301,7 @@ int GrammarTranslator::factor()
         if (word.first == "LBRACK")
         {
             get_word();
-            exp();
+            exp(exp_type);
             if (word.first == "RBRACK")
             {
                 get_word();
@@ -1290,7 +1330,7 @@ int GrammarTranslator::factor()
     else if (word.first == "LPARENT") // '('<exp>')'
     {
         get_word();
-        exp();
+        exp(exp_type);
         if (word.first == "RPARENT")
         {
             get_word();
@@ -1327,11 +1367,21 @@ int GrammarTranslator::factor()
  * 有返回值函数调用语句
  * <f_ret_call> ::= <ident>'('<arg_list>')'
  */
-int GrammarTranslator::f_ret_call() //??没地方接返回值?
+int GrammarTranslator::f_ret_call()
 {
+    FunctionProperty *fp;
+    std::string name;
+    std::vector<VarProperty> arg_list;
+
     if (word.first == "IDENFR")
     {
+        name = word.second;
         get_word();
+        fp = table.find_f(name);
+        if (fp == NULL)
+        {
+            e_undifine_identifier();
+        }
     }
     else
     {
@@ -1347,7 +1397,7 @@ int GrammarTranslator::f_ret_call() //??没地方接返回值?
         logger.error("lparent missing in f_ret_call");
         return -1;
     }
-    arg_list();
+    GrammarTranslator::arg_list(arg_list);
     if (word.first == "RPARENT")
     {
         get_word();
@@ -1356,6 +1406,25 @@ int GrammarTranslator::f_ret_call() //??没地方接返回值?
     {
         e_right_parenthesis();
     }
+    if (fp)
+    {
+        if (fp->arg_list.size() != arg_list.size())
+        {
+            e_func_param_n();
+        }
+        else
+        {
+            for (int i = 0; i < arg_list.size(); i++)
+            {
+                if (fp->arg_list[i].type != arg_list[i].type)
+                {
+                    e_func_param_type();
+                    break;
+                }
+            }
+        }
+    }
+    print_pcode("$%s", name.c_str());
 
     print_grammar("<有返回值函数调用语句>");
     return 0;
@@ -1366,9 +1435,19 @@ int GrammarTranslator::f_ret_call() //??没地方接返回值?
  */
 int GrammarTranslator::f_void_call()
 {
+    FunctionProperty *fp;
+    std::string name;
+    std::vector<VarProperty> arg_list;
+
     if (word.first == "IDENFR")
     {
+        name = word.second;
         get_word();
+        fp = table.find_f(name);
+        if (fp == NULL)
+        {
+            e_undifine_identifier();
+        }
     }
     else
     {
@@ -1384,7 +1463,7 @@ int GrammarTranslator::f_void_call()
         logger.error("lparent missing in f_void_call");
         return -1;
     }
-    arg_list();
+    GrammarTranslator::arg_list(arg_list);
     if (word.first == "RPARENT")
     {
         get_word();
@@ -1393,6 +1472,25 @@ int GrammarTranslator::f_void_call()
     {
         e_right_parenthesis();
     }
+    if (fp)
+    {
+        if (fp->arg_list.size() != arg_list.size())
+        {
+            e_func_param_n();
+        }
+        else
+        {
+            for (int i = 0; i < arg_list.size(); i++)
+            {
+                if (fp->arg_list[i].type != arg_list[i].type)
+                {
+                    e_func_param_type();
+                    break;
+                }
+            }
+        }
+    }
+    print_pcode("$%s", name.c_str());
 
     print_grammar("<无返回值函数调用语句>");
     return 0;
@@ -1402,14 +1500,17 @@ int GrammarTranslator::f_void_call()
  * <arg_list> ::= <exp>{,<exp>}
  *                <空>
  */
-int GrammarTranslator::arg_list()
+int GrammarTranslator::arg_list(std::vector<VarProperty> &arg_list)
 {
+    std::string exp_type;
+
     if (word.first == "PLUS" || word.first == "MINU" || word.first == "IDENFR" ||
         word.first == "LPARENT" || word.first == "INTCON" || word.first == "CHARCON")
     {
         while (true)
         {
-            exp();
+            exp(exp_type);
+            arg_list.push_back(VarProperty("", exp_type));
             if (word.first == "COMMA")
             {
                 get_word();
@@ -1482,6 +1583,7 @@ int GrammarTranslator::r_stmt()
  */
 int GrammarTranslator::w_stmt()
 {
+    std::string exp_type;
     if (word.first == "PRINTFTK")
     {
         get_word();
@@ -1508,12 +1610,12 @@ int GrammarTranslator::w_stmt()
         if (word.first == "COMMA")
         {
             get_word();
-            exp();
+            exp(exp_type);
         }
     }
     else
     {
-        exp();
+        exp(exp_type);
     }
 
     if (word.first == "RPARENT")
@@ -1534,6 +1636,7 @@ int GrammarTranslator::w_stmt()
  */
 int GrammarTranslator::ret_stmt()
 {
+    std::string exp_type;
     if (word.first != "RETURNTK")
     {
         logger.error("returntk missing in ret_stmt");
@@ -1543,7 +1646,7 @@ int GrammarTranslator::ret_stmt()
     if (word.first == "LPARENT")
     {
         get_word();
-        exp();
+        exp(exp_type);
         if (word.first == "RPARENT")
         {
             get_word();

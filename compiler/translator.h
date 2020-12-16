@@ -50,13 +50,13 @@ private:
     int loop_stmt(); // 循环语句
     int step();      // 步长
 
-    int exp();    // 表达式
-    int term();   // 项
-    int factor(); // 因子
+    int exp(std::string &type);    // 表达式
+    int term(std::string &type);   // 项
+    int factor(std::string &type); // 因子
 
-    int f_ret_call();  // 有返回值函数调用语句
-    int f_void_call(); // 无返回值函数调用语句
-    int arg_list();    // 值参数表
+    int f_ret_call();                                 // 有返回值函数调用语句
+    int f_void_call();                                // 无返回值函数调用语句
+    int arg_list(std::vector<VarProperty> &arg_list); // 值参数表
 
     int r_stmt();   // 读语句
     int w_stmt();   // 写语句
