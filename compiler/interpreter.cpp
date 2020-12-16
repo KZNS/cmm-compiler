@@ -92,13 +92,134 @@ PcodeInterpreter::PcodeInterpreter(){
     this->cmdHandler["exit"] = do_exit;
     this->cmdHandler["arg"] = do_arg;
     this->cmdHandler["ret"] = do_ret;
+    this->cmdHandler["sub"] = do_sub;
+    this->cmdHandler["div"] = do_div;
+    this->cmdHandler["mod"] = do_mod;
+    this->cmdHandler["cmpeq"] = do_cmpeq;
+    this->cmdHandler["cmpne"] = do_cmpne;
+    this->cmdHandler["cmpgt"] = do_cmpgt;
+    this->cmdHandler["cmplt"] = do_cmplt;
+    this->cmdHandler["cmpge"] = do_cmpge;
+    this->cmdHandler["cmple"] = do_cmple;
+    this->cmdHandler["and"] = do_and;
+    this->cmdHandler["or"] = do_or;
+    this->cmdHandler["not"] = do_not;
+    this->cmdHandler["neg"] = do_neg;
 }
-//add / sub / mul / div / mod / cmpeq / cmpne / cmpgt 
-// cmplt / cmpge / cmple / and / or / not / neg
+int PcodeInterpreter::do_mul(const string dummy){
+    int op_2 = get_rtstack_var();
+    int op_1 = get_rtstack_var();
+    int result = op_1 * op_2; runtimeStack.push(result);
+    logger.info("multiplied to %d",result);
+    return 0;
+}
+int PcodeInterpreter::do_add(const string dummy){//op_1 + op_2
+    int op_2 = get_rtstack_var();
+    int op_1 = get_rtstack_var();
+    int result = op_1 + op_2; runtimeStack.push(result);
+    logger.info("added to %d",result);
+    return 0;
+}
+int PcodeInterpreter::do_sub(const string dummy){//op_1-op_2
+    int result = get_rtstack_var() - get_rtstack_var(); 
+    runtimeStack.push(result);
+    logger.info("subtracted to %d",result);
+    return 0;
+}
+int PcodeInterpreter::do_div(const string dummy){//op_1 / op_2
+    int op_2 = get_rtstack_var();
+    int op_1 = get_rtstack_var();
+    if(op_2==0){
+        logger.error("[%d] Runtime error: division by zero",eip);
+        exit(-5);
+    }
+    int result = op_1 / op_2;
+    runtimeStack.push(result);
+    logger.info("divided to %d",result);
+    return 0;
+}
+int PcodeInterpreter::do_mod(const string dummy){
+    int op_2 = get_rtstack_var();
+    int op_1 = get_rtstack_var();
+    if(op_2==0){
+        logger.error("[%d] Runtime error: modular by zero",eip);
+        exit(-5);
+    }
+    int result = op_1 % op_2;
+    runtimeStack.push(result);
+    logger.info("mod to %d",result);
+    return 0;
+}
+int PcodeInterpreter::do_cmpeq(const string dummy){
+    int result = get_rtstack_var() == get_rtstack_var(); 
+    runtimeStack.push(result);
+    logger.info("cmp == to %d",result);
+    return 0;
+}
+int PcodeInterpreter::do_cmpne(const string cmd){
+    int result = get_rtstack_var() != get_rtstack_var(); 
+    runtimeStack.push(result);
+    logger.info("cmp != to %d",result);
+    return 0;
+}
+int PcodeInterpreter::do_cmpgt(const string cmd){
+    int result = get_rtstack_var() > get_rtstack_var(); 
+    runtimeStack.push(result);
+    logger.info("cmp > to %d",result);
+    return 0;
+}
+int PcodeInterpreter::do_cmplt(const string cmd){
+    int result = get_rtstack_var() < get_rtstack_var(); 
+    runtimeStack.push(result);
+    logger.info("cmt < to %d",result);
+    return 0;
+}
+int PcodeInterpreter::do_cmpge(const string cmd){
+    int result = get_rtstack_var() >= get_rtstack_var(); 
+    runtimeStack.push(result);
+    logger.info("cmp >= to %d",result);
+    return 0;
+}
+int PcodeInterpreter::do_cmple(const string cmd){
+    int result = get_rtstack_var() <= get_rtstack_var(); 
+    runtimeStack.push(result);
+    logger.info("cmp <= to %d",result);
+    return 0;
+}
+int PcodeInterpreter::do_and(const string cmd){
+    int result = get_rtstack_var() && get_rtstack_var(); 
+    runtimeStack.push(result);
+    logger.info("and-op to %d",result);
+    return 0;
+}
+int PcodeInterpreter::do_or(const string cmd){
+    int result = get_rtstack_var() || get_rtstack_var(); 
+    runtimeStack.push(result);
+    logger.info("or-op to %d",result);
+    return 0;
+}
+int PcodeInterpreter::do_not(const string dummy){
+    check_rtstack_size(1);
+    runtimeStack.top() = !runtimeStack.top();
+    logger.info("not-op to %d",runtimeStack.top());
+    return 0;
+}
+int PcodeInterpreter::do_neg(const string dummy){
+    check_rtstack_size(1);
+    runtimeStack.top() = -runtimeStack.top();
+    logger.info("neg-op to %d",runtimeStack.top());
+    return 0;
+}
+int PcodeInterpreter::get_rtstack_var(){
+    check_rtstack_size(1);
+    int r = runtimeStack.top(); 
+    runtimeStack.pop();
+    return r;
+}
 int PcodeInterpreter::get_var(const string varName){//接受元素名/数组名[下标]，返回其在runtimeVar中的下标
     if(varName.find('[')==varName.npos){
         if(runtimeVarLookup.top().find(varName)==runtimeVarLookup.top().end()){
-            logger.error("access to undefined variable %s",varName.c_str());
+            logger.error("[%d] Runtime error: access to undefined variable %s",eip,varName.c_str());
             exit(-1);
         }
         return runtimeVarLookup.top()[varName]; 
@@ -107,7 +228,7 @@ int PcodeInterpreter::get_var(const string varName){//接受元素名/数组名[
 }
 void PcodeInterpreter::check_rtstack_size(const int n){
     if(runtimeStack.size()<n){
-        logger.error("Runtime error: invalid stack depth = %d, wants %d",runtimeStack.size(),n);
+        logger.error("[%d] Runtime error: invalid stack depth = %d, wants %d",eip,runtimeStack.size(),n);
         exit(-5);
     }
 }
@@ -257,26 +378,6 @@ int PcodeInterpreter::do_input(const string cmd){
     cout << msg<<endl;
     return 0;
 }
-int PcodeInterpreter::do_mul(const string dummy){
-    check_rtstack_size(2);
-    int r = runtimeStack.top();
-    runtimeStack.pop();
-    r *= runtimeStack.top();
-    runtimeStack.pop();
-    runtimeStack.push(r);
-    logger.info("multiplied to %d",r);
-    return 0;
-}
-int PcodeInterpreter::do_add(const string dummy){
-    check_rtstack_size(2);
-    int r = runtimeStack.top();
-    runtimeStack.pop();
-    r += runtimeStack.top();
-    runtimeStack.pop();
-    runtimeStack.push(r);
-    logger.info("added to %d",r);
-    return 0;
-}
 int PcodeInterpreter::do_var(const string cmd){
     vector<string> vars;
     SplitString(cmd,vars,",");
@@ -284,7 +385,7 @@ int PcodeInterpreter::do_var(const string cmd){
         vector<string> attr;
         SplitString(var,attr,":");
         if(var_exists(attr[0])){
-            logger.error("duplicate definition of variable %s",var.c_str());
+            logger.error("[%d] Runtime error: duplicate definition of variable %s",eip,var.c_str());
             exit(-1);
         }
         if(attr[0].find('[')!=attr[0].npos){//array mode
@@ -295,12 +396,12 @@ int PcodeInterpreter::do_var(const string cmd){
                 runtimeVar.push_back({attr[1],attr[0],0});
                 old_sp.top()++;
             }
-            logger.info("declared array variable %s (%d)",attr[0].substr(0,attr[0].find_first_of('[')).c_str(),len);
+            logger.info("[%d] Runtime error: declared array variable %s (%d)",eip,attr[0].substr(0,attr[0].find_first_of('[')).c_str(),len);
         } else {
             runtimeVarLookup.top()[attr[0]] = runtimeVar.size();
             runtimeVar.push_back({attr[1],attr[0],0});
             old_sp.top()++;
-            logger.info("declared variable %s",attr[0].c_str());
+            logger.info("[%d] Runtime error: declared variable %s",eip,attr[0].c_str());
         }
     }
     return 0;
@@ -313,7 +414,7 @@ int PcodeInterpreter::do_push(const string cmd){//如果发现是数组操作，
         msg += "variable:";msg+=cmd; 
     } else {
         if(!isnum(cmd)){
-            logger.fatal("invalid push argument %s",cmd);
+            logger.error("[%d] Runtime error: invalid push argument %s",eip,cmd);
             exit(-3);
         }
         stringstream ss;
@@ -368,13 +469,14 @@ int PcodeInterpreter::interpret(const std::string &in_file_name){
             string labelName = v[0].substr(0,v[0].size()-1);
             if(labelMap.find(labelName)!=labelMap.end()){
                 printf("duplicate labels error.");
+                logger.error("[%d] Runtime error: duplicate labels error.",eip);
                 return -1;
             }
             this->labelMap.insert(make_pair(labelName,this->code.size()));
         } else if(v.size()==2 && v[0]=="FUNC" && v[1].back()==':'){
             string funcName = v[1].substr(1,v[1].size()-2);
             if(funcMap.find(funcName)!=funcMap.end()){
-                printf("duplicate funcname error");
+                logger.error("[%d] Runtime error: duplicate funcname error.",eip);
                 return -1;
             }
             this->funcMap.insert(make_pair(funcName,this->code.size()-1));//回退到函数入口

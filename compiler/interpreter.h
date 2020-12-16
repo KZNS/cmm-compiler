@@ -48,6 +48,22 @@ private:
     int get_var(const std::string);
     bool var_exists(const std::string);
     void check_rtstack_size(const int);
+    int get_rtstack_var();
+    //add / sub / mul / div / mod / cmpeq / cmpne / cmpgt 
+// cmplt / cmpge / cmple / and / or / not / neg
+    int do_sub(const std::string);
+    int do_div(const std::string);
+    int do_mod(const std::string);
+    int do_cmpeq(const std::string);
+    int do_cmpne(const std::string);
+    int do_cmpgt(const std::string);
+    int do_cmplt(const std::string);
+    int do_cmpge(const std::string);
+    int do_cmple(const std::string);
+    int do_and(const std::string);
+    int do_or(const std::string);
+    int do_not(const std::string);
+    int do_neg(const std::string);
 public:
     PcodeInterpreter();
     int interpret(const std::string &in_file_name);
