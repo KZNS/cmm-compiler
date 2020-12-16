@@ -72,6 +72,12 @@ PcodeInterpreter::PcodeInterpreter(){
 }
 //add / sub / mul / div / mod / cmpeq / cmpne / cmpgt 
 // cmplt / cmpge / cmple / and / or / not / neg
+int PcodeInterpreter::dump_rtstack(){
+    cout << "--rtstack:"<<runtimeStack.size()<<"---"<<endl;
+
+    cout << "------------------------"<<endl;
+    return 0;
+}
 int PcodeInterpreter::do_arg(const string cmd){
     cout << "do_Arg:"<<cmd<<endl;
     vector<string> args;
@@ -206,12 +212,12 @@ int PcodeInterpreter::do_input(const string cmd){
             for(int i=old_sp.top();i<runtimeVar.size();i++){
                 if(runtimeVar[i].name==v){//暂时不考虑变量未初始化的问题，默认是0
                     cin >> runtimeVar[i].val;
-                    msg += "setting "+runtimeVar[i].name+" to "+to_string(runtimeVar[i].val);
+                    logger.debug("setting %s to %s",runtimeVar[i].name,to_string(runtimeVar[i].val));
                 }   
             }
         } else {
-            cout << "runtime error: "<<v<<" is not defined"<<endl;
-            return -1;
+            logger.error("runtime error: %s is not defined",v);
+            exit(-1);
         }
     }
     cout << msg<<endl;
@@ -250,15 +256,15 @@ int PcodeInterpreter::do_var(const string cmd){
         vector<string> attr;
         SplitString(var,attr,":");
         if(runtimeVarLookup.top().find(attr[0])!=runtimeVarLookup.top().end()){
-            cout << "duplicate definition of variable "<<var<<endl;
-            return -1;
+            logger.error("duplicate definition of variable %s",var.c_str());
+            exit(-1);
         } else {
             runtimeVarLookup.top()[attr[0]] = runtimeVar.size();
             runtimeVar.push_back({attr[1],attr[0],0});
             old_sp.top()++;
+            logger.debug("declared variable %s",attr[0]);
         }
     }
-    cout << "cmd:"<<cmd << endl;
     return 0;
 }
 int PcodeInterpreter::do_push(const string cmd){//如果发现是数组操作，去栈拿【i】：栈顶的是下标，运算数在第二个
@@ -268,7 +274,7 @@ int PcodeInterpreter::do_push(const string cmd){//如果发现是数组操作，
         cout << "pushd variable "<< cmd << " ";
     } else {
         if(!isnum(cmd)){
-            cout << "invalid push input:"<<cmd<<endl;
+            logger.fatal("invalid push argument %s",cmd);
             exit(-3);
         }
         stringstream ss;
@@ -370,3 +376,5 @@ int PcodeInterpreter::interpret(const std::string &in_file_name){
 }
 #endif
 
+//数组第二个是下标，第一个是值
+//pop 第一个是下标

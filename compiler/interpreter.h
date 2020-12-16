@@ -45,6 +45,7 @@ private:
     int do_ret(const std::string);
     int do_arg(const std::string);
     int func_call(const std::string);
+    int dump_rtstack();
 public:
     PcodeInterpreter();
     int interpret(const std::string &in_file_name);
