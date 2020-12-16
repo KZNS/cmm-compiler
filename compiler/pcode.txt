@@ -1,6 +1,5 @@
 ; int a, b;
 var a:int,b:int
-
 ; a = 1 + 2;
 push 1
 push 2
@@ -12,7 +11,7 @@ push a
 push 2
 mul
 pop b
-
+ 
 print "a=",a,"b=",b
 push a
 push b

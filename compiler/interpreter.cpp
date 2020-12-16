@@ -21,8 +21,32 @@ void SplitString(const std::string& s, std::vector<std::string>& v, const std::s
     pos1 = pos2 + c.size();
     pos2 = s.find(c, pos1);
   }
-  if(pos1 != s.length())
+  if(pos1 != s.length()){
     v.push_back(s.substr(pos1));
+  }
+    if(c==" "&&v.size()>0){
+        vector<string> v2;
+        string s2;
+        v2.push_back(v[0]);
+        if(v.size()>1){
+            for(int i=1;i<v.size();i++){
+                if(i!=1){
+                    s2 += " ";
+                }
+                s2 += v[i];
+            }
+        }
+        v2.push_back(s2);
+        v = v2;
+        return;
+    }
+}
+void SplitStringWithSpace(const std::string& s, std::vector<std::string>& v){
+    int pos = s.find_first_of(' ');
+    v.push_back(s.substr(0,pos));
+    if(!s.substr(pos+1,s.length()-1).empty()){
+        v.push_back(s.substr(pos+1,s.length()-1));
+    }
 }
 bool isnum(string s)  
 {  
@@ -41,7 +65,6 @@ bool isnum(string s)
         else  
                 return true;  
 }  
-  
 string& trim(string &s) 
 {
     if (s.empty()) 
@@ -72,26 +95,43 @@ PcodeInterpreter::PcodeInterpreter(){
 }
 //add / sub / mul / div / mod / cmpeq / cmpne / cmpgt 
 // cmplt / cmpge / cmple / and / or / not / neg
-int PcodeInterpreter::dump_rtstack(){
-    cout << "--rtstack:"<<runtimeStack.size()<<"---"<<endl;
-
-    cout << "------------------------"<<endl;
-    return 0;
+int PcodeInterpreter::get_var(const string varName){//接受元素名/数组名[下标]，返回其在runtimeVar中的下标
+    if(varName.find('[')==varName.npos){
+        if(runtimeVarLookup.top().find(varName)==runtimeVarLookup.top().end()){
+            logger.error("access to undefined variable %s",varName.c_str());
+            exit(-1);
+        }
+        return runtimeVarLookup.top()[varName]; 
+    }
+    return -1;
+}
+void PcodeInterpreter::check_rtstack_size(const int n){
+    if(runtimeStack.size()<n){
+        logger.error("Runtime error: invalid stack depth = %d, wants %d",runtimeStack.size(),n);
+        exit(-5);
+    }
+}
+bool PcodeInterpreter::var_exists(const string varName){
+    if(runtimeVarLookup.top().find(varName)==runtimeVarLookup.top().end())return false;
+    return true;
 }
 int PcodeInterpreter::do_arg(const string cmd){
-    cout << "do_Arg:"<<cmd<<endl;
-    vector<string> args;
     unordered_map<string,int> m;
     runtimeVarLookup.push(m);
-    SplitString(cmd,args,",");
-    if(runtimeStack.size()<args.size()){
-        cout << "invalid stack depth in do_Args"<<endl;
-        return -1;
+    if(cmd==""){
+        return 0;
     }
+    cout << "cmd size:"<<cmd.length()<<"|"<<cmd<<endl;
+    vector<string> args;
+    SplitString(cmd,args,",");
+    check_rtstack_size(args.size());
     reverse(args.begin(),args.end());
     for(auto a:args){
-        runtimeVarLookup.top()[a] = runtimeVar.size();
-        runtimeVar.push_back({"arg",a,runtimeStack.top()});//type,name,val
+        vector<string> attr;
+        SplitString(a,attr,":");
+        string dtype = attr.size()<2 ? "int" : attr[1];
+        runtimeVarLookup.top()[attr[0]] = runtimeVar.size();
+        runtimeVar.push_back({dtype,attr[0],runtimeStack.top()});//type,name,val
         cout << "arg:"<<a<<"="<<runtimeStack.top()<<endl;
         runtimeStack.pop();
     }
@@ -101,6 +141,7 @@ int PcodeInterpreter::do_ret(const string cmd){
     if(cmd=="~"){
         cout << "is~"<<endl;
         int t = runtimeStack.top();
+        runtimeStack.pop();
         int n = old_sp.top();
         old_sp.pop();
         int o = old_sp.top();
@@ -123,7 +164,7 @@ int PcodeInterpreter::do_ret(const string cmd){
         //pop everything in this func and return
         eip.pop();
         return 0;
-    } else if(runtimeVarLookup.top().find(cmd)!=runtimeVarLookup.top().end()){
+    } else if(var_exists(cmd)){
         //for(int i=)
         int t = runtimeVar[runtimeVarLookup.top()[cmd]].val;
         int n = old_sp.top();
@@ -152,10 +193,7 @@ int PcodeInterpreter::do_jmp(const string cmd){
     return 0;
 }
 int PcodeInterpreter::do_jz(const string cmd){
-    if(runtimeStack.size()<1){
-        cout << "invalid runtime stack depth"<<endl;
-        return -1;
-    }
+    check_rtstack_size(1);
     if(labelMap.find(cmd)==labelMap.end()){
         cout << cmd << " not found in label map."<<endl;
         return -1;
@@ -176,8 +214,13 @@ int PcodeInterpreter::do_print(const string cmd){
     for(auto i:info){
         if(i.front()=='\"'&&i.back()=='\"'){
             cout << i.substr(1,i.length()-2);
-        } else if(runtimeVarLookup.top().find(i)!=runtimeVarLookup.top().end()){
-            cout << runtimeVar[runtimeVarLookup.top()[i]].val;
+        } else if(i.find('~')!=i.npos){//输出栈顶元素并pop
+            check_rtstack_size(1);
+            cout << runtimeStack.top();
+            runtimeStack.pop();
+            //这里后续判断类型
+        } else {
+            cout << runtimeVar[get_var(i)].val;
         }
     }
     cout << endl;
@@ -207,46 +250,31 @@ int PcodeInterpreter::do_input(const string cmd){
     vector<string> vars;
     string msg;
     SplitString(cmd,vars,",");
-    for(auto v:vars){
-        if(runtimeVarLookup.top().find(v)!=runtimeVarLookup.top().end()){
-            for(int i=old_sp.top();i<runtimeVar.size();i++){
-                if(runtimeVar[i].name==v){//暂时不考虑变量未初始化的问题，默认是0
-                    cin >> runtimeVar[i].val;
-                    logger.debug("setting %s to %s",runtimeVar[i].name,to_string(runtimeVar[i].val));
-                }   
-            }
-        } else {
-            logger.error("runtime error: %s is not defined",v);
-            exit(-1);
-        }
+    for(auto var:vars){
+        cin >> runtimeVar[get_var(var)].val;
+        logger.debug("setting %s to %s",runtimeVar[get_var(var)].name.c_str(),to_string(runtimeVar[get_var(var)].val).c_str());
     }
     cout << msg<<endl;
     return 0;
 }
 int PcodeInterpreter::do_mul(const string dummy){
-    if(runtimeStack.size()<2){
-        cout << "invalid stack depth"<<endl;
-        return -1;
-    }
+    check_rtstack_size(2);
     int r = runtimeStack.top();
     runtimeStack.pop();
     r *= runtimeStack.top();
     runtimeStack.pop();
     runtimeStack.push(r);
-    cout <<"multiplied to "<<r << endl;
+    logger.info("multiplied to %d",r);
     return 0;
 }
 int PcodeInterpreter::do_add(const string dummy){
-    if(runtimeStack.size()<2){
-        cout << "invalid stack depth"<<endl;
-        return -1;
-    }
+    check_rtstack_size(2);
     int r = runtimeStack.top();
     runtimeStack.pop();
     r += runtimeStack.top();
     runtimeStack.pop();
     runtimeStack.push(r);
-    cout <<"added to "<<r <<" eip:"<<eip.top()<< endl;
+    logger.info("added to %d",r);
     return 0;
 }
 int PcodeInterpreter::do_var(const string cmd){
@@ -255,23 +283,34 @@ int PcodeInterpreter::do_var(const string cmd){
     for(auto var:vars){
         vector<string> attr;
         SplitString(var,attr,":");
-        if(runtimeVarLookup.top().find(attr[0])!=runtimeVarLookup.top().end()){
+        if(var_exists(attr[0])){
             logger.error("duplicate definition of variable %s",var.c_str());
             exit(-1);
+        }
+        if(attr[0].find('[')!=attr[0].npos){//array mode
+            int len = stoi(attr[0].substr(attr[0].find_first_of('[')+1,attr[0].find_first_of(']')-2));
+            for(int i=0;i<len;i++){
+                string vName = attr[0].substr(0,attr[0].find_first_of('['))+"["+to_string(i)+"]";
+                runtimeVarLookup.top()[vName] = runtimeVar.size();
+                runtimeVar.push_back({attr[1],attr[0],0});
+                old_sp.top()++;
+            }
+            logger.info("declared array variable %s (%d)",attr[0].substr(0,attr[0].find_first_of('[')).c_str(),len);
         } else {
             runtimeVarLookup.top()[attr[0]] = runtimeVar.size();
             runtimeVar.push_back({attr[1],attr[0],0});
             old_sp.top()++;
-            logger.debug("declared variable %s",attr[0]);
+            logger.info("declared variable %s",attr[0].c_str());
         }
     }
     return 0;
 }
 int PcodeInterpreter::do_push(const string cmd){//如果发现是数组操作，去栈拿【i】：栈顶的是下标，运算数在第二个
     int a;
-    if(runtimeVarLookup.top().find(cmd)!=runtimeVarLookup.top().end()){//这是个变量名，去找变量值
-        a = runtimeVar[runtimeVarLookup.top()[cmd]].val;
-        cout << "pushd variable "<< cmd << " ";
+    string msg;
+    if(var_exists(cmd)){
+        a = runtimeVar[get_var(cmd)].val;
+        msg += "variable:";msg+=cmd; 
     } else {
         if(!isnum(cmd)){
             logger.fatal("invalid push argument %s",cmd);
@@ -282,29 +321,24 @@ int PcodeInterpreter::do_push(const string cmd){//如果发现是数组操作，
         ss>>a;
     }
     runtimeStack.push(a);
-    cout << "push:"<<a << endl;
+    logger.info("push: %d %s",a,msg.c_str());
     return 0;
 }
 int PcodeInterpreter::do_pop(const string cmd){//如果发现是数组操作，去栈拿【i】：栈顶的是下标，运算数在第二个
-    cout << "pop:"<<cmd << endl;
     if(cmd==""){//直接pop，不管了
         runtimeStack.pop();
         cout <<" direct pop"<<endl;
         return 0;
     }
-    if(runtimeVarLookup.top().find(cmd)!=runtimeVarLookup.top().end()){//这是个变量名，去找变量值
-        runtimeVar[runtimeVarLookup.top()[cmd]].val = runtimeStack.top();
-        runtimeStack.pop();
-        return 0;
-    } else {
-        cout << "not foudn"<<endl;
-    }
+    runtimeVar[get_var(cmd)].val = runtimeStack.top();
+    runtimeStack.pop();
+    logger.info("pop into %s",cmd.c_str());
     return -1;
 }
 int PcodeInterpreter::func_call(const string funcName){
     string fname = funcName.substr(1,funcName.length()-1);
     if(funcMap.find(fname)!=funcMap.end()){
-        cout << "eip pushed "<<funcMap[fname]<< endl;
+        logger.info("eip pushed %d",funcMap[fname]);
         eip.push(funcMap[fname]);
         old_sp.push(old_sp.top()+1);
     } else {
@@ -317,7 +351,7 @@ int PcodeInterpreter::interpret(const std::string &in_file_name){
     ifstream myfile(in_file_name);
     string temp;
     if(!myfile.is_open()){
-        cout << "fail" << endl;
+        cout << "failed to open file" << endl;
         return -1;
     }
     while(getline(myfile,temp)){
@@ -328,6 +362,7 @@ int PcodeInterpreter::interpret(const std::string &in_file_name){
         //cout << temp << endl;
         vector<string> v;
         SplitString(temp,v," ");//这里不该这样写，应该只用空格分一次，需要重写split
+        //SplitStringWithSpace(temp,v);
         this->code.push_back(v);
         if(v.size()==1 && v[0].back()==':'){
             string labelName = v[0].substr(0,v[0].size()-1);
@@ -347,7 +382,7 @@ int PcodeInterpreter::interpret(const std::string &in_file_name){
     }
     myfile.close();
     int i=0;
-    while(i<25){
+    while(i<99){
         vector<string> cmd = code[eip.top()];
         if(cmd.size()>0){
             if(cmd[0].back()==':'){
@@ -362,6 +397,7 @@ int PcodeInterpreter::interpret(const std::string &in_file_name){
         if(cmd.size()==2){
             (this->*cmdHandler[cmd[0]])(cmd[1]);
         } else {
+            logger.warn("[!]second command argument is empty!");
             (this->*cmdHandler[cmd[0]])("");
         }
         //cout << "-->"<<cmd[0]<<endl;

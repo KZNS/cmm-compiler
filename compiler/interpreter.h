@@ -45,7 +45,9 @@ private:
     int do_ret(const std::string);
     int do_arg(const std::string);
     int func_call(const std::string);
-    int dump_rtstack();
+    int get_var(const std::string);
+    bool var_exists(const std::string);
+    void check_rtstack_size(const int);
 public:
     PcodeInterpreter();
     int interpret(const std::string &in_file_name);
