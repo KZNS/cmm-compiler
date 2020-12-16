@@ -20,7 +20,9 @@ private:
     std::ofstream fout;
     Word word;
     Word word_buffer[WORD_BUFFER_SZ];
+    int line_number_buffer[WORD_BUFFER_SZ];
     int bottom_word_id, now_word_id, top_word_id;
+    int last_line_number;
     int line_number;
     std::string translate_type;
 

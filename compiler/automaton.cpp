@@ -245,6 +245,7 @@ int LexicalAutomaton::open(const std::string &file_name)
     if (fin.is_open())
         fin.close();
     fin.open(file_name);
+    line_number = 1;
     return 0;
 }
 int LexicalAutomaton::close()
@@ -295,7 +296,7 @@ int LexicalAutomaton::append_keyword(const std::string &word, const std::string 
     t->type = type;
     return 0;
 }
-Word LexicalAutomaton::get_word()
+Word LexicalAutomaton::get_word(int &new_line_number)
 {
     if (last == 0)
     {
@@ -308,6 +309,10 @@ Word LexicalAutomaton::get_word()
     t = root;
     while (!(' ' <= c && c <= '~' && t->next[c - ' '] != NULL))
     {
+        if (c == '\n')
+        {
+            line_number++;
+        }
         if (!fin.get(c))
         {
             c = -1;
@@ -325,12 +330,13 @@ Word LexicalAutomaton::get_word()
         }
     }
     last = c;
-    
+
     if (t->type == "CHARCON" || t->type == "STRCON")
     {
-        s = s.substr(1, s.length()-2);
+        s = s.substr(1, s.length() - 2);
     }
 
+    new_line_number = line_number;
     return make_pair(t->type, s);
 }
 bool LexicalAutomaton::empty()

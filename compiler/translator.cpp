@@ -2035,10 +2035,13 @@ int GrammarTranslator::get_new_word()
         if (bottom_word_id <= top_word_id - WORD_BUFFER_SZ + 1)
             bottom_word_id++;
         top_word_id++;
-        word_buffer[top_word_id % WORD_BUFFER_SZ] = words.get_word();
+        word_buffer[top_word_id % WORD_BUFFER_SZ] =
+            words.get_word(line_number_buffer[top_word_id % WORD_BUFFER_SZ]);
     }
     now_word_id++;
     word = word_buffer[now_word_id % WORD_BUFFER_SZ];
+    last_line_number = line_number;
+    line_number = line_number_buffer[now_word_id % WORD_BUFFER_SZ];
     return 0;
 }
 int GrammarTranslator::roll_back(int step)
@@ -2136,7 +2139,6 @@ int GrammarTranslator::translate_lexical(const std::string &in_file_name, const 
 {
     words.open(in_file_name);
     fout.open(out_file_name);
-    line_number = 0;
 
     get_word();
     while (word.first != "")
@@ -2154,7 +2156,6 @@ int GrammarTranslator::translate(const std::string &in_file_name,
     words.open(in_file_name);
     fout.open(out_file_name);
     translate_type = type;
-    line_number = 0;
     pcode_indent_deep = 0;
     int e;
 
