@@ -1618,6 +1618,7 @@ int GrammarTranslator::r_stmt()
  */
 int GrammarTranslator::w_stmt()
 {
+    std::string str;
     std::string exp_type;
     if (word.first == "PRINTFTK")
     {
@@ -1641,16 +1642,22 @@ int GrammarTranslator::w_stmt()
     // <str> | <str>,<exp> | <exp>
     if (word.first == "STRCON")
     {
-        str_const();
+        str_const(str);
         if (word.first == "COMMA")
         {
             get_word();
             exp(exp_type);
+            print_pcode("print \"%s\",~:%s", str.c_str(), exp_type.c_str());
+        }
+        else
+        {
+            print_pcode("print \"%s\"", str.c_str());
         }
     }
     else
     {
         exp(exp_type);
+        print_pcode("print ~:%s", exp_type.c_str());
     }
 
     if (word.first == "RPARENT")
@@ -1700,10 +1707,11 @@ int GrammarTranslator::ret_stmt()
  * 字符串
  * <str> ::= "{十进制编码为32,33,35-126的ASCII字符}"
  */
-int GrammarTranslator::str_const()
+int GrammarTranslator::str_const(std::string &str)
 {
     if (word.first == "STRCON")
     {
+        str = word.second;
         get_word();
     }
     else

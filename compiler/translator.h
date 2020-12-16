@@ -64,7 +64,7 @@ private:
     int w_stmt();   // 写语句
     int ret_stmt(); // 返回语句
 
-    int str_const(); // 字符串
+    int str_const(std::string &str); // 字符串
 
     int e_word();                //非法符号或不符合词法
     int e_redifine_identifier(); //名字重定义
