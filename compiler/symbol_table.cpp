@@ -28,7 +28,7 @@ int SymbolTable::insert_var(const VarProperty &var_p)
 {
     if (is_local)
     {
-        if (local_var_table.find(var_p.name) != global_var_table.end())
+        if (local_var_table.find(var_p.name) != local_var_table.end())
         {
             logger.error("var %s already exists", var_p.name.c_str());
             return -1;
