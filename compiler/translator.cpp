@@ -931,10 +931,14 @@ int GrammarTranslator::eval()
  */
 int GrammarTranslator::cond_stmt(std::string ret_type)
 {
+    std::string unique_label = get_unique_label();
+
     // if'('<cond>')'<stmt>
     if (word.first == "IFTK")
     {
         get_word();
+        print_pcode("If%s:", unique_label.c_str());
+        change_pcode_indent_deep(1);
     }
     else
     {
@@ -959,14 +963,25 @@ int GrammarTranslator::cond_stmt(std::string ret_type)
     {
         e_right_parenthesis();
     }
-    stmt(ret_type);
+    change_pcode_indent_deep(-1);
+    print_pcode("jz Else%s", unique_label.c_str());
 
+    change_pcode_indent_deep(1);
+    stmt(ret_type);
+    change_pcode_indent_deep(-1);
+
+    print_pcode("jmp Endif%s", unique_label.c_str());
+
+    print_pcode("Else%s:", unique_label.c_str());
+    change_pcode_indent_deep(1);
     // [else<stmt>]
     if (word.first == "ELSETK")
     {
         get_word();
         stmt(ret_type);
     }
+    change_pcode_indent_deep(-1);
+    print_pcode("Endif%s:", unique_label.c_str());
 
     print_grammar("<条件语句>");
     return 0;
@@ -978,19 +993,57 @@ int GrammarTranslator::cond_stmt(std::string ret_type)
  */
 int GrammarTranslator::cond()
 {
+    std::string op;
     std::string exp_type;
     std::string exp_type_b;
+
     exp(exp_type);
-    if (word.first == "LSS" || word.first == "LEQ" || word.first == "GRE" ||
-        word.first == "GEQ" || word.first == "EQL" || word.first == "NEQ")
-    {
-        get_word(); //rel_op();
-        exp(exp_type_b);
-    }
-    if (exp_type != "INTTK" || exp_type_b != "INTTK")
+    if (exp_type != "INTTK")
     {
         e_condition_type();
     }
+    if (word.first == "LSS" || word.first == "LEQ" || word.first == "GRE" ||
+        word.first == "GEQ" || word.first == "EQL" || word.first == "NEQ")
+    {
+        op = word.first;
+        get_word(); //rel_op();
+        exp(exp_type_b);
+        if (exp_type_b != "INTTK")
+        {
+            e_condition_type();
+        }
+
+        if (op == "LSS")
+        {
+            print_pcode("cmplt");
+        }
+        else if (op == "LEQ")
+        {
+            print_pcode("cmple");
+        }
+        else if (op == "GRE")
+        {
+            print_pcode("cmpgt");
+        }
+        else if (op == "GEQ")
+        {
+            print_pcode("cmpge");
+        }
+        else if (op == "EQL")
+        {
+            print_pcode("cmpeq");
+        }
+        else if (op == "NEQ")
+        {
+            print_pcode("cmpne");
+        }
+        else
+        {
+            logger.error("wrong operator");
+            return -1;
+        }
+    }
+
     print_grammar("<条件>");
     return 0;
 }
