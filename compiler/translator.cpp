@@ -411,6 +411,7 @@ int GrammarTranslator::f_ret()
         return -1;
     }
     print_pcode("FUNC @%s:", name.c_str());
+    change_pcode_indent_deep(1);
 
     // '('<param_table>')'
     if (word.first == "LPARENT")
@@ -465,6 +466,7 @@ int GrammarTranslator::f_ret()
         logger.error("missing '}'");
         return -1;
     }
+    change_pcode_indent_deep(-1);
     print_pcode("ENDFUNC");
     table.set_global();
 
@@ -503,6 +505,7 @@ int GrammarTranslator::f_void()
         return -1;
     }
     print_pcode("FUNC @%s:", name.c_str());
+    change_pcode_indent_deep(1);
 
     // '('<param_table>')'
     if (word.first == "LPARENT")
@@ -557,6 +560,7 @@ int GrammarTranslator::f_void()
         logger.error("missing '}'");
         return -1;
     }
+    change_pcode_indent_deep(-1);
     print_pcode("ENDFUNC");
     table.set_global();
 
@@ -645,6 +649,7 @@ int GrammarTranslator::main_f()
     }
 
     print_pcode("FUNC @%s:", name.c_str());
+    change_pcode_indent_deep(1);
 
     if (word.first == "LPARENT")
     {
@@ -684,6 +689,7 @@ int GrammarTranslator::main_f()
         logger.error("RBRACE missing in main_f");
         return -1;
     }
+    change_pcode_indent_deep(-1);
     print_pcode("ENDFUNC");
     table.set_global();
 
@@ -1798,7 +1804,21 @@ int GrammarTranslator::print_pcode(std::string format, ...)
         vsnprintf(buffer, 100, format.c_str(), args);
         va_end(args);
 
+        for (int i = 0; i < pcode_indent_deep; i++)
+        {
+            fout << "    ";
+        }
         fout << buffer << std::endl;
+    }
+    return 0;
+}
+
+int GrammarTranslator::change_pcode_indent_deep(int x)
+{
+    pcode_indent_deep += x;
+    if (pcode_indent_deep < 0)
+    {
+        pcode_indent_deep = 0;
     }
     return 0;
 }
@@ -1939,6 +1959,7 @@ int GrammarTranslator::translate(const std::string &in_file_name,
     fout.open(out_file_name);
     translate_type = type;
     line_number = 0;
+    pcode_indent_deep = 0;
     int e;
 
     get_word();

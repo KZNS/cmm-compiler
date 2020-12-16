@@ -24,6 +24,8 @@ private:
     int line_number;
     std::string translate_type;
 
+    int pcode_indent_deep;
+
     int prog(); // 程序
 
     int declare_const(); // 常量说明
@@ -84,6 +86,8 @@ private:
     int print_grammar(const std::string &info);                                   //输出语法信息
     int print_error(const int &error_line_number, const std::string &error_type); //输出错误信息
     int print_pcode(std::string format, ...);                                     //输出pcode
+
+    int change_pcode_indent_deep(int x);
 
     int get_word();
     int get_new_word();
