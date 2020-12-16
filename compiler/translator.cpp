@@ -1887,76 +1887,91 @@ int GrammarTranslator::str_const(std::string &str)
 int GrammarTranslator::e_word()
 {
     logger.error("e_word");
+    print_error(line_number, "a");
     return 0;
 }
 int GrammarTranslator::e_redifine_identifier()
 {
     logger.error("e_redifine_identifier");
+    print_error(line_number, "b");
     return 0;
 }
 int GrammarTranslator::e_undifine_identifier()
 {
     logger.error("e_undifine_identifier");
+    print_error(line_number, "c");
     return 0;
 }
 int GrammarTranslator::e_func_param_type()
 {
     logger.error("e_func_param_type");
+    print_error(line_number, "d");
     return 0;
 }
 int GrammarTranslator::e_func_param_n()
 {
     logger.error("e_func_param_n");
+    print_error(line_number, "e");
     return 0;
 }
 int GrammarTranslator::e_condition_type()
 {
     logger.error("e_condition_type");
+    print_error(line_number, "d");
     return 0;
 }
 int GrammarTranslator::e_return_void()
 {
     logger.error("e_return_void");
+    print_error(line_number, "g");
     return 0;
 }
 int GrammarTranslator::e_return_val()
 {
     logger.error("e_return_val");
+    print_error(line_number, "h");
     return 0;
 }
 int GrammarTranslator::e_array_index()
 {
     logger.error("e_array_index");
+    print_error(line_number, "i");
     return 0;
 }
 int GrammarTranslator::e_change_const_value()
 {
     logger.error("e_change_const_value");
+    print_error(line_number, "j");
     return 0;
 }
 int GrammarTranslator::e_semicolon()
 {
     logger.error("e_semicolon");
+    print_error(last_line_number, "k");
     return 0;
 }
 int GrammarTranslator::e_right_parenthesis()
 {
     logger.error("e_right_parenthesis");
+    print_error(last_line_number, "l");
     return 0;
 }
 int GrammarTranslator::e_right_bracket()
 {
     logger.error("e_right_bracket");
+    print_error(last_line_number, "m");
     return 0;
 }
 int GrammarTranslator::e_do_while()
 {
     logger.error("e_do_while");
+    print_error(line_number, "n");
     return 0;
 }
 int GrammarTranslator::e_const_define_type()
 {
     logger.error("e_const_define_type");
+    print_error(line_number, "o");
     return 0;
 }
 
