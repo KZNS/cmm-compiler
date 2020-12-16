@@ -2049,6 +2049,8 @@ int GrammarTranslator::get_word()
         print_lexical(word);
     }
     get_new_word();
+    last_line_number = line_number;
+    line_number = line_number_buffer[now_word_id % WORD_BUFFER_SZ];
     return 0;
 }
 int GrammarTranslator::get_new_word()
@@ -2063,8 +2065,6 @@ int GrammarTranslator::get_new_word()
     }
     now_word_id++;
     word = word_buffer[now_word_id % WORD_BUFFER_SZ];
-    last_line_number = line_number;
-    line_number = line_number_buffer[now_word_id % WORD_BUFFER_SZ];
     return 0;
 }
 int GrammarTranslator::roll_back(int step)
