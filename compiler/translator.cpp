@@ -143,8 +143,7 @@ int GrammarTranslator::def_const()
             return -1;
         }
 
-        if (word.first == "PLUS" || word.first == "MINU" ||
-            word.first == "INTCON" || word.first == "CHARCON")
+        if (word.first == "PLUS" || word.first == "MINU" || word.first == "INTCON")
         {
             if (type == "INTTK")
             {
@@ -152,7 +151,15 @@ int GrammarTranslator::def_const()
                 print_pcode("push %d", x);
                 print_pcode("pop %s", name.c_str());
             }
-            else if (type == "CHARTK")
+            else
+            {
+                e_const_define_type();
+                get_word();
+            }
+        }
+        else if (word.first == "CHARCON")
+        {
+            if (type == "CHARTK")
             {
                 c = word.second[0];
                 get_word();
@@ -161,8 +168,8 @@ int GrammarTranslator::def_const()
             }
             else
             {
-                logger.error("wrong type");
-                return -1;
+                e_const_define_type();
+                get_word();
             }
         }
         else if (word.first == "")
@@ -1110,8 +1117,7 @@ int GrammarTranslator::loop_stmt(std::string ret_type)
         }
         else
         {
-            logger.error("whiletk missing in for of loop_stmp");
-            return -1;
+            e_do_while();
         }
         change_pcode_indent_deep(-1);
         print_pcode("While%s:", unique_label.c_str());

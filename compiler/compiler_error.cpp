@@ -5,7 +5,7 @@
 using namespace std;
 Logger logger;
 std::string in_file_name("testfile.txt");
-std::string out_file_name("output.txt");
+std::string out_file_name("error.txt");
 string language = "\n\
 define words\n\
 CONSTTK const\n\
