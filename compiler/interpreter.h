@@ -23,6 +23,7 @@ class PcodeInterpreter
 private:
     std::vector<Variable> runtimeVar;//变量表：？
     std::stack<std::unordered_map<std::string,int>> runtimeVarLookup;
+    std::unordered_map<std::string,int> runtimeGlobLookup;
     std::unordered_map<std::string,Variable> globalVar;//全局变量表
     std::stack<int> runtimeStack;//stack运算栈：stack,int
     std::unordered_map<std::string,int> labelMap;//label表：label名对应跳到第几行代码
@@ -64,6 +65,7 @@ private:
     int do_or(const std::string);
     int do_not(const std::string);
     int do_neg(const std::string);
+    int do_jnz(const std::string);
 public:
     PcodeInterpreter();
     int interpret(const std::string &in_file_name);

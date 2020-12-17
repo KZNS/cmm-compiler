@@ -8,3 +8,4 @@ a.out
 testfile.txt
 output.txt
 error.txt
+p*.txt
