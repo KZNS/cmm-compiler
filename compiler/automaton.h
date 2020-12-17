@@ -33,6 +33,8 @@ private:
     std::vector<AutomatonNode *> node_list;
     char last;
     bool inited;
+    int line_number;
+
     std::string expand_rel(const std::string &rel);
     int split_str(std::string s, std::vector<std::string> &result);
     int link_rule(std::queue<AutomatonNode *> &ls, std::queue<AutomatonNode *> &nextls,
@@ -49,7 +51,7 @@ public:
     int open(const std::string &file_name);
     int close();
     int append_keyword(const std::string &word, const std::string &type);
-    Word get_word();
+    Word get_word(int &new_line);
     bool empty();
 };
 
