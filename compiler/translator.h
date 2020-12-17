@@ -45,14 +45,14 @@ private:
 
     int main_f(); // 主函数
 
-    int comp_stmt(std::string ret_type); // 复合语句
-    int stmt_list(std::string ret_type); // 语句列
-    int stmt(std::string ret_type);      // 语句
-    int eval();                          // 赋值语句
-    int cond_stmt(std::string ret_type); // 条件语句
-    int cond();                          // 条件
-    int loop_stmt(std::string ret_type); // 循环语句
-    int step(unsigned int &x);           // 步长
+    int comp_stmt(std::string ret_type, bool &returned); // 复合语句
+    int stmt_list(std::string ret_type, bool &returned); // 语句列
+    int stmt(std::string ret_type, bool &returned);      // 语句
+    int eval();                                          // 赋值语句
+    int cond_stmt(std::string ret_type, bool &returned); // 条件语句
+    int cond();                                          // 条件
+    int loop_stmt(std::string ret_type, bool &returned); // 循环语句
+    int step(unsigned int &x);                           // 步长
 
     int exp(std::string &type);    // 表达式
     int term(std::string &type);   // 项
