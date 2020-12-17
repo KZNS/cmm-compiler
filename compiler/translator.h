@@ -71,8 +71,8 @@ private:
     int e_word();                // a 非法符号或不符合词法
     int e_redifine_identifier(); // b 名字重定义
     int e_undifine_identifier(); // c 未定义的名字
-    int e_func_param_type();     // d 函数参数个数不匹配
-    int e_func_param_n();        // e 函数参数类型不匹配
+    int e_func_param_n();        // d 函数参数个数不匹配
+    int e_func_param_type();     // e 函数参数类型不匹配
     int e_condition_type();      // f 条件判断中出现不合法的类型
     int e_return_void();         // g 无返回值的函数存在不匹配的return语句
     int e_return_val();          // h 有返回值的函数缺少return语句或存在不匹配的return语句

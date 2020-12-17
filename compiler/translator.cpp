@@ -1919,15 +1919,15 @@ int GrammarTranslator::e_undifine_identifier()
     print_error(line_number, "c");
     return 0;
 }
-int GrammarTranslator::e_func_param_type()
-{
-    logger.error("e_func_param_type");
-    print_error(line_number, "d");
-    return 0;
-}
 int GrammarTranslator::e_func_param_n()
 {
     logger.error("e_func_param_n");
+    print_error(line_number, "d");
+    return 0;
+}
+int GrammarTranslator::e_func_param_type()
+{
+    logger.error("e_func_param_type");
     print_error(line_number, "e");
     return 0;
 }
