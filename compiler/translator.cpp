@@ -1964,7 +1964,7 @@ int GrammarTranslator::e_func_param_type()
 int GrammarTranslator::e_condition_type()
 {
     logger.error("e_condition_type");
-    print_error(line_number, "d");
+    print_error(line_number, "f");
     return 0;
 }
 int GrammarTranslator::e_return_void()
