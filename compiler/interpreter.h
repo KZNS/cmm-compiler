@@ -24,7 +24,6 @@ private:
     std::vector<Variable> runtimeVar;//变量表：？
     std::stack<std::unordered_map<std::string,int>> runtimeVarLookup;
     std::unordered_map<std::string,int> runtimeGlobLookup;
-    std::unordered_map<std::string,Variable> globalVar;//全局变量表
     std::stack<int> runtimeStack;//stack运算栈：stack,int
     std::unordered_map<std::string,int> labelMap;//label表：label名对应跳到第几行代码
     std::unordered_map<std::string,int> funcMap;//函数表：？指示函数ret到哪行 注意函数有返回值则会往栈里放东西
@@ -50,8 +49,6 @@ private:
     bool var_exists(const std::string);
     void check_rtstack_size(const int);
     int get_rtstack_var();
-    //add / sub / mul / div / mod / cmpeq / cmpne / cmpgt 
-// cmplt / cmpge / cmple / and / or / not / neg
     int do_sub(const std::string);
     int do_div(const std::string);
     int do_mod(const std::string);
