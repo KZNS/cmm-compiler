@@ -1329,7 +1329,7 @@ int GrammarTranslator::loop_stmt(std::string ret_type, bool &returned)
         print_pcode("pop %s", name.c_str());
         change_pcode_indent_deep(-1);
         print_pcode("jmp Forcond%s", unique_label.c_str());
-        print_pcode("Endif%s:", unique_label.c_str());
+        print_pcode("Endfor%s:", unique_label.c_str());
     }
     else
     {
@@ -1749,7 +1749,7 @@ int GrammarTranslator::r_stmt()
             }
             else
             {
-                tmp << ", " << name;
+                tmp << "," << name;
             }
         }
         else
@@ -1817,7 +1817,7 @@ int GrammarTranslator::w_stmt()
         {
             get_word();
             exp(exp_type);
-            print_pcode("print \"%s\",~:%s", str.c_str(), exp_type.c_str());
+            print_pcode("print \"%s\"`~:%s", str.c_str(), exp_type.c_str());
         }
         else
         {

@@ -1,0 +1,644 @@
+info: cmd:---->push
+info: push: 0
+info: cmd:---->pop
+info: pop into theSum
+info: cmd:---->If4:
+info: is label,will continue
+info: cmd:---->push
+info: push: 22 variable:a
+info: cmd:---->push
+info: push: 10
+info: cmd:---->cmpgt
+warn: [!]second command argument is empty!
+info: cmp gt to 1
+info: cmd:---->jz
+info: cmd:---->push
+info: push: 0
+info: cmd:---->pop
+info: pop into i
+info: cmd:---->Do5:
+info: is label,will continue
+info: cmd:---->push
+info: push: 0 variable:theSum
+info: cmd:---->push
+info: push: 0 variable:i
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 0
+info: cmd:---->pop
+info: pop into theSum
+info: cmd:---->push
+info: push: 0 variable:i
+info: cmd:---->push
+info: push: 1
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 1
+info: cmd:---->pop
+info: pop into i
+info: cmd:---->While5:
+info: is label,will continue
+info: cmd:---->push
+info: push: 1 variable:i
+info: cmd:---->push
+info: push: 22 variable:a
+info: cmd:---->cmplt
+warn: [!]second command argument is empty!
+info: cmp lt to 1
+info: cmd:---->jnz
+info: cmd:---->push
+info: push: 0 variable:theSum
+info: cmd:---->push
+info: push: 1 variable:i
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 1
+info: cmd:---->pop
+info: pop into theSum
+info: cmd:---->push
+info: push: 1 variable:i
+info: cmd:---->push
+info: push: 1
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 2
+info: cmd:---->pop
+info: pop into i
+info: cmd:---->While5:
+info: is label,will continue
+info: cmd:---->push
+info: push: 2 variable:i
+info: cmd:---->push
+info: push: 22 variable:a
+info: cmd:---->cmplt
+warn: [!]second command argument is empty!
+info: cmp lt to 1
+info: cmd:---->jnz
+info: cmd:---->push
+info: push: 1 variable:theSum
+info: cmd:---->push
+info: push: 2 variable:i
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 3
+info: cmd:---->pop
+info: pop into theSum
+info: cmd:---->push
+info: push: 2 variable:i
+info: cmd:---->push
+info: push: 1
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 3
+info: cmd:---->pop
+info: pop into i
+info: cmd:---->While5:
+info: is label,will continue
+info: cmd:---->push
+info: push: 3 variable:i
+info: cmd:---->push
+info: push: 22 variable:a
+info: cmd:---->cmplt
+warn: [!]second command argument is empty!
+info: cmp lt to 1
+info: cmd:---->jnz
+info: cmd:---->push
+info: push: 3 variable:theSum
+info: cmd:---->push
+info: push: 3 variable:i
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 6
+info: cmd:---->pop
+info: pop into theSum
+info: cmd:---->push
+info: push: 3 variable:i
+info: cmd:---->push
+info: push: 1
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 4
+info: cmd:---->pop
+info: pop into i
+info: cmd:---->While5:
+info: is label,will continue
+info: cmd:---->push
+info: push: 4 variable:i
+info: cmd:---->push
+info: push: 22 variable:a
+info: cmd:---->cmplt
+warn: [!]second command argument is empty!
+info: cmp lt to 1
+info: cmd:---->jnz
+info: cmd:---->push
+info: push: 6 variable:theSum
+info: cmd:---->push
+info: push: 4 variable:i
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 10
+info: cmd:---->pop
+info: pop into theSum
+info: cmd:---->push
+info: push: 4 variable:i
+info: cmd:---->push
+info: push: 1 
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 5
+info: cmd:---->pop
+info: pop into i
+info: cmd:---->While5:
+info: is label,will continue
+info: cmd:---->push
+info: push: 5 variable:i
+info: cmd:---->push
+info: push: 22 variable:a
+info: cmd:---->cmplt
+warn: [!]second command argument is empty!
+info: cmp lt to 1
+info: cmd:---->jnz
+info: cmd:---->push
+info: push: 10 variable:theSum
+info: cmd:---->push
+info: push: 5 variable:i
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 15
+info: cmd:---->pop
+info: pop into theSum
+info: cmd:---->push
+info: push: 5 variable:i
+info: cmd:---->push
+info: push: 1
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 6
+info: cmd:---->pop
+info: pop into i
+info: cmd:---->While5:
+info: is label,will continue
+info: cmd:---->push
+info: push: 6 variable:i
+info: cmd:---->push
+info: push: 22 variable:a
+info: cmd:---->cmplt
+warn: [!]second command argument is empty!
+info: cmp lt to 1
+info: cmd:---->jnz
+info: cmd:---->push
+info: push: 15 variable:theSum
+info: cmd:---->push
+info: push: 6 variable:i
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 21
+info: cmd:---->pop
+info: pop into theSum
+info: cmd:---->push
+info: push: 6 variable:i
+info: cmd:---->push
+info: push: 1
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 7
+info: cmd:---->pop
+info: pop into i
+info: cmd:---->While5:
+info: is label,will continue
+info: cmd:---->push
+info: push: 7 variable:i
+info: cmd:---->push
+info: push: 22 variable:a
+info: cmd:---->cmplt
+warn: [!]second command argument is empty!
+info: cmp lt to 1
+info: cmd:---->jnz
+info: cmd:---->push
+info: push: 21 variable:theSum
+info: cmd:---->push
+info: push: 7 variable:i
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 28
+info: cmd:---->pop
+info: pop into theSum
+info: cmd:---->push
+info: push: 7 variable:i
+info: cmd:---->push
+info: push: 1
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 8
+info: cmd:---->pop
+info: pop into i
+info: cmd:---->While5:
+info: is label,will continue
+info: cmd:---->push
+info: push: 8 variable:i
+info: cmd:---->push
+info: push: 22 variable:a
+info: cmd:---->cmplt
+warn: [!]second command argument is empty!
+info: cmp lt to 1
+info: cmd:---->jnz
+info: cmd:---->push
+info: push: 28 variable:theSum
+info: cmd:---->push
+info: push: 8 variable:i
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 36
+info: cmd:---->pop
+info: pop into theSum
+info: cmd:---->push
+info: push: 8 variable:i
+info: cmd:---->push
+info: push: 1
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 9
+info: cmd:---->pop
+info: pop into i
+info: cmd:---->While5:
+info: is label,will continue
+info: cmd:---->push
+info: push: 9 variable:i
+info: cmd:---->push
+info: push: 22 variable:a
+info: cmd:---->cmplt
+warn: [!]second command argument is empty!
+info: cmp lt to 1
+info: cmd:---->jnz
+info: cmd:---->push
+info: push: 36 variable:theSum
+info: cmd:---->push
+info: push: 9 variable:i
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 45
+info: cmd:---->pop
+info: pop into theSum
+info: cmd:---->push
+info: push: 9 variable:i
+info: cmd:---->push
+info: push: 1
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 10
+info: cmd:---->pop
+info: pop into i
+info: cmd:---->While5:
+info: is label,will continue
+info: cmd:---->push
+info: push: 10 variable:i
+info: cmd:---->push
+info: push: 22 variable:a
+info: cmd:---->cmplt
+warn: [!]second command argument is empty!
+info: cmp lt to 1
+info: cmd:---->jnz
+info: cmd:---->push
+info: push: 45 variable:theSum
+info: cmd:---->push
+info: push: 10 variable:i
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 55
+info: cmd:---->pop
+info: pop into theSum
+info: cmd:---->push
+info: push: 10 variable:i
+info: cmd:---->push
+info: push: 1
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 11
+info: cmd:---->pop
+info: pop into i
+info: cmd:---->While5:
+info: is label,will continue
+info: cmd:---->push
+info: push: 11 variable:i
+info: cmd:---->push
+info: push: 22 variable:a
+info: cmd:---->cmplt
+warn: [!]second command argument is empty!
+info: cmp lt to 1
+info: cmd:---->jnz
+info: cmd:---->push
+info: push: 55 variable:theSum
+info: cmd:---->push
+info: push: 11 variable:i
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 66
+info: cmd:---->pop
+info: pop into theSum
+info: cmd:---->push
+info: push: 11 variable:i
+info: cmd:---->push
+info: push: 1
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 12
+info: cmd:---->pop
+info: pop into i
+info: cmd:---->While5:
+info: is label,will continue
+info: cmd:---->push
+info: push: 12 variable:i
+info: cmd:---->push
+info: push: 22 variable:a
+info: cmd:---->cmplt
+warn: [!]second command argument is empty!
+info: cmp lt to 1
+info: cmd:---->jnz
+info: cmd:---->push
+info: push: 66 variable:theSum
+info: cmd:---->push
+info: push: 12 variable:i
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 78
+info: cmd:---->pop
+info: pop into theSum
+info: cmd:---->push
+info: push: 12 variable:i
+info: cmd:---->push
+info: push: 1
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 13
+info: cmd:---->pop
+info: pop into i
+info: cmd:---->While5:
+info: is label,will continue
+info: cmd:---->push
+info: push: 13 variable:i
+info: cmd:---->push
+info: push: 22 variable:a
+info: cmd:---->cmplt
+warn: [!]second command argument is empty!
+info: cmp lt to 1
+info: cmd:---->jnz
+info: cmd:---->push
+info: push: 78 variable:theSum
+info: cmd:---->push
+info: push: 13 variable:i
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 91
+info: cmd:---->pop
+info: pop into theSum
+info: cmd:---->push
+info: push: 13 variable:i
+info: cmd:---->push
+info: push: 1
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 14
+info: cmd:---->pop
+info: pop into i
+info: cmd:---->While5:
+info: is label,will continue
+info: cmd:---->push
+info: push: 14 variable:i
+info: cmd:---->push
+info: push: 22 variable:a
+info: cmd:---->cmplt
+warn: [!]second command argument is empty!
+info: cmp lt to 1
+info: cmd:---->jnz
+info: cmd:---->push
+info: push: 91 variable:theSum
+info: cmd:---->push
+info: push: 14 variable:i
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 105
+info: cmd:---->pop
+info: pop into theSum
+info: cmd:---->push
+info: push: 14 variable:i
+info: cmd:---->push
+info: push: 1
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 15
+info: cmd:---->pop
+info: pop into i
+info: cmd:---->While5:
+info: is label,will continue
+info: cmd:---->push
+info: push: 15 variable:i
+info: cmd:---->push
+info: push: 22 variable:a
+info: cmd:---->cmplt
+warn: [!]second command argument is empty!
+info: cmp lt to 1
+info: cmd:---->jnz
+info: cmd:---->push
+info: push: 105 variable:theSum
+info: cmd:---->push
+info: push: 15 variable:i
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 120
+info: cmd:---->pop
+info: pop into theSum
+info: cmd:---->push
+info: push: 15 variable:i
+info: cmd:---->push
+info: push: 1
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 16
+info: cmd:---->pop
+info: pop into i
+info: cmd:---->While5:
+info: is label,will continue
+info: cmd:---->push
+info: push: 16 variable:i
+info: cmd:---->push
+info: push: 22 variable:a
+info: cmd:---->cmplt
+warn: [!]second command argument is empty!
+info: cmp lt to 1
+info: cmd:---->jnz
+info: cmd:---->push
+info: push: 120 variable:theSum
+info: cmd:---->push
+info: push: 16 variable:i
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 136
+info: cmd:---->pop
+info: pop into theSum
+info: cmd:---->push
+info: push: 16 variable:i
+info: cmd:---->push
+info: push: 1
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 17
+info: cmd:---->pop
+info: pop into i
+info: cmd:---->While5:
+info: is label,will continue
+info: cmd:---->push
+info: push: 17 variable:i
+info: cmd:---->push
+info: push: 22 variable:a
+info: cmd:---->cmplt
+warn: [!]second command argument is empty!
+info: cmp lt to 1
+info: cmd:---->jnz
+info: cmd:---->push
+info: push: 136 variable:theSum
+info: cmd:---->push
+info: push: 17 variable:i
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 153
+info: cmd:---->pop
+info: pop into theSum
+info: cmd:---->push
+info: push: 17 variable:i
+info: cmd:---->push
+info: push: 1
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 18
+info: cmd:---->pop
+info: pop into i
+info: cmd:---->While5:
+info: is label,will continue
+info: cmd:---->push
+info: push: 18 variable:i
+info: cmd:---->push
+info: push: 22 variable:a
+info: cmd:---->cmplt
+warn: [!]second command argument is empty!
+info: cmp lt to 1
+info: cmd:---->jnz
+info: cmd:---->push
+info: push: 153 variable:theSum
+info: cmd:---->push
+info: push: 18 variable:i
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 171
+info: cmd:---->pop
+info: pop into theSum
+info: cmd:---->push
+info: push: 18 variable:i
+info: cmd:---->push
+info: push: 1
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 19
+info: cmd:---->pop
+info: pop into i
+info: cmd:---->While5:
+info: is label,will continue
+info: cmd:---->push
+info: push: 19 variable:i
+info: cmd:---->push
+info: push: 22 variable:a
+info: cmd:---->cmplt
+warn: [!]second command argument is empty!
+info: cmp lt to 1
+info: cmd:---->jnz
+info: cmd:---->push
+info: push: 171 variable:theSum
+info: cmd:---->push
+info: push: 19 variable:i
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 190
+info: cmd:---->pop
+info: pop into theSum
+info: cmd:---->push
+info: push: 19 variable:i
+info: cmd:---->push
+info: push: 1
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 20
+info: cmd:---->pop
+info: pop into i
+info: cmd:---->While5:
+info: is label,will continue
+info: cmd:---->push
+info: push: 20 variable:i
+info: cmd:---->push
+info: push: 22 variable:a
+info: cmd:---->cmplt
+warn: [!]second command argument is empty!
+info: cmp lt to 1
+info: cmd:---->jnz
+info: cmd:---->push
+info: push: 190 variable:theSum
+info: cmd:---->push
+info: push: 20 variable:i
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 210
+info: cmd:---->pop
+info: pop into theSum
+info: cmd:---->push
+info: push: 20 variable:i
+info: cmd:---->push
+info: push: 1
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 21
+info: cmd:---->pop
+info: pop into i
+info: cmd:---->While5:
+info: is label,will continue
+info: cmd:---->push
+info: push: 21 variable:i
+info: cmd:---->push
+info: push: 22 variable:a
+info: cmd:---->cmplt
+warn: [!]second command argument is empty!
+info: cmp lt to 1
+info: cmd:---->jnz
+info: cmd:---->push
+info: push: 210 variable:theSum 
+info: cmd:---->push
+info: push: 21 variable:i
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 231
+info: cmd:---->pop
+info: pop into theSum
+info: cmd:---->push
+info: push: 21 variable:i
+info: cmd:---->push
+info: push: 1
+info: cmd:---->add
+warn: [!]second command argument is empty!
+info: added to 22
+info: cmd:---->pop
+info: pop into i
+info: cmd:---->While5:
+info: is label,will continue
+info: cmd:---->push
+info: push: 22 variable:i
+info: cmd:---->push
+info: push: 22 variable:a
+info: cmd:---->cmplt
+warn: [!]second command argument is empty!
+info: cmp lt to 0
+info: cmd:---->jnz
+info: cmd:---->EndDoWhile5:
+info: is label,will continue
+info: cmd:---->jmp
+info: jump target:228
+info: cmd:---->push
+info: push: 231 variable:theSum
+info: cmd:---->print
+231

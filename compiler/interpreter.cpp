@@ -289,7 +289,10 @@ int PcodeInterpreter::do_ret(const string cmd){
         int n = old_sp.top();
         old_sp.pop();
         int o = old_sp.top();
-        for(int i=n;i>=o;i--){
+        // for(int i=n;i>=o;i--){
+        //     runtimeVar.pop_back();
+        // }
+        for(int i=0;i<(n-o-1);i++){
             runtimeVar.pop_back();
         }
         runtimeVarLookup.pop();
@@ -372,7 +375,8 @@ int PcodeInterpreter::do_jnz(const string cmd){
 }
 int PcodeInterpreter::do_print(const string cmd){
     vector<string> info;
-    SplitString(cmd,info,",");
+    SplitString(cmd,info,"`");
+    if(cmd=="a"){}
     for(auto i:info){
         if(i.front()=='\"'&&i.back()=='\"'){
             cout << i.substr(1,i.length()-2);
@@ -479,8 +483,9 @@ int PcodeInterpreter::do_pop(const string cmd){//如果发现是数组操作，�
         logger.info("direct pop");
         return 0;
     }
-    runtimeVar[get_var(cmd)].val = runtimeStack.top();
-    runtimeStack.pop();
+    int v = runtimeStack.top();runtimeStack.pop();
+    runtimeVar[get_var(cmd)].val = v;
+    
     logger.info("pop into %s",cmd.c_str());
     return -1;
 }

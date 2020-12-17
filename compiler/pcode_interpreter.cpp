@@ -5,6 +5,6 @@ using namespace std;
 int main(void){
     logger.set_level("fatal");
     PcodeInterpreter interp;
-    interp.interpret("p7.txt");
+    interp.interpret("p10.txt");
     return 0;
 }
