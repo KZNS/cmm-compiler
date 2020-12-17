@@ -1,0 +1,53 @@
+var const1:INTTK
+push 1
+pop const1
+var const2:INTTK
+push -100
+pop const2
+var const3:CHARTK
+push 95
+pop const3
+var change1:INTTK
+var change3:CHARTK
+$main
+exit 0
+FUNC @gets1:
+    arg var1:INTTK,var2:INTTK
+    
+    var i:INTTK
+    var j:INTTK
+    var change1:INTTK
+    push 0
+    pop i
+    push 1
+    push 1
+    add
+    print ~:INTTK
+    push var1
+    pop change1
+    push change1
+    ret ~
+ENDFUNC
+FUNC @g2:
+    arg
+    
+    ret
+ENDFUNC
+FUNC @main:
+    arg
+    
+    var const1:INTTK
+    push -21
+    pop const1
+    var const2:INTTK
+    push 10
+    pop const2
+    var k:INTTK
+    input k
+    push const1
+    push k
+    $gets1
+    print ~:INTTK
+    print "Hello World"
+    ret
+ENDFUNC
