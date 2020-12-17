@@ -3,8 +3,8 @@
 Logger logger;
 using namespace std;
 int main(void){
-    logger.set_level("debug");
+    logger.set_level("fatal");
     PcodeInterpreter interp;
-    interp.interpret("p8.txt");
+    interp.interpret("p7.txt");
     return 0;
 }

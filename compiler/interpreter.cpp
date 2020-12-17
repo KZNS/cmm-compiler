@@ -265,7 +265,7 @@ int PcodeInterpreter::do_arg(const string cmd){
     if(cmd==""){
         return 0;
     }
-    cout << "cmd size:"<<cmd.length()<<"|"<<cmd<<endl;
+    logger.info("cmd size: %d | %s",cmd.length(),cmd.c_str());
     vector<string> args;
     SplitString(cmd,args,",");
     check_rtstack_size(args.size());
@@ -276,7 +276,7 @@ int PcodeInterpreter::do_arg(const string cmd){
         string dtype = attr.size()<2 ? "int" : attr[1];
         runtimeVarLookup.top()[attr[0]] = runtimeVar.size();
         runtimeVar.push_back({dtype,attr[0],runtimeStack.top()});//type,name,val
-        cout << "arg:"<<a<<"="<<runtimeStack.top()<<endl;
+        logger.info("arg:%s=%d",a.c_str(),runtimeStack.top());
         runtimeStack.pop();
     }
     return 0;
@@ -284,7 +284,6 @@ int PcodeInterpreter::do_arg(const string cmd){
 int PcodeInterpreter::do_ret(const string cmd){
     logger.info("ret command position 2: %s",cmd.c_str());
     if(cmd=="~"){
-        cout << "is~"<<endl;
         int t = runtimeStack.top();
         runtimeStack.pop();
         int n = old_sp.top();
@@ -492,8 +491,8 @@ int PcodeInterpreter::func_call(const string funcName){
         eip.push(funcMap[fname]);
         old_sp.push(old_sp.top()+1);
     } else {
-        cout << fname<<" is not a valid funcname"<<endl;
-        return -1;
+        logger.error("%s is not a valid funcname",fname.c_str());
+        exit(-8);
     }
     return 0;
 }
@@ -531,14 +530,14 @@ int PcodeInterpreter::interpret(const std::string &in_file_name){
         }
     }
     myfile.close();
-    cout << "-labelMap---"<<endl;
-    for(auto iter=labelMap.begin();iter!=labelMap.end();iter++){
-        cout << iter->first << " : " << iter->second << endl;
-    }
-    cout << "-funcMap---"<<endl;
-    for(auto iter=funcMap.begin();iter!=funcMap.end();iter++){
-        cout << iter->first << " : " << iter->second << endl;
-    }
+    // cout << "-labelMap---"<<endl;
+    // for(auto iter=labelMap.begin();iter!=labelMap.end();iter++){
+    //     cout << iter->first << " : " << iter->second << endl;
+    // }
+    // cout << "-funcMap---"<<endl;
+    // for(auto iter=funcMap.begin();iter!=funcMap.end();iter++){
+    //     cout << iter->first << " : " << iter->second << endl;
+    // }
     int i=0;
     while(true){
         vector<string> cmd = code[eip.top()];
