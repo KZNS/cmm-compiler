@@ -29,7 +29,7 @@ void SplitString(const std::string& s, std::vector<std::string>& v, const std::s
         string s2;
         v2.push_back(v[0]);
         if(v.size()>1){
-            for(int i=1;i<v.size();i++){
+            for(int i=1;i<(int)v.size();i++){
                 if(i!=1){
                     s2 += " ";
                 }
@@ -82,32 +82,32 @@ PcodeInterpreter::PcodeInterpreter(){
     this->eip.push(0);
     this->old_sp.push(0);
     this->runtimeVarLookup.push(m);
-    this->cmdHandler["var"] = do_var;
-    this->cmdHandler["push"] = do_push;
-    this->cmdHandler["pop"] = do_pop;
-    this->cmdHandler["add"] = do_add;
-    this->cmdHandler["mul"] = do_mul;
-    this->cmdHandler["print"] = do_print;
-    this->cmdHandler["input"] = do_input;
-    this->cmdHandler["jmp"] = do_jmp;
-    this->cmdHandler["jz"] = do_jz;
-    this->cmdHandler["jnz"] = do_jnz;
-    this->cmdHandler["exit"] = do_exit;
-    this->cmdHandler["arg"] = do_arg;
-    this->cmdHandler["ret"] = do_ret;
-    this->cmdHandler["sub"] = do_sub;
-    this->cmdHandler["div"] = do_div;
-    this->cmdHandler["mod"] = do_mod;
-    this->cmdHandler["cmpeq"] = do_cmpeq;
-    this->cmdHandler["cmpne"] = do_cmpne;
-    this->cmdHandler["cmpgt"] = do_cmpgt;
-    this->cmdHandler["cmplt"] = do_cmplt;
-    this->cmdHandler["cmpge"] = do_cmpge;
-    this->cmdHandler["cmple"] = do_cmple;
-    this->cmdHandler["and"] = do_and;
-    this->cmdHandler["or"] = do_or;
-    this->cmdHandler["not"] = do_not;
-    this->cmdHandler["neg"] = do_neg;
+    this->cmdHandler["var"] = &PcodeInterpreter::do_var;
+    this->cmdHandler["push"] = &PcodeInterpreter::do_push;
+    this->cmdHandler["pop"] = &PcodeInterpreter::do_pop;
+    this->cmdHandler["add"] = &PcodeInterpreter::do_add;
+    this->cmdHandler["mul"] = &PcodeInterpreter::do_mul;
+    this->cmdHandler["print"] = &PcodeInterpreter::do_print;
+    this->cmdHandler["input"] = &PcodeInterpreter::do_input;
+    this->cmdHandler["jmp"] = &PcodeInterpreter::do_jmp;
+    this->cmdHandler["jz"] = &PcodeInterpreter::do_jz;
+    this->cmdHandler["jnz"] = &PcodeInterpreter::do_jnz;
+    this->cmdHandler["exit"] = &PcodeInterpreter::do_exit;
+    this->cmdHandler["arg"] = &PcodeInterpreter::do_arg;
+    this->cmdHandler["ret"] = &PcodeInterpreter::do_ret;
+    this->cmdHandler["sub"] = &PcodeInterpreter::do_sub;
+    this->cmdHandler["div"] = &PcodeInterpreter::do_div;
+    this->cmdHandler["mod"] = &PcodeInterpreter::do_mod;
+    this->cmdHandler["cmpeq"] = &PcodeInterpreter::do_cmpeq;
+    this->cmdHandler["cmpne"] = &PcodeInterpreter::do_cmpne;
+    this->cmdHandler["cmpgt"] = &PcodeInterpreter::do_cmpgt;
+    this->cmdHandler["cmplt"] = &PcodeInterpreter::do_cmplt;
+    this->cmdHandler["cmpge"] = &PcodeInterpreter::do_cmpge;
+    this->cmdHandler["cmple"] = &PcodeInterpreter::do_cmple;
+    this->cmdHandler["and"] = &PcodeInterpreter::do_and;
+    this->cmdHandler["or"] = &PcodeInterpreter::do_or;
+    this->cmdHandler["not"] = &PcodeInterpreter::do_not;
+    this->cmdHandler["neg"] = &PcodeInterpreter::do_neg;
 }
 int PcodeInterpreter::do_mul(const string dummy){
     int op_2 = get_rtstack_var();
@@ -239,7 +239,7 @@ int PcodeInterpreter::get_var(const string varName){//接受元素名/数组名[
     }
 }
 void PcodeInterpreter::check_rtstack_size(const int n){
-    if(runtimeStack.size()<n){
+    if((int)runtimeStack.size()<n){
         logger.error("[%d] Runtime error: invalid stack depth = %d, wants %d",eip.top(),runtimeStack.size(),n);
         exit(-5);
     }
@@ -466,7 +466,7 @@ int PcodeInterpreter::do_push(const string cmd){//如果发现是数组操作，
         msg += "variable:";msg+=cmd; 
     } else {
         if(!isnum(cmd)){
-            logger.error("[%d] Runtime error: invalid push argument %s",eip.top(),cmd);
+            logger.error("[%d] Runtime error: invalid push argument %s",eip.top(),cmd.c_str());
             exit(-3);
         }
         stringstream ss;

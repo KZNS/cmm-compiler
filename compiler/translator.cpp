@@ -1595,7 +1595,7 @@ int GrammarTranslator::f_ret_call(std::string &ret_type)
         }
         else
         {
-            for (int i = 0; i < arg_list.size(); i++)
+            for (int i = 0; i < (int)arg_list.size(); i++)
             {
                 if (fp->arg_list[i].type != arg_list[i].type)
                 {
@@ -1661,7 +1661,7 @@ int GrammarTranslator::f_void_call()
         }
         else
         {
-            for (int i = 0; i < arg_list.size(); i++)
+            for (int i = 0; i < (int)arg_list.size(); i++)
             {
                 if (fp->arg_list[i].type != arg_list[i].type)
                 {
@@ -2022,7 +2022,7 @@ int GrammarTranslator::e_const_define_type()
     return 0;
 }
 
-int GrammarTranslator::print_lexical(const Word &p_word)
+int GrammarTranslator::print_lexical(const Word &word)
 {
     if (translate_type == "lexical" || translate_type == "grammar")
     {

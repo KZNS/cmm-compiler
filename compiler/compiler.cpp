@@ -1,5 +1,4 @@
 #include "translator.h"
-#include "interpreter.h"
 #include <string>
 #include <iostream>
 using namespace std;
@@ -22,8 +21,6 @@ int main(int argc, char *argv[])
 
     trans.translate(in_file_name, out_file_name);
 
-    PcodeInterpreter interp;
-    interp.interpret(out_file_name);
     return 0;
 }
 int help()
