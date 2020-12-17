@@ -143,8 +143,7 @@ int GrammarTranslator::def_const()
             return -1;
         }
 
-        if (word.first == "PLUS" || word.first == "MINU" ||
-            word.first == "INTCON" || word.first == "CHARCON")
+        if (word.first == "PLUS" || word.first == "MINU" || word.first == "INTCON")
         {
             if (type == "INTTK")
             {
@@ -152,7 +151,15 @@ int GrammarTranslator::def_const()
                 print_pcode("push %d", x);
                 print_pcode("pop %s", name.c_str());
             }
-            else if (type == "CHARTK")
+            else
+            {
+                e_const_define_type();
+                get_word();
+            }
+        }
+        else if (word.first == "CHARCON")
+        {
+            if (type == "CHARTK")
             {
                 c = word.second[0];
                 get_word();
@@ -161,9 +168,13 @@ int GrammarTranslator::def_const()
             }
             else
             {
-                logger.error("wrong type");
-                return -1;
+                e_const_define_type();
+                get_word();
             }
+        }
+        else if (word.first == "")
+        {
+            e_word();
         }
         else
         {
@@ -400,6 +411,7 @@ int GrammarTranslator::f_ret()
     std::string type;
     std::string name;
     std::vector<VarProperty> arg_list;
+    bool returned = false;
     int e;
 
     table.set_local();
@@ -445,7 +457,11 @@ int GrammarTranslator::f_ret()
         logger.error("missing '{'");
         return -1;
     }
-    comp_stmt(type);
+    comp_stmt(type, returned);
+    if (!returned)
+    {
+        e_return_val();
+    }
     if (word.first == "RBRACE")
     {
         get_word();
@@ -471,6 +487,7 @@ int GrammarTranslator::f_void()
     std::string name;
     std::string type;
     std::vector<VarProperty> arg_list;
+    bool returned = false;
 
     table.set_local();
     // void<ident>
@@ -528,7 +545,7 @@ int GrammarTranslator::f_void()
         logger.error("missing '{'");
         return -1;
     }
-    comp_stmt(type);
+    comp_stmt(type, returned);
     if (word.first == "RBRACE")
     {
         get_word();
@@ -537,6 +554,10 @@ int GrammarTranslator::f_void()
     {
         logger.error("missing '}'");
         return -1;
+    }
+    if (!returned)
+    {
+        print_pcode("ret");
     }
     change_pcode_indent_deep(-1);
     print_pcode("ENDFUNC");
@@ -618,6 +639,7 @@ int GrammarTranslator::main_f()
 {
     std::string name;
     std::string type;
+    bool returned = false;
 
     table.set_local();
     // void main'('')'
@@ -675,7 +697,7 @@ int GrammarTranslator::main_f()
         logger.error("LBRACE missing in main_f");
         return -1;
     }
-    comp_stmt(type);
+    comp_stmt(type, returned);
     if (word.first == "RBRACE")
     {
         get_word();
@@ -684,6 +706,10 @@ int GrammarTranslator::main_f()
     {
         logger.error("RBRACE missing in main_f");
         return -1;
+    }
+    if (!returned)
+    {
+        print_pcode("ret");
     }
     change_pcode_indent_deep(-1);
     print_pcode("ENDFUNC");
@@ -697,7 +723,7 @@ int GrammarTranslator::main_f()
  * 复合语句
  * <comp_stmt> ::= [<declare_const>][<declare_var>]<stmt_list>
  */
-int GrammarTranslator::comp_stmt(std::string ret_type)
+int GrammarTranslator::comp_stmt(std::string ret_type, bool &returned)
 {
     if (word.first == "CONSTTK")
     {
@@ -708,7 +734,7 @@ int GrammarTranslator::comp_stmt(std::string ret_type)
     {
         declare_var();
     }
-    stmt_list(ret_type);
+    stmt_list(ret_type, returned);
     print_grammar("<复合语句>");
     return 0;
 }
@@ -716,7 +742,7 @@ int GrammarTranslator::comp_stmt(std::string ret_type)
  * 语句列
  * <stmt_list> ::= {<stmt>}
  */
-int GrammarTranslator::stmt_list(std::string ret_type)
+int GrammarTranslator::stmt_list(std::string ret_type, bool &returned)
 {
     while (true)
     {
@@ -725,7 +751,7 @@ int GrammarTranslator::stmt_list(std::string ret_type)
             word.first == "SCANFTK" || word.first == "PRINTFTK" || word.first == "RETURNTK" ||
             word.first == "SEMICN")
         {
-            stmt(ret_type);
+            stmt(ret_type, returned);
         }
         else
         {
@@ -748,20 +774,20 @@ int GrammarTranslator::stmt_list(std::string ret_type)
  *            <空>;
  *            <ret_stmt>;
  */
-int GrammarTranslator::stmt(std::string ret_type)
+int GrammarTranslator::stmt(std::string ret_type, bool &returned)
 {
     if (word.first == "IFTK") // <cond_stmt>
     {
-        cond_stmt(ret_type);
+        cond_stmt(ret_type, returned);
     }
     else if (word.first == "DOTK" || word.first == "WHILETK" || word.first == "FORTK") // <loop_stmt>
     {
-        loop_stmt(ret_type);
+        loop_stmt(ret_type, returned);
     }
     else if (word.first == "LBRACE") // '{'<stmt_list>'}'
     {
         get_word();
-        stmt_list(ret_type);
+        stmt_list(ret_type, returned);
         if (word.first == "RBRACE")
         {
             get_word();
@@ -812,6 +838,7 @@ int GrammarTranslator::stmt(std::string ret_type)
         else if (word.first == "RETURNTK") // <ret_stmt>
         {
             ret_stmt(ret_type);
+            returned = true;
         }
         else if (word.first == "SEMICN") // <空>
         {
@@ -857,6 +884,10 @@ int GrammarTranslator::eval()
         if (vp == NULL)
         {
             e_undifine_identifier();
+        }
+        else if (vp->is_const)
+        {
+            e_change_const_value();
         }
     }
     else
@@ -929,9 +960,10 @@ int GrammarTranslator::eval()
  * 条件语句
  * <cond_stmt> ::= if'('<cond>')'<stmt>[else<stmt>]
  */
-int GrammarTranslator::cond_stmt(std::string ret_type)
+int GrammarTranslator::cond_stmt(std::string ret_type, bool &returned)
 {
     std::string unique_label = get_unique_label();
+    bool return_a = false, return_b = false;
 
     // if'('<cond>')'<stmt>
     if (word.first == "IFTK")
@@ -967,7 +999,7 @@ int GrammarTranslator::cond_stmt(std::string ret_type)
     print_pcode("jz Else%s", unique_label.c_str());
 
     change_pcode_indent_deep(1);
-    stmt(ret_type);
+    stmt(ret_type, return_a);
     change_pcode_indent_deep(-1);
 
     print_pcode("jmp Endif%s", unique_label.c_str());
@@ -978,10 +1010,15 @@ int GrammarTranslator::cond_stmt(std::string ret_type)
     if (word.first == "ELSETK")
     {
         get_word();
-        stmt(ret_type);
+        stmt(ret_type, return_b);
     }
     change_pcode_indent_deep(-1);
     print_pcode("Endif%s:", unique_label.c_str());
+
+    if (return_a && return_b)
+    {
+        returned = true;
+    }
 
     print_grammar("<条件语句>");
     return 0;
@@ -1053,7 +1090,7 @@ int GrammarTranslator::cond()
  *                 do<stmt>while'('<cond>')'
  *                 for'('<ident>=<exp>;<cond>;<ident>=<ident>(+|-)<step>')'<stmt>
  */
-int GrammarTranslator::loop_stmt(std::string ret_type)
+int GrammarTranslator::loop_stmt(std::string ret_type, bool &returned)
 {
     std::string unique_label = get_unique_label();
     std::string exp_type;
@@ -1062,6 +1099,7 @@ int GrammarTranslator::loop_stmt(std::string ret_type)
     std::string op;
     VarProperty *vp;
     unsigned int x;
+    bool return_a;
 
     if (word.first == "WHILETK") // while'('<cond>')'<stmt>
     {
@@ -1089,7 +1127,7 @@ int GrammarTranslator::loop_stmt(std::string ret_type)
         change_pcode_indent_deep(-1);
         print_pcode("jz EndWhile%s", unique_label.c_str());
         change_pcode_indent_deep(1);
-        stmt(ret_type);
+        stmt(ret_type, return_a); // returned in while not count
         print_pcode("jmp While%s", unique_label.c_str());
         change_pcode_indent_deep(-1);
         print_pcode("EndWhile%s:", unique_label.c_str());
@@ -1099,15 +1137,14 @@ int GrammarTranslator::loop_stmt(std::string ret_type)
         get_word();
         print_pcode("Do%s:", unique_label.c_str());
         change_pcode_indent_deep(1);
-        stmt(ret_type);
+        stmt(ret_type, returned);
         if (word.first == "WHILETK")
         {
             get_word();
         }
         else
         {
-            logger.error("whiletk missing in for of loop_stmp");
-            return -1;
+            e_do_while();
         }
         change_pcode_indent_deep(-1);
         print_pcode("While%s:", unique_label.c_str());
@@ -1283,7 +1320,7 @@ int GrammarTranslator::loop_stmt(std::string ret_type)
             logger.error("rparent missing in while of loop_stmp");
             return -1;
         }
-        stmt(ret_type);
+        stmt(ret_type, return_a); // returned in for not count
         change_pcode_indent_deep(-1);
         print_pcode("Forupdate%s:", unique_label.c_str());
         change_pcode_indent_deep(1);
@@ -1417,7 +1454,6 @@ int GrammarTranslator::factor(std::string &type)
 {
     VarProperty *vp;
     std::string name;
-    bool is_array;
     std::string index_type;
 
     if (detect(2, "IDENFR", "LPARENT")) // <f_ret_call>
@@ -1832,13 +1868,20 @@ int GrammarTranslator::ret_stmt(std::string ret_type)
         {
             e_right_parenthesis();
         }
-        if (ret_type != "VOIDTK")
+        if (ret_type == exp_type)
         {
             print_pcode("ret ~");
         }
         else
         {
-            e_return_void();
+            if (ret_type == "VOIDTK")
+            {
+                e_return_void();
+            }
+            else
+            {
+                e_return_val();
+            }
         }
     }
     else
@@ -1887,76 +1930,95 @@ int GrammarTranslator::str_const(std::string &str)
 int GrammarTranslator::e_word()
 {
     logger.error("e_word");
+    print_error(line_number, "a");
+    while (word.first == "")
+    {
+        get_word();
+    }
     return 0;
 }
 int GrammarTranslator::e_redifine_identifier()
 {
     logger.error("e_redifine_identifier");
+    print_error(line_number, "b");
     return 0;
 }
 int GrammarTranslator::e_undifine_identifier()
 {
     logger.error("e_undifine_identifier");
-    return 0;
-}
-int GrammarTranslator::e_func_param_type()
-{
-    logger.error("e_func_param_type");
+    print_error(line_number, "c");
     return 0;
 }
 int GrammarTranslator::e_func_param_n()
 {
     logger.error("e_func_param_n");
+    print_error(line_number, "d");
+    return 0;
+}
+int GrammarTranslator::e_func_param_type()
+{
+    logger.error("e_func_param_type");
+    print_error(line_number, "e");
     return 0;
 }
 int GrammarTranslator::e_condition_type()
 {
     logger.error("e_condition_type");
+    print_error(line_number, "f");
     return 0;
 }
 int GrammarTranslator::e_return_void()
 {
     logger.error("e_return_void");
+    print_error(line_number, "g");
     return 0;
 }
 int GrammarTranslator::e_return_val()
 {
     logger.error("e_return_val");
+    print_error(line_number, "h");
     return 0;
 }
 int GrammarTranslator::e_array_index()
 {
     logger.error("e_array_index");
+    print_error(line_number, "i");
     return 0;
 }
 int GrammarTranslator::e_change_const_value()
 {
     logger.error("e_change_const_value");
+    print_error(line_number, "j");
     return 0;
 }
 int GrammarTranslator::e_semicolon()
 {
     logger.error("e_semicolon");
+    print_error(last_line_number, "k");
     return 0;
 }
 int GrammarTranslator::e_right_parenthesis()
 {
     logger.error("e_right_parenthesis");
+    print_error(last_line_number, "l");
     return 0;
 }
 int GrammarTranslator::e_right_bracket()
 {
     logger.error("e_right_bracket");
+    print_error(last_line_number, "m");
     return 0;
 }
 int GrammarTranslator::e_do_while()
 {
     logger.error("e_do_while");
+    print_error(line_number, "n");
     return 0;
 }
 int GrammarTranslator::e_const_define_type()
 {
     logger.error("e_const_define_type");
+    print_error(line_number, "o");
     return 0;
 }
 
@@ -2026,6 +2088,8 @@ int GrammarTranslator::get_word()
         print_lexical(word);
     }
     get_new_word();
+    last_line_number = line_number;
+    line_number = line_number_buffer[now_word_id % WORD_BUFFER_SZ];
     return 0;
 }
 int GrammarTranslator::get_new_word()
@@ -2035,7 +2099,8 @@ int GrammarTranslator::get_new_word()
         if (bottom_word_id <= top_word_id - WORD_BUFFER_SZ + 1)
             bottom_word_id++;
         top_word_id++;
-        word_buffer[top_word_id % WORD_BUFFER_SZ] = words.get_word();
+        word_buffer[top_word_id % WORD_BUFFER_SZ] =
+            words.get_word(line_number_buffer[top_word_id % WORD_BUFFER_SZ]);
     }
     now_word_id++;
     word = word_buffer[now_word_id % WORD_BUFFER_SZ];
@@ -2136,7 +2201,6 @@ int GrammarTranslator::translate_lexical(const std::string &in_file_name, const 
 {
     words.open(in_file_name);
     fout.open(out_file_name);
-    line_number = 0;
 
     get_word();
     while (word.first != "")
@@ -2154,7 +2218,6 @@ int GrammarTranslator::translate(const std::string &in_file_name,
     words.open(in_file_name);
     fout.open(out_file_name);
     translate_type = type;
-    line_number = 0;
     pcode_indent_deep = 0;
     int e;
 

@@ -242,8 +242,8 @@ define keywords
 | a    | 1       |          | e_word                | 非法符号或不符合词法                                 |
 | b    |         | 1        | e_redifine_identifier | 名字重定义                                           |
 | c    |         | 1        | e_undifine_identifier | 未定义的名字                                         |
-| d    |         | 1        | e_func_param_type     | 函数参数个数不匹配                                   |
-| e    |         | 1        | e_func_param_n        | 函数参数类型不匹配                                   |
+| d    |         | 1        | e_func_param_n        | 函数参数个数不匹配                                   |
+| e    |         | 1        | e_func_param_type     | 函数参数类型不匹配                                   |
 | f    |         | 1        | e_condition_type      | 条件判断中出现不合法的类型                           |
 | g    | 1       | 1        | e_return_void         | 无返回值的函数存在不匹配的return语句                 |
 | h    | 1       | 1        | e_return_val          | 有返回值的函数缺少return语句或存在不匹配的return语句 |

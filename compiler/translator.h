@@ -20,7 +20,9 @@ private:
     std::ofstream fout;
     Word word;
     Word word_buffer[WORD_BUFFER_SZ];
+    int line_number_buffer[WORD_BUFFER_SZ];
     int bottom_word_id, now_word_id, top_word_id;
+    int last_line_number;
     int line_number;
     std::string translate_type;
 
@@ -43,14 +45,14 @@ private:
 
     int main_f(); // 主函数
 
-    int comp_stmt(std::string ret_type); // 复合语句
-    int stmt_list(std::string ret_type); // 语句列
-    int stmt(std::string ret_type);      // 语句
-    int eval();                          // 赋值语句
-    int cond_stmt(std::string ret_type); // 条件语句
-    int cond();                          // 条件
-    int loop_stmt(std::string ret_type); // 循环语句
-    int step(unsigned int &x);           // 步长
+    int comp_stmt(std::string ret_type, bool &returned); // 复合语句
+    int stmt_list(std::string ret_type, bool &returned); // 语句列
+    int stmt(std::string ret_type, bool &returned);      // 语句
+    int eval();                                          // 赋值语句
+    int cond_stmt(std::string ret_type, bool &returned); // 条件语句
+    int cond();                                          // 条件
+    int loop_stmt(std::string ret_type, bool &returned); // 循环语句
+    int step(unsigned int &x);                           // 步长
 
     int exp(std::string &type);    // 表达式
     int term(std::string &type);   // 项
@@ -66,21 +68,21 @@ private:
 
     int str_const(std::string &str); // 字符串
 
-    int e_word();                //非法符号或不符合词法
-    int e_redifine_identifier(); //名字重定义
-    int e_undifine_identifier(); //未定义的名字
-    int e_func_param_type();     //函数参数个数不匹配
-    int e_func_param_n();        //函数参数类型不匹配
-    int e_condition_type();      //条件判断中出现不合法的类型
-    int e_return_void();         //无返回值的函数存在不匹配的return语句
-    int e_return_val();          //有返回值的函数缺少return语句或存在不匹配的return语句
-    int e_array_index();         //数组元素的下标只能是整型表达式
-    int e_change_const_value();  //不能改变常量的值
-    int e_semicolon();           //应为分号
-    int e_right_parenthesis();   //应为右小括号’)’
-    int e_right_bracket();       //应为右中括号’]’
-    int e_do_while();            //do-while应为语句中缺少while
-    int e_const_define_type();   //常量定义中=后面只能是整型或字符型常量
+    int e_word();                // a 非法符号或不符合词法
+    int e_redifine_identifier(); // b 名字重定义
+    int e_undifine_identifier(); // c 未定义的名字
+    int e_func_param_n();        // d 函数参数个数不匹配
+    int e_func_param_type();     // e 函数参数类型不匹配
+    int e_condition_type();      // f 条件判断中出现不合法的类型
+    int e_return_void();         // g 无返回值的函数存在不匹配的return语句
+    int e_return_val();          // h 有返回值的函数缺少return语句或存在不匹配的return语句
+    int e_array_index();         // i 数组元素的下标只能是整型表达式
+    int e_change_const_value();  // j 不能改变常量的值
+    int e_semicolon();           // k 应为分号
+    int e_right_parenthesis();   // l 应为右小括号’)’
+    int e_right_bracket();       // m 应为右中括号’]’
+    int e_do_while();            // n do-while应为语句中缺少while
+    int e_const_define_type();   // o 常量定义中=后面只能是整型或字符型常量
 
     int print_lexical(const Word &p_word);                                        //输出词法信息
     int print_grammar(const std::string &info);                                   //输出语法信息
