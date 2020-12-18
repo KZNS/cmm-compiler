@@ -1,0 +1,32 @@
+digraph DFA {
+    rankdir = LR
+    node [shape=record]
+
+    1 -> 2 [label="c"]
+    2 -> 3 [label="o"]
+    3 -> 4 [label="n"]
+    4 -> 5 [label="s"]
+    5 -> 6 [label="t"]
+
+    2 -> 7 [label="h"]
+    7 -> 8 [label="a"]
+    8 -> 9 [label="r"]
+
+    1 -> 10 [label="\{"]
+
+    1 -> 11 [label="_abd~zA~Z"]
+    11 -> 11 [label="_a~zA~Z0~9"]
+    2 -> 11 [label="_a~np~zA~Z0~9"]
+    3 -> 11 [label="_a~mo~zA~Z0~9"]
+    4 -> 11 [label="_a~rt~zA~Z0~9"]
+    5 -> 11 [label="_a~su~zA~Z0~9"]
+    6 -> 11 [label="_a~zA~Z0~9"]
+    7 -> 11 [label="_b~zA~Z0~9"]
+    8 -> 11 [label="_a~qs~zA~Z0~9"]
+    9 -> 11 [label="_a~zA~Z0~9"]
+
+    6 [label="6|CONSTTK"]
+    9 [label="9|CHARTK"]
+    10 [label="10|LBRACE"]
+    11 [label="11|IDENFR"]
+}

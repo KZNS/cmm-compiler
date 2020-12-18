@@ -1,0 +1,214 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [  <!ENTITY quot "&#34;">  <!ENTITY amp "&#38;">  <!ENTITY apos "&#39;">  <!ENTITY lt "&#60;">  <!ENTITY gt "&#62;">  <!ENTITY nbsp "&#160;">  <!ENTITY iexcl "&#161;">  <!ENTITY cent "&#162;">  <!ENTITY pound "&#163;">  <!ENTITY curren "&#164;">  <!ENTITY yen "&#165;">  <!ENTITY brvbar "&#166;">  <!ENTITY sect "&#167;">  <!ENTITY uml "&#168;">  <!ENTITY copy "&#169;">  <!ENTITY ordf "&#170;">  <!ENTITY laquo "&#171;">  <!ENTITY not "&#172;">  <!ENTITY shy "&#173;">  <!ENTITY reg "&#174;">  <!ENTITY macr "&#175;">  <!ENTITY deg "&#176;">  <!ENTITY plusmn "&#177;">  <!ENTITY sup2 "&#178;">  <!ENTITY sup3 "&#179;">  <!ENTITY acute "&#180;">  <!ENTITY micro "&#181;">  <!ENTITY para "&#182;">  <!ENTITY middot "&#183;">  <!ENTITY cedil "&#184;">  <!ENTITY sup1 "&#185;">  <!ENTITY ordm "&#186;">  <!ENTITY raquo "&#187;">  <!ENTITY frac14 "&#188;">  <!ENTITY frac12 "&#189;">  <!ENTITY frac34 "&#190;">  <!ENTITY iquest "&#191;">  <!ENTITY Agrave "&#192;">  <!ENTITY Aacute "&#193;">  <!ENTITY Acirc "&#194;">  <!ENTITY Atilde "&#195;">  <!ENTITY Auml "&#196;">  <!ENTITY Aring "&#197;">  <!ENTITY AElig "&#198;">  <!ENTITY Ccedil "&#199;">  <!ENTITY Egrave "&#200;">  <!ENTITY Eacute "&#201;">  <!ENTITY Ecirc "&#202;">  <!ENTITY Euml "&#203;">  <!ENTITY Igrave "&#204;">  <!ENTITY Iacute "&#205;">  <!ENTITY Icirc "&#206;">  <!ENTITY Iuml "&#207;">  <!ENTITY ETH "&#208;">  <!ENTITY Ntilde "&#209;">  <!ENTITY Ograve "&#210;">  <!ENTITY Oacute "&#211;">  <!ENTITY Ocirc "&#212;">  <!ENTITY Otilde "&#213;">  <!ENTITY Ouml "&#214;">  <!ENTITY times "&#215;">  <!ENTITY Oslash "&#216;">  <!ENTITY Ugrave "&#217;">  <!ENTITY Uacute "&#218;">  <!ENTITY Ucirc "&#219;">  <!ENTITY Uuml "&#220;">  <!ENTITY Yacute "&#221;">  <!ENTITY THORN "&#222;">  <!ENTITY szlig "&#223;">  <!ENTITY agrave "&#224;">  <!ENTITY aacute "&#225;">  <!ENTITY acirc "&#226;">  <!ENTITY atilde "&#227;">  <!ENTITY auml "&#228;">  <!ENTITY aring "&#229;">  <!ENTITY aelig "&#230;">  <!ENTITY ccedil "&#231;">  <!ENTITY egrave "&#232;">  <!ENTITY eacute "&#233;">  <!ENTITY ecirc "&#234;">  <!ENTITY euml "&#235;">  <!ENTITY igrave "&#236;">  <!ENTITY iacute "&#237;">  <!ENTITY icirc "&#238;">  <!ENTITY iuml "&#239;">  <!ENTITY eth "&#240;">  <!ENTITY ntilde "&#241;">  <!ENTITY ograve "&#242;">  <!ENTITY oacute "&#243;">  <!ENTITY ocirc "&#244;">  <!ENTITY otilde "&#245;">  <!ENTITY ouml "&#246;">  <!ENTITY divide "&#247;">  <!ENTITY oslash "&#248;">  <!ENTITY ugrave "&#249;">  <!ENTITY uacute "&#250;">  <!ENTITY ucirc "&#251;">  <!ENTITY uuml "&#252;">  <!ENTITY yacute "&#253;">  <!ENTITY thorn "&#254;">  <!ENTITY yuml "&#255;">  <!ENTITY OElig "&#338;">  <!ENTITY oelig "&#339;">  <!ENTITY Scaron "&#352;">  <!ENTITY scaron "&#353;">  <!ENTITY Yuml "&#376;">  <!ENTITY fnof "&#402;">  <!ENTITY circ "&#710;">  <!ENTITY tilde "&#732;">  <!ENTITY Alpha "&#913;">  <!ENTITY Beta "&#914;">  <!ENTITY Gamma "&#915;">  <!ENTITY Delta "&#916;">  <!ENTITY Epsilon "&#917;">  <!ENTITY Zeta "&#918;">  <!ENTITY Eta "&#919;">  <!ENTITY Theta "&#920;">  <!ENTITY Iota "&#921;">  <!ENTITY Kappa "&#922;">  <!ENTITY Lambda "&#923;">  <!ENTITY Mu "&#924;">  <!ENTITY Nu "&#925;">  <!ENTITY Xi "&#926;">  <!ENTITY Omicron "&#927;">  <!ENTITY Pi "&#928;">  <!ENTITY Rho "&#929;">  <!ENTITY Sigma "&#931;">  <!ENTITY Tau "&#932;">  <!ENTITY Upsilon "&#933;">  <!ENTITY Phi "&#934;">  <!ENTITY Chi "&#935;">  <!ENTITY Psi "&#936;">  <!ENTITY Omega "&#937;">  <!ENTITY alpha "&#945;">  <!ENTITY beta "&#946;">  <!ENTITY gamma "&#947;">  <!ENTITY delta "&#948;">  <!ENTITY epsilon "&#949;">  <!ENTITY zeta "&#950;">  <!ENTITY eta "&#951;">  <!ENTITY theta "&#952;">  <!ENTITY iota "&#953;">  <!ENTITY kappa "&#954;">  <!ENTITY lambda "&#955;">  <!ENTITY mu "&#956;">  <!ENTITY nu "&#957;">  <!ENTITY xi "&#958;">  <!ENTITY omicron "&#959;">  <!ENTITY pi "&#960;">  <!ENTITY rho "&#961;">  <!ENTITY sigmaf "&#962;">  <!ENTITY sigma "&#963;">  <!ENTITY tau "&#964;">  <!ENTITY upsilon "&#965;">  <!ENTITY phi "&#966;">  <!ENTITY chi "&#967;">  <!ENTITY psi "&#968;">  <!ENTITY omega "&#969;">  <!ENTITY thetasym "&#977;">  <!ENTITY upsih "&#978;">  <!ENTITY piv "&#982;">  <!ENTITY ensp "&#8194;">  <!ENTITY emsp "&#8195;">  <!ENTITY thinsp "&#8201;">  <!ENTITY zwnj "&#8204;">  <!ENTITY zwj "&#8205;">  <!ENTITY lrm "&#8206;">  <!ENTITY rlm "&#8207;">  <!ENTITY ndash "&#8211;">  <!ENTITY mdash "&#8212;">  <!ENTITY lsquo "&#8216;">  <!ENTITY rsquo "&#8217;">  <!ENTITY sbquo "&#8218;">  <!ENTITY ldquo "&#8220;">  <!ENTITY rdquo "&#8221;">  <!ENTITY bdquo "&#8222;">  <!ENTITY dagger "&#8224;">  <!ENTITY Dagger "&#8225;">  <!ENTITY bull "&#8226;">  <!ENTITY hellip "&#8230;">  <!ENTITY permil "&#8240;">  <!ENTITY prime "&#8242;">  <!ENTITY Prime "&#8243;">  <!ENTITY lsaquo "&#8249;">  <!ENTITY rsaquo "&#8250;">  <!ENTITY oline "&#8254;">  <!ENTITY frasl "&#8260;">  <!ENTITY euro "&#8364;">  <!ENTITY image "&#8465;">  <!ENTITY weierp "&#8472;">  <!ENTITY real "&#8476;">  <!ENTITY trade "&#8482;">  <!ENTITY alefsym "&#8501;">  <!ENTITY larr "&#8592;">  <!ENTITY uarr "&#8593;">  <!ENTITY rarr "&#8594;">  <!ENTITY darr "&#8595;">  <!ENTITY harr "&#8596;">  <!ENTITY crarr "&#8629;">  <!ENTITY lArr "&#8656;">  <!ENTITY uArr "&#8657;">  <!ENTITY rArr "&#8658;">  <!ENTITY dArr "&#8659;">  <!ENTITY hArr "&#8660;">  <!ENTITY forall "&#8704;">  <!ENTITY part "&#8706;">  <!ENTITY exist "&#8707;">  <!ENTITY empty "&#8709;">  <!ENTITY nabla "&#8711;">  <!ENTITY isin "&#8712;">  <!ENTITY notin "&#8713;">  <!ENTITY ni "&#8715;">  <!ENTITY prod "&#8719;">  <!ENTITY sum "&#8721;">  <!ENTITY minus "&#8722;">  <!ENTITY lowast "&#8727;">  <!ENTITY radic "&#8730;">  <!ENTITY prop "&#8733;">  <!ENTITY infin "&#8734;">  <!ENTITY ang "&#8736;">  <!ENTITY and "&#8743;">  <!ENTITY or "&#8744;">  <!ENTITY cap "&#8745;">  <!ENTITY cup "&#8746;">  <!ENTITY int "&#8747;">  <!ENTITY there4 "&#8756;">  <!ENTITY sim "&#8764;">  <!ENTITY cong "&#8773;">  <!ENTITY asymp "&#8776;">  <!ENTITY ne "&#8800;">  <!ENTITY equiv "&#8801;">  <!ENTITY le "&#8804;">  <!ENTITY ge "&#8805;">  <!ENTITY sub "&#8834;">  <!ENTITY sup "&#8835;">  <!ENTITY nsub "&#8836;">  <!ENTITY sube "&#8838;">  <!ENTITY supe "&#8839;">  <!ENTITY oplus "&#8853;">  <!ENTITY otimes "&#8855;">  <!ENTITY perp "&#8869;">  <!ENTITY sdot "&#8901;">  <!ENTITY lceil "&#8968;">  <!ENTITY rceil "&#8969;">  <!ENTITY lfloor "&#8970;">  <!ENTITY rfloor "&#8971;">  <!ENTITY lang "&#9001;">  <!ENTITY rang "&#9002;">  <!ENTITY loz "&#9674;">  <!ENTITY spades "&#9824;">  <!ENTITY clubs "&#9827;">  <!ENTITY hearts "&#9829;">  <!ENTITY diams "&#9830;"> ]><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1019pt" height="422pt" viewBox="0.00 0.00 1019.06 422.3">
+<g id="graph0" class="graph" transform="translate(4,418.29998779296875) scale(1)" data-name="DFA">
+
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-418.3 1015.0575,-418.3 1015.0575,4 -4,4"></polygon>
+<!-- 1 -->
+<g id="node1" class="node" data-name="1">
+
+<polygon fill="none" stroke="#000000" points="0,-35 0,-71 54,-71 54,-35 0,-35"></polygon>
+<text text-anchor="middle" x="27" y="-48.9" font-family="Times,serif" font-size="14.00" fill="#000000">1</text>
+</g>
+<!-- 2 -->
+<g id="node2" class="node" data-name="2">
+
+<polygon fill="none" stroke="#000000" points="105.3294,-97 105.3294,-133 159.3294,-133 159.3294,-97 105.3294,-97"></polygon>
+<text text-anchor="middle" x="132.3294" y="-110.9" font-family="Times,serif" font-size="14.00" fill="#000000">2</text>
+</g>
+<!-- 1&#45;&gt;2 -->
+<g id="edge1" class="edge" data-name="1->2">
+
+<path fill="none" stroke="#000000" d="M54.1249,-68.9665C67.0252,-76.56 82.6232,-85.7414 96.4843,-93.9005"></path>
+<polygon fill="#000000" stroke="#000000" points="94.903,-97.031 105.2964,-99.0876 98.454,-90.9985 94.903,-97.031"></polygon>
+<text text-anchor="middle" x="75.3593" y="-86.2" font-family="Times,serif" font-size="14.00" fill="#000000">c</text>
+</g>
+<!-- 10 -->
+<g id="node10" class="node" data-name="10">
+
+<polygon fill="none" stroke="#000000" points="96.7186,-28.2 96.7186,-77.8 167.9402,-77.8 167.9402,-28.2 96.7186,-28.2"></polygon>
+<text text-anchor="middle" x="132.3294" y="-61.2" font-family="Times,serif" font-size="14.00" fill="#000000">10</text>
+<polyline fill="none" stroke="#000000" points="96.7186,-53 167.9402,-53 "></polyline>
+<text text-anchor="middle" x="132.3294" y="-36.4" font-family="Times,serif" font-size="14.00" fill="#000000">LBRACE</text>
+</g>
+<!-- 1&#45;&gt;10 -->
+<g id="edge9" class="edge" data-name="1->10">
+
+<path fill="none" stroke="#000000" d="M54.1249,-53C63.9175,-53 75.2646,-53 86.2264,-53"></path>
+<polygon fill="#000000" stroke="#000000" points="86.5549,-56.5001 96.5549,-53 86.5548,-49.5001 86.5549,-56.5001"></polygon>
+<text text-anchor="middle" x="75.3593" y="-57.2" font-family="Times,serif" font-size="14.00" fill="#000000">{</text>
+</g>
+<!-- 11 -->
+<g id="node11" class="node" data-name="11">
+
+<polygon fill="none" stroke="#000000" points="940.3816,-164.2 940.3816,-213.8 1006.9272,-213.8 1006.9272,-164.2 940.3816,-164.2"></polygon>
+<text text-anchor="middle" x="973.6544" y="-197.2" font-family="Times,serif" font-size="14.00" fill="#000000">11</text>
+<polyline fill="none" stroke="#000000" points="940.3816,-189 1006.9272,-189 "></polyline>
+<text text-anchor="middle" x="973.6544" y="-172.4" font-family="Times,serif" font-size="14.00" fill="#000000">IDENFR</text>
+</g>
+<!-- 1&#45;&gt;11 -->
+<g id="edge10" class="edge" data-name="1->11">
+
+<path fill="none" stroke="#000000" d="M48.4317,-34.7604C68.6796,-19.4294 100.5996,0 132.3294,0 132.3294,0 132.3294,0 782.1637,0 848.3263,0 875.3444,-3.4705 922.3816,-50 950.6394,-77.9528 963.465,-122.8075 969.1927,-153.9734"></path>
+<polygon fill="#000000" stroke="#000000" points="965.7645,-154.693 970.8751,-163.9738 972.6675,-153.5317 965.7645,-154.693"></polygon>
+<text text-anchor="middle" x="341.557" y="-4.2" font-family="Times,serif" font-size="14.00" fill="#000000">_abd~zA~Z</text>
+</g>
+<!-- 3 -->
+<g id="node3" class="node" data-name="3">
+
+<polygon fill="none" stroke="#000000" points="210.9402,-220 210.9402,-256 264.9402,-256 264.9402,-220 210.9402,-220"></polygon>
+<text text-anchor="middle" x="237.9402" y="-233.9" font-family="Times,serif" font-size="14.00" fill="#000000">3</text>
+</g>
+<!-- 2&#45;&gt;3 -->
+<g id="edge2" class="edge" data-name="2->3">
+
+<path fill="none" stroke="#000000" d="M147.9126,-133.1491C165.7742,-153.9516 195.1961,-188.218 215.5182,-211.8862"></path>
+<polygon fill="#000000" stroke="#000000" points="213.1231,-214.4695 222.293,-219.7765 218.4341,-209.9094 213.1231,-214.4695"></polygon>
+<text text-anchor="middle" x="189.4402" y="-187.2" font-family="Times,serif" font-size="14.00" fill="#000000">o</text>
+</g>
+<!-- 7 -->
+<g id="node7" class="node" data-name="7">
+
+<polygon fill="none" stroke="#000000" points="314.557,-97 314.557,-133 368.557,-133 368.557,-97 314.557,-97"></polygon>
+<text text-anchor="middle" x="341.557" y="-110.9" font-family="Times,serif" font-size="14.00" fill="#000000">7</text>
+</g>
+<!-- 2&#45;&gt;7 -->
+<g id="edge6" class="edge" data-name="2->7">
+
+<path fill="none" stroke="#000000" d="M159.6823,-115C196.6715,-115 262.7767,-115 304.2841,-115"></path>
+<polygon fill="#000000" stroke="#000000" points="304.529,-118.5001 314.529,-115 304.529,-111.5001 304.529,-118.5001"></polygon>
+<text text-anchor="middle" x="237.9402" y="-119.2" font-family="Times,serif" font-size="14.00" fill="#000000">h</text>
+</g>
+<!-- 2&#45;&gt;11 -->
+<g id="edge12" class="edge" data-name="2->11">
+
+<path fill="none" stroke="#000000" d="M156.4167,-96.9733C184.5739,-76.2328 228.5365,-45 237.9402,-45 237.9402,-45 237.9402,-45 782.1637,-45 849.4351,-45 871.4611,-58.0392 922.3816,-102 938.7295,-116.1135 951.2166,-136.7894 959.7731,-154.4439"></path>
+<polygon fill="#000000" stroke="#000000" points="956.7577,-156.2633 964.1219,-163.8803 963.1151,-153.3334 956.7577,-156.2633"></polygon>
+<text text-anchor="middle" x="441.3632" y="-49.2" font-family="Times,serif" font-size="14.00" fill="#000000">_a~np~zA~Z0~9</text>
+</g>
+<!-- 4 -->
+<g id="node4" class="node" data-name="4">
+
+<polygon fill="none" stroke="#000000" points="314.557,-267 314.557,-303 368.557,-303 368.557,-267 314.557,-267"></polygon>
+<text text-anchor="middle" x="341.557" y="-280.9" font-family="Times,serif" font-size="14.00" fill="#000000">4</text>
+</g>
+<!-- 3&#45;&gt;4 -->
+<g id="edge3" class="edge" data-name="3->4">
+
+<path fill="none" stroke="#000000" d="M265.1643,-250.3487C277.4197,-255.9077 292.0644,-262.5504 305.2377,-268.5258"></path>
+<polygon fill="#000000" stroke="#000000" points="303.962,-271.7903 314.5147,-272.7338 306.8536,-265.4154 303.962,-271.7903"></polygon>
+<text text-anchor="middle" x="286.4402" y="-265.2" font-family="Times,serif" font-size="14.00" fill="#000000">n</text>
+</g>
+<!-- 3&#45;&gt;11 -->
+<g id="edge13" class="edge" data-name="3->11">
+
+<path fill="none" stroke="#000000" d="M265.1258,-238.4091C349.2133,-239.4393 612.4874,-240.898 829.5754,-223 871.0845,-219.5778 882.1742,-220.8664 922.3816,-210 925.1239,-209.2589 927.9158,-208.4093 930.7094,-207.4861"></path>
+<polygon fill="#000000" stroke="#000000" points="931.9052,-210.7756 940.1442,-204.1146 929.5496,-204.1839 931.9052,-210.7756"></polygon>
+<text text-anchor="middle" x="557.6873" y="-241.2" font-family="Times,serif" font-size="14.00" fill="#000000">_a~mo~zA~Z0~9</text>
+</g>
+<!-- 5 -->
+<g id="node5" class="node" data-name="5">
+
+<polygon fill="none" stroke="#000000" points="530.6873,-312 530.6873,-348 584.6873,-348 584.6873,-312 530.6873,-312"></polygon>
+<text text-anchor="middle" x="557.6873" y="-325.9" font-family="Times,serif" font-size="14.00" fill="#000000">5</text>
+</g>
+<!-- 4&#45;&gt;5 -->
+<g id="edge4" class="edge" data-name="4->5">
+
+<path fill="none" stroke="#000000" d="M368.5788,-291.4455C376.494,-293.2893 385.171,-295.2675 393.1738,-297 436.7191,-306.4269 486.9547,-316.3688 520.343,-322.8455"></path>
+<polygon fill="#000000" stroke="#000000" points="520.0788,-326.3592 530.5615,-324.8215 521.4079,-319.4865 520.0788,-326.3592"></polygon>
+<text text-anchor="middle" x="441.3632" y="-320.2" font-family="Times,serif" font-size="14.00" fill="#000000">s</text>
+</g>
+<!-- 4&#45;&gt;11 -->
+<g id="edge14" class="edge" data-name="4->11">
+
+<path fill="none" stroke="#000000" d="M368.6614,-286.5989C469.8394,-292.121 824.6236,-307.3598 922.3816,-256 936.4989,-248.5831 947.8822,-235.3563 956.3035,-222.603"></path>
+<polygon fill="#000000" stroke="#000000" points="959.3846,-224.2748 961.6576,-213.9267 953.4275,-220.5987 959.3846,-224.2748"></polygon>
+<text text-anchor="middle" x="671.287" y="-296.2" font-family="Times,serif" font-size="14.00" fill="#000000">_a~rt~zA~Z0~9</text>
+</g>
+<!-- 6 -->
+<g id="node6" class="node" data-name="6">
+
+<polygon fill="none" stroke="#000000" points="741.8916,-364.2 741.8916,-413.8 822.4358,-413.8 822.4358,-364.2 741.8916,-364.2"></polygon>
+<text text-anchor="middle" x="782.1637" y="-397.2" font-family="Times,serif" font-size="14.00" fill="#000000">6</text>
+<polyline fill="none" stroke="#000000" points="741.8916,-389 822.4358,-389 "></polyline>
+<text text-anchor="middle" x="782.1637" y="-372.4" font-family="Times,serif" font-size="14.00" fill="#000000">CONSTTK</text>
+</g>
+<!-- 5&#45;&gt;6 -->
+<g id="edge5" class="edge" data-name="5->6">
+
+<path fill="none" stroke="#000000" d="M584.7644,-337.1168C621.1581,-346.6823 686.5314,-363.8646 732.0313,-375.8235"></path>
+<polygon fill="#000000" stroke="#000000" points="731.1454,-379.2095 741.7066,-378.3665 732.9248,-372.4394 731.1454,-379.2095"></polygon>
+<text text-anchor="middle" x="671.287" y="-375.2" font-family="Times,serif" font-size="14.00" fill="#000000">t</text>
+</g>
+<!-- 5&#45;&gt;11 -->
+<g id="edge15" class="edge" data-name="5->11">
+
+<path fill="none" stroke="#000000" d="M584.8098,-330.9211C659.7948,-332.9524 867.952,-334.9526 922.3816,-297 946.623,-280.097 959.7598,-248.5877 966.6455,-223.9484"></path>
+<polygon fill="#000000" stroke="#000000" points="970.0485,-224.768 969.1483,-214.2115 963.2689,-223.0253 970.0485,-224.768"></polygon>
+<text text-anchor="middle" x="782.1637" y="-334.2" font-family="Times,serif" font-size="14.00" fill="#000000">_a~su~zA~Z0~9</text>
+</g>
+<!-- 6&#45;&gt;11 -->
+<g id="edge16" class="edge" data-name="6->11">
+
+<path fill="none" stroke="#000000" d="M822.5801,-385.4865C853.708,-380.7185 895.7834,-369.4815 922.3816,-343 954.4137,-311.1085 966.4343,-258.7205 970.9451,-224.0426"></path>
+<polygon fill="#000000" stroke="#000000" points="974.447,-224.227 972.1177,-213.8914 967.4932,-223.4236 974.447,-224.227"></polygon>
+<text text-anchor="middle" x="884.9785" y="-384.2" font-family="Times,serif" font-size="14.00" fill="#000000">_a~zA~Z0~9</text>
+</g>
+<!-- 8 -->
+<g id="node8" class="node" data-name="8">
+
+<polygon fill="none" stroke="#000000" points="530.6873,-112 530.6873,-148 584.6873,-148 584.6873,-112 530.6873,-112"></polygon>
+<text text-anchor="middle" x="557.6873" y="-125.9" font-family="Times,serif" font-size="14.00" fill="#000000">8</text>
+</g>
+<!-- 7&#45;&gt;8 -->
+<g id="edge7" class="edge" data-name="7->8">
+
+<path fill="none" stroke="#000000" d="M368.9301,-116.8998C407.3369,-119.5653 477.3371,-124.4235 520.4527,-127.4158"></path>
+<polygon fill="#000000" stroke="#000000" points="520.3181,-130.9148 530.5365,-128.1157 520.8029,-123.9316 520.3181,-130.9148"></polygon>
+<text text-anchor="middle" x="441.3632" y="-129.2" font-family="Times,serif" font-size="14.00" fill="#000000">a</text>
+</g>
+<!-- 7&#45;&gt;11 -->
+<g id="edge17" class="edge" data-name="7->11">
+
+<path fill="none" stroke="#000000" d="M368.8414,-112.4209C401.707,-109.4546 458.6093,-104.7668 507.5526,-103 692.4557,-96.3253 757.6578,-53.7399 922.3816,-138 931.5194,-142.6742 940.0497,-149.5639 947.4287,-156.7774"></path>
+<polygon fill="#000000" stroke="#000000" points="944.9488,-159.2481 954.4037,-164.0288 949.9938,-154.3954 944.9488,-159.2481"></polygon>
+<text text-anchor="middle" x="671.287" y="-97.2" font-family="Times,serif" font-size="14.00" fill="#000000">_b~zA~Z0~9</text>
+</g>
+<!-- 9 -->
+<g id="node9" class="node" data-name="9">
+
+<polygon fill="none" stroke="#000000" points="745.3909,-164.2 745.3909,-213.8 818.9365,-213.8 818.9365,-164.2 745.3909,-164.2"></polygon>
+<text text-anchor="middle" x="782.1637" y="-197.2" font-family="Times,serif" font-size="14.00" fill="#000000">9</text>
+<polyline fill="none" stroke="#000000" points="745.3909,-189 818.9365,-189 "></polyline>
+<text text-anchor="middle" x="782.1637" y="-172.4" font-family="Times,serif" font-size="14.00" fill="#000000">CHARTK</text>
+</g>
+<!-- 8&#45;&gt;9 -->
+<g id="edge8" class="edge" data-name="8->9">
+
+<path fill="none" stroke="#000000" d="M584.7644,-137.1168C622.0575,-146.9187 689.7803,-164.7185 735.3674,-176.7003"></path>
+<polygon fill="#000000" stroke="#000000" points="734.7469,-180.1561 745.3081,-179.3131 736.5263,-173.386 734.7469,-180.1561"></polygon>
+<text text-anchor="middle" x="671.287" y="-175.2" font-family="Times,serif" font-size="14.00" fill="#000000">r</text>
+</g>
+<!-- 8&#45;&gt;11 -->
+<g id="edge18" class="edge" data-name="8->11">
+
+<path fill="none" stroke="#000000" d="M584.9964,-128.0707C634.3287,-125.1927 741.3732,-121.7338 829.5754,-138.2 864.5594,-144.7311 902.4521,-158.3716 930.5935,-169.8748"></path>
+<polygon fill="#000000" stroke="#000000" points="929.5428,-173.2284 940.12,-173.8392 932.2323,-166.7657 929.5428,-173.2284"></polygon>
+<text text-anchor="middle" x="782.1637" y="-142.2" font-family="Times,serif" font-size="14.00" fill="#000000">_a~qs~zA~Z0~9</text>
+</g>
+<!-- 9&#45;&gt;11 -->
+<g id="edge19" class="edge" data-name="9->11">
+
+<path fill="none" stroke="#000000" d="M819.085,-189C850.761,-189 896.4617,-189 929.9553,-189"></path>
+<polygon fill="#000000" stroke="#000000" points="930.3677,-192.5001 940.3676,-189 930.3676,-185.5001 930.3677,-192.5001"></polygon>
+<text text-anchor="middle" x="884.9785" y="-193.2" font-family="Times,serif" font-size="14.00" fill="#000000">_a~zA~Z0~9</text>
+</g>
+<!-- 11&#45;&gt;11 -->
+<g id="edge11" class="edge" data-name="11->11">
+
+<path fill="none" stroke="#000000" d="M957.2551,-213.9178C956.3286,-223.9117 961.795,-232.3 973.6544,-232.3 981.0665,-232.3 985.9814,-229.0233 988.399,-224.1259"></path>
+<polygon fill="#000000" stroke="#000000" points="991.9084,-224.349 990.0537,-213.9178 984.9986,-223.2289 991.9084,-224.349"></polygon>
+<text text-anchor="middle" x="973.6544" y="-236.5" font-family="Times,serif" font-size="14.00" fill="#000000">_a~zA~Z0~9</text>
+</g>
+</g>
+</svg>
