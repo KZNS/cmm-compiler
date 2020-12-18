@@ -380,16 +380,20 @@ int PcodeInterpreter::do_print(const string cmd){
     for(auto i:info){
         if(i.front()=='\"'&&i.back()=='\"'){
             cout << i.substr(1,i.length()-2);
+            pymodule_output += i.substr(1,i.length()-2);
         } else if(i.find('~')!=i.npos){//输出栈顶元素并pop
             check_rtstack_size(1);
             cout << runtimeStack.top();
+            pymodule_output += to_string(runtimeStack.top());
             runtimeStack.pop();
             //这里后续判断类型
         } else {
             cout << runtimeVar[get_var(i)].val;
+            pymodule_output += to_string(runtimeVar[get_var(i)].val);
         }
     }
     cout << endl;
+    pymodule_output += to_string('\n');
     return 0;
 }
 int PcodeInterpreter::do_exit(const string cmd){
@@ -501,12 +505,12 @@ int PcodeInterpreter::func_call(const string funcName){
     }
     return 0;
 }
-int PcodeInterpreter::interpret(const std::string &in_file_name){
+string PcodeInterpreter::interpret(const std::string &in_file_name){
     ifstream myfile(in_file_name);
     string temp;
     if(!myfile.is_open()){
         cout << "failed to open file" << endl;
-        return -1;
+        return "";
     }
     while(getline(myfile,temp)){
         temp = trim(temp);
@@ -572,7 +576,7 @@ int PcodeInterpreter::interpret(const std::string &in_file_name){
         i++;
         eip.top()++;
     }
-    return 0;
+    return pymodule_output;
 }
 #endif
 

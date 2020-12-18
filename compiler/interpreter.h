@@ -33,6 +33,7 @@ private:
     //int eip;//eip指针：int
     std::stack<int> eip;
     std::stack<int> old_sp;
+    std::string pymodule_output;
     int do_var(const std::string);
     int do_push(const std::string);
     int do_pop(const std::string);
@@ -68,7 +69,7 @@ private:
     int do_jnz(const std::string);
 public:
     PcodeInterpreter();
-    int interpret(const std::string &in_file_name);
+    string interpret(const std::string &in_file_name);
 };
 
 #include "interpreter.cpp"
