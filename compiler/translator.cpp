@@ -2026,7 +2026,7 @@ int GrammarTranslator::print_lexical(const Word &word)
 {
     if (translate_type == "lexical" || translate_type == "grammar")
     {
-        fout << word.first << " " << word.second << std::endl;
+        *out << word.first << " " << word.second << std::endl;
     }
     return 0;
 }
@@ -2034,7 +2034,7 @@ int GrammarTranslator::print_grammar(const std::string &info)
 {
     if (translate_type == "grammar")
     {
-        fout << info << std::endl;
+        *out << info << std::endl;
     }
     return 0;
 }
@@ -2042,7 +2042,7 @@ int GrammarTranslator::print_error(const int &error_line_number, const std::stri
 {
     if (translate_type == "error")
     {
-        fout << error_line_number << ' ' << error_type << std::endl;
+        *out << error_line_number << ' ' << error_type << std::endl;
     }
     return 0;
 }
@@ -2059,9 +2059,9 @@ int GrammarTranslator::print_pcode(std::string format, ...)
 
         for (int i = 0; i < pcode_indent_deep; i++)
         {
-            fout << "    ";
+            *out << "    ";
         }
-        fout << buffer << std::endl;
+        *out << buffer << std::endl;
     }
     return 0;
 }
@@ -2155,6 +2155,7 @@ GrammarTranslator::GrammarTranslator()
     bottom_word_id = 0;
     top_word_id = -1;
     now_word_id = -1;
+    out = NULL;
 }
 int GrammarTranslator::load_lexical(std::istream &file)
 {
@@ -2200,23 +2201,24 @@ int GrammarTranslator::load_lexical(const std::string &file_name)
 int GrammarTranslator::translate_lexical(const std::string &in_file_name, const std::string &out_file_name)
 {
     words.open(in_file_name);
-    fout.open(out_file_name);
+    out = new std::ofstream(out_file_name);
 
     get_word();
     while (word.first != "")
     {
-        fout << word.first << " " << word.second << std::endl;
+        *out << word.first << " " << word.second << std::endl;
         get_word();
     }
     words.close();
-    fout.close();
+    delete out;
+    out = NULL;
     return 0;
 }
 int GrammarTranslator::translate(const std::string &in_file_name,
                                  const std::string &out_file_name, const std::string &type)
 {
     words.open(in_file_name);
-    fout.open(out_file_name);
+    out = new std::ofstream(out_file_name);
     translate_type = type;
     pcode_indent_deep = 0;
     int e;
@@ -2229,7 +2231,8 @@ int GrammarTranslator::translate(const std::string &in_file_name,
         return -1;
     }
     words.close();
-    fout.close();
+    delete out;
+    out = NULL;
     return 0;
 }
 

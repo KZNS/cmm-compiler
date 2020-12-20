@@ -17,7 +17,7 @@ private:
     LexicalAutomaton words;
     SymbolTable table;
     bool loaded_lex;
-    std::ofstream fout;
+    std::ostream *out;
     Word word;
     Word word_buffer[WORD_BUFFER_SZ];
     int line_number_buffer[WORD_BUFFER_SZ];
