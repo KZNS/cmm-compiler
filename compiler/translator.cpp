@@ -2198,11 +2198,12 @@ int GrammarTranslator::load_lexical(const std::string &file_name)
 
     return 0;
 }
-int GrammarTranslator::translate(const std::string &in_file_name,
-                                 const std::string &out_file_name, const std::string &type)
+int GrammarTranslator::translate(std::istream &in_stream, std::ostream &out_stream,
+                                 const std::string &type)
 {
-    words.open(in_file_name);
-    out = new std::ofstream(out_file_name);
+    words.open(in_stream);
+    out = &out_stream;
+
     translate_type = type;
     pcode_indent_deep = 0;
     int e;
@@ -2214,6 +2215,29 @@ int GrammarTranslator::translate(const std::string &in_file_name,
         logger.error("unknown \"%s\"", word.second.c_str());
         return -1;
     }
+
+    words.close();
+    out = NULL;
+    return 0;
+}
+int GrammarTranslator::translate(const std::string &in_file_name,
+                                 const std::string &out_file_name, const std::string &type)
+{
+    words.open(in_file_name);
+    out = new std::ofstream(out_file_name);
+
+    translate_type = type;
+    pcode_indent_deep = 0;
+    int e;
+
+    get_word();
+    e = prog();
+    if (e == -1)
+    {
+        logger.error("unknown \"%s\"", word.second.c_str());
+        return -1;
+    }
+
     words.close();
     delete out;
     out = NULL;

@@ -97,10 +97,14 @@ private:
     int roll_back(int step);
     bool detect(int step, ...);
 
+    int translate(const std::string &type);
+
 public:
     GrammarTranslator();
     int load_lexical(std::istream &file);
     int load_lexical(const std::string &file_name);
+    int translate(std::istream &in_stream, std::ostream &out_stream,
+                  const std::string &type = "PCODE");
     int translate(const std::string &in_file_name, const std::string &out_file_name,
                   const std::string &type = "PCODE");
 };

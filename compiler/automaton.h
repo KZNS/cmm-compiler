@@ -34,6 +34,7 @@ private:
     char last;
     bool inited;
     int line_number;
+    bool using_new_stream;
 
     std::string expand_rel(const std::string &rel);
     int split_str(std::string s, std::vector<std::string> &result);
@@ -48,6 +49,7 @@ private:
 public:
     LexicalAutomaton();
     ~LexicalAutomaton();
+    int open(std::istream &in_stream);
     int open(const std::string &file_name);
     int close();
     int append_keyword(const std::string &word, const std::string &type);

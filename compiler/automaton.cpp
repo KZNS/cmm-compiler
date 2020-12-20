@@ -240,13 +240,19 @@ LexicalAutomaton::~LexicalAutomaton()
         delete node_list[i];
     }
 }
+int LexicalAutomaton::open(std::istream &in_stream)
+{
+    close();
+    in_source_code = &in_stream;
+    using_new_stream = false;
+    line_number = 1;
+    return 0;
+}
 int LexicalAutomaton::open(const std::string &file_name)
 {
-    if (in_source_code)
-    {
-        delete in_source_code;
-    }
+    close();
     in_source_code = new std::ifstream(file_name);
+    using_new_stream = true;
     line_number = 1;
     return 0;
 }
@@ -254,7 +260,10 @@ int LexicalAutomaton::close()
 {
     if (in_source_code)
     {
-        delete in_source_code;
+        if (using_new_stream)
+        {
+            delete in_source_code;
+        }
         in_source_code = NULL;
     }
     return 0;
