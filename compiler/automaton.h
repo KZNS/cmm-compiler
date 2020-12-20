@@ -28,7 +28,7 @@ typedef std::pair<std::string, std::string> Word;
 class LexicalAutomaton
 {
 private:
-    std::ifstream fin;
+    std::istream *in_source_code;
     AutomatonNode *root;
     std::vector<AutomatonNode *> node_list;
     char last;
