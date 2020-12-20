@@ -69,7 +69,7 @@ private:
     int do_jnz(const std::string);
 public:
     PcodeInterpreter();
-    string interpret(const std::string &in_file_name);
+    std::string interpret(const std::string &in_file_name);
 };
 
 #include "interpreter.cpp"
