@@ -59,7 +59,7 @@ int main()
     
     trans.load_lexical(lang);
 
-    trans.translate_lexical(in_file_name, out_file_name);
+    trans.translate(in_file_name, out_file_name, "lexical");
 
     return 0;
 }

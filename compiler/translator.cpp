@@ -2198,22 +2198,6 @@ int GrammarTranslator::load_lexical(const std::string &file_name)
 
     return 0;
 }
-int GrammarTranslator::translate_lexical(const std::string &in_file_name, const std::string &out_file_name)
-{
-    words.open(in_file_name);
-    out = new std::ofstream(out_file_name);
-
-    get_word();
-    while (word.first != "")
-    {
-        *out << word.first << " " << word.second << std::endl;
-        get_word();
-    }
-    words.close();
-    delete out;
-    out = NULL;
-    return 0;
-}
 int GrammarTranslator::translate(const std::string &in_file_name,
                                  const std::string &out_file_name, const std::string &type)
 {
