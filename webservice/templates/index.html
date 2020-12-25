@@ -13,12 +13,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.59.0/lib/codemirror.min.css">
-    <link rel="stylesheet" href="coda.css">
+    <link rel="stylesheet" href="{{url_for('static',filename='coda.css')}}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/codemirror@5.59.0/lib/codemirror.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/codemirror@5.59.0/mode/clike/clike.js"></script>
+    <script>
+        let msgOK = (s) => {
+            Toastify({
+                text: s,
+                duration: 3000,
+                backgroundColor: "linear-gradient(to right, #197dc0, #197dc0)",
+            }).showToast();
+        }
+        let msgFail = (s) => {
+            Toastify({
+                text: s,
+                duration: 3000,
+                backgroundColor: "linear-gradient(to right, #EF100F, #EF100F)",
+            }).showToast();
+        }
+    </script>
     <style>
         .model {
             height: calc(100% - 112px);
@@ -61,7 +79,7 @@
         }
 
         .textout {
-            min-height: 400px;
+            height: 75%;
         }
     </style>
 </head>
@@ -88,11 +106,11 @@
                     <p id="outputContent">
 
                     </p>
+                    <img src="" alt="graph output" id="graph" style="display: none;height:200px">
                 </div>
                 <hr>
                 <div class="imgout">
                     graph out
-                    <img src="" alt="graph output" id="graph" style="display: none;height:200px">
                 </div>
             </div>
         </div>
@@ -132,7 +150,7 @@
             </ul>
             <ul class="navbar-nav" style="width:50%" id="slide">
                 <li class="nav-item" id="movethis">
-                    <img src="./trex.png" height="50px" width="auto" id="moveimg">
+                    <img src="{{url_for('static',filename='trex.png')}}" height="50px" width="auto" id="moveimg">
                     <!-- <span>
                         <button onclick="save()">保存</button>
                     </span> -->
@@ -144,7 +162,9 @@
         let $div = $("#movethis");
         let $img = $("#moveimg")
         let step = 7
+        let timeout = 20
         let moveRight = true
+        let keyQueue = new Array()
         var documentWidth = $(document).width() - $div.position().left - $img.width() - 5;//5是为防止浏览器出现滚动条
         console.log($div.position())
         console.log(parseInt($div.css('marginLeft')))
@@ -152,63 +172,52 @@
         var iw = $img.width()
         let marginl = slideWidth - iw
         console.log(slideWidth, iw)
-        function moveLeft() {
-            console.log("move left")
-            $div.stop();
-            $div.animate({
-                marginLeft: "0px"
-            }, 50);
-        }
-        function _moveRight() {
-            console.log("move right")
-            $div.stop();
-            $div.animate({
-                marginLeft: `25px`
-            }, 50);
-        }
-        let moveHandler = () =>{
+        let moveHandler = (keyCode) => {
             //一秒40
-            console.log("move handler")
             let slideWidth = $("#slide").width()
-            let slidePos = $("#slide").position()
-            let currentPos = $div.position()
             let ml = parseInt($div.css('marginLeft'))
-            let newMl = moveRight?(ml+step):(ml-step)
-            if(newMl>slideWidth){
+            let newMl = moveRight ? (ml + step) : (ml - step)
+            if (newMl > slideWidth - step * 4) {
                 moveRight = false
-                newMl = ml - step*2
-            } else if(newMl<0){
+                newMl = ml - step * 2
+            } else if (newMl < 0) {
                 moveRight = true
-                newMl = ml + step*2
+                newMl = ml + step * 2
             }
-            //$div.stop()
+            $div.stop()
             $div.animate({
-                marginLeft:`${newMl}`
-            },20)
-        }
-        function random(min, max) {
-            return Math.floor(Math.random() * (max - min)) + min;
+                marginLeft: keyCode !== 13 ? `${newMl}` : 0
+            }, timeout).promise().then(res => {
+                keyQueue.shift()
+            })
         }
         $(document).keydown(function (event) {
-            // if(random(0,2)===1){
-            //     moveRight()
-            // } else {
-            //     moveRight()
-            // }
-            moveHandler()
+            keyQueue.push(event.keyCode)
+            moveHandler(event.keyCode)
         })
-        var myCodeMirror = CodeMirror(document.getElementById("codeinput"), {
-            value: "void main()\n{\n    printf(\"Hello CMM!\");\n}",
+        let oldCode = localStorage.getItem("cmmcode")
+        if(oldCode){msgOK("恢复成功")}
+        let oldCodeText = oldCode ? oldCode : ""
+        let myCodeMirror = CodeMirror(document.getElementById("codeinput"), {
+            value: oldCodeText,
             lineNumbers: true,
             matchBrackets: true,
             mode: "text/x-c++src",
             theme: "coda",
         });
+        let save = () => {
+            try {
+                localStorage.setItem("cmmcode", myCodeMirror.getValue())
+                msgOK("保存成功")
+            } catch (error) {
+                msgFail("保存失败：" + error)
+            }
+        }
         let toggleLevel = () => {
             $("#loggingLevel").toggle()
         }
         let submit = () => {
-            let codeinput = $("#codeinput").text()
+            let codeinput = myCodeMirror.getValue()
             let logging = $('input[name="loggingToggle"]:checked').val();
             let loggingLevel = $("#loggingLevel").val()
             let result = {
@@ -216,22 +225,29 @@
                 logging: logging,
                 loggingLevel: loggingLevel
             }
-            console.log(result)
             fetch('/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(result)
-            }).then(res => res.json()).then(
+            }).then(
+                res => {
+                if(res.ok){
+                    return Promise.resolve(res.json())
+                } else {
+                    return Promise.reject("服务器错误")
+                }
+            }).then(
                 r => {
                     console.log(r)
                     $("#outputContent").text(r.data)
                     $("#graph").attr("src", r.img)
                     $("#graph").show()
                 }
-            ).catch(err => {
-                console.log(err)
+            ).catch(
+                err => {
+                msgFail(err)
             })
         }
         let handlekeydown = (e) => {
