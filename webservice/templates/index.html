@@ -81,17 +81,24 @@
         .textout {
             height: 75%;
         }
+        .rightborder {
+            border-right:1px solid #afb2b4;;
+        }
+        .row {
+            padding-bottom: 0%;
+            margin-bottom: 0%;
+        }
     </style>
 </head>
 
 <body>
-    <div style="height: 100%;">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light" style="">
+    <div style="height: 100%">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="/"><span style="color:#197dc0;font-weight: 500;">CMM</span>&nbsp;<span
                     style="color:#0099FF">COMPILER</span></a>
         </nav>
         <div class="model">
-            <div class="left" id="codeinput">
+            <div class="left rightborder" id="codeinput">
                 <!-- 左半边
                 <div contenteditable="plaintext-only" style="color:rgb(86,156,179)" onchange="handleChange()"
                     class="codeinput"  tabindex="-1" onkeydown="handlekeydown()">
@@ -100,18 +107,29 @@
             <div class="right">
                 <!--右半边-->
                 <div class="textout">
-                    <h2>
-                        输出
-                    </h2>
-                    <p id="outputContent">
-
-                    </p>
-                    <img src="" alt="graph output" id="graph" style="display: none;height:200px">
+                    <div class="row" style="height: 100%;">
+                        <div class="col-md-6 rightborder">
+                            <h5>
+                                中间代码(PCode)输出
+                            </h5>
+                            <p id="outputContent">
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>
+                                解释器输出
+                            </h5>
+                            <p id="stdoutput">
+                            </p>
+                        </div>
+                    </div>
+                    <!-- <hr> -->
                 </div>
                 <hr>
-                <div class="imgout">
+                <!-- <div class="imgout">
                     graph out
-                </div>
+                    <img src="" alt="graph output" id="graph" style="display: none;height:200px">
+                </div> -->
             </div>
         </div>
         <nav class="navbar navbar-expand-lg fixed-bottom navbar-light bg-light" style="height:56px;text-align:left">
@@ -196,7 +214,7 @@
             moveHandler(event.keyCode)
         })
         let oldCode = localStorage.getItem("cmmcode")
-        if(oldCode){msgOK("恢复成功")}
+        if (oldCode) { msgOK("恢复成功") }
         let oldCodeText = oldCode ? oldCode : ""
         let myCodeMirror = CodeMirror(document.getElementById("codeinput"), {
             value: oldCodeText,
@@ -233,22 +251,23 @@
                 body: JSON.stringify(result)
             }).then(
                 res => {
-                if(res.ok){
-                    return Promise.resolve(res.json())
-                } else {
-                    return Promise.reject("服务器错误")
-                }
-            }).then(
-                r => {
-                    console.log(r)
-                    $("#outputContent").text(r.data)
-                    $("#graph").attr("src", r.img)
-                    $("#graph").show()
-                }
-            ).catch(
-                err => {
-                msgFail(err)
-            })
+                    if (res.ok) {
+                        return Promise.resolve(res.json())
+                    } else {
+                        return Promise.reject("服务器错误")
+                    }
+                }).then(
+                    r => {
+                        console.log(r)
+                        $("#outputContent").html(r.pcode)
+                        $("#stdoutput").html(r.output)
+                        //$("#graph").attr("src", r.img)
+                        $("#graph").show()
+                    }
+                ).catch(
+                    err => {
+                        msgFail(err)
+                    })
         }
         let handlekeydown = (e) => {
             console.log(e)

@@ -585,7 +585,7 @@ int PcodeInterpreter::func_call(const string funcName)
     }
     return 0;
 }
-int PcodeInterpreter::interpret(const std::string &in_file_name)
+string PcodeInterpreter::interpret(const std::string &in_file_name)
 {
     ifstream myfile(in_file_name);
     string temp;

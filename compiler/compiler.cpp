@@ -23,6 +23,16 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+
+extern "C"{
+    int run(){
+    logger.set_level("fatal");
+    GrammarTranslator trans;
+    trans.load_lexical("language.txt");
+    trans.translate("testfile.txt", "out.txt");
+    return 0;
+}
+}
 int help()
 {
     cout << "usage: ./compiler.exe <input> [-l <level>] [-o <output>]" << endl;

@@ -52,14 +52,29 @@ def comp():
         if logging_level not in logging_levels:
             logging_level = 'info'
     content = r.get('codeinput')
-    cmd = r'compiler.exe'
+    with open('../compiler/testfile.txt','w') as f:
+        f.write(content)
+        f.close()
+    os.chdir('../compiler')
+    cmd = r'compiler.exe testfile.txt -o out.txt'
     rs = os.popen(cmd)
     res = rs.read()
+    pcode = ''
+    with open('../compiler/out.txt') as f:
+        for line in f.readlines():
+            pcode += str(line).replace('\t','&nbsp;&nbsp;&nbsp;&nbsp;').replace(' ','&nbsp;')+'</br>'
+    os.chdir('../compiler')
+    cmd2 = r'pcode_interpreter.exe'
+    rs = os.popen(cmd2)
+    pcodeout = ''
+    for line in rs.readlines():
+        pcodeout += str(line).replace('\t','&nbsp;&nbsp;&nbsp;&nbsp;')+'</br>'
+    print(pcodeout)
     # using placeholding image here for now
-    img = Image.open('./placeholder.png')
-    img = img.convert('RGB')
-    img_b64 = b"data:image/jpeg;base64,"+pil_base64(img)
-    return jsonify({'data': res, 'img': img_b64})
+    #img = Image.open('../webservice/placeholder.png')
+    #img = img.convert('RGB')
+    #img_b64 = b"data:image/jpeg;base64,"+pil_base64(img)
+    return jsonify({'pcode': pcode, 'output':pcodeout})
 
 
 if __name__ == "__main__":
