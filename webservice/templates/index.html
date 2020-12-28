@@ -13,7 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.59.0/lib/codemirror.min.css">
-    <link rel="stylesheet" href="{{url_for('static',filename='coda.css')}}">
+    <link rel="stylesheet" href="https://www.dutbit.com/cmm/coda.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
@@ -41,7 +41,18 @@
         .model {
             height: calc(100% - 112px);
         }
-
+        .subheading {
+            font-size: medium;
+            margin-left: 5px;
+            margin-top: 5px;
+            padding-bottom: 0%;
+            padding-top: 3px;
+        }
+        .subheadingdiv{
+            background-color:#f1f8ff;
+            padding-top: 0%;
+            margin-top: -5px;
+        }
         .left {
             width: 50%;
             height: 100%;
@@ -53,7 +64,8 @@
             width: 50%;
             height: 100%;
             float: right;
-            background-color: antiquewhite;
+            background-color: whitesmoke;
+            border-top:1px solid rgba(0,0,0,0.1);
         }
 
         .CodeMirror {
@@ -79,10 +91,21 @@
         }
 
         .textout {
-            height: 75%;
+            height: 85%;
         }
         .rightborder {
-            border-right:1px solid #afb2b4;;
+            border-right:1px solid rgba(0,0,0,0.1);
+        }
+        .allborder {
+            border:1px solid rgba(0,0,0,0.1);
+        }
+        .textareaborder {
+            margin-top: 0%;
+            border:0;
+            border-top:1px solid rgba(0,0,0,0.1);
+            width:100%;height:auto;background-color: transparent;
+            font-size: 15px;
+            line-height: 1.1;
         }
         .row {
             padding-bottom: 0%;
@@ -93,46 +116,62 @@
 
 <body>
     <div style="height: 100%">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light" style="">
             <a class="navbar-brand" href="/"><span style="color:#197dc0;font-weight: 500;">CMM</span>&nbsp;<span
                     style="color:#0099FF">COMPILER</span></a>
         </nav>
         <div class="model">
             <div class="left rightborder" id="codeinput">
-                <!-- 左半边
-                <div contenteditable="plaintext-only" style="color:rgb(86,156,179)" onchange="handleChange()"
-                    class="codeinput"  tabindex="-1" onkeydown="handlekeydown()">
-                </div> -->
+
             </div>
-            <div class="right">
-                <!--右半边-->
+            <div class="right"style="overflow-x:hidden;overflow-y: auto;">
                 <div class="textout">
                     <div class="row" style="height: 100%;">
-                        <div class="col-md-6 rightborder">
-                            <h5>
-                                中间代码(PCode)输出
-                            </h5>
-                            <p id="outputContent">
-                            </p>
+                        <div class="col-md-6 rightborder" style="padding-right:0%;padding-top: 0%;margin-top:0%;">
+                            <div class="subheadingdiv">
+                                <h5 class="subheading">
+                                    中间代码(PCode)输出
+                                </h5>
+                                <hr style="margin: 0%;">
+                            </div>
+                            <div style="overflow-x: hidden;overflow-y: hidden;">
+                                <p id="outputContent">
+                                </p>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <h5>
-                                解释器输出
-                            </h5>
-                            <p id="stdoutput">
-                            </p>
+                        <div class="col-md-6" style="padding: 0%;margin-top: 0%;">
+                            <div style="height:80%">
+                                <div class="subheadingdiv">
+                                    <h5 class="subheading">
+                                        解释器输出
+                                    </h5>
+                                    <hr style="margin: 0%;">
+                                </div>
+                                <p id="stdoutput">
+                                </p>
+                            </div>
+                            <hr style="margin: 0%;">
+                            <div style="height:20%;padding-left: 0%;">
+                                <div class="subheadingdiv">
+                                    <h5 class="subheading" style="margin-bottom: 0%;padding-bottom: 5px;">
+                                        标准输入
+                                    </h5>
+                                </div>
+                                <textarea class="textareaborder" placeholder=">" rows="5" id="stdin"></textarea>
+                            </div>
                         </div>
                     </div>
-                    <!-- <hr> -->
                 </div>
-                <hr>
-                <!-- <div class="imgout">
-                    graph out
-                    <img src="" alt="graph output" id="graph" style="display: none;height:200px">
-                </div> -->
+                <hr style="margin: 0%;">
+                <div class="subheadingdiv">
+                    <h5 class="subheading">日志输出</h5>
+                    <hr style="margin: 0%;">
+                </div>
+                <p id="log"></p>
             </div>
         </div>
-        <nav class="navbar navbar-expand-lg fixed-bottom navbar-light bg-light" style="height:56px;text-align:left">
+        <nav class="navbar navbar-expand-lg fixed-bottom navbar-light bg-light" style="height:56px;text-align:left;
+        border-top:1px solid 1px solid rgba(0,0,0,0.1);">
             <ul class="navbar-nav">
                 <li class="nav-item active">
                     <span style="float:left;">
@@ -146,8 +185,8 @@
                     <span style="float:right;margin-right:10px;">
                         <select id="loggingLevel" style="display:none">
                             <option value="debug">debug</option>
-                            <option value="info" selected="selected">info</option>
-                            <option value="warn">warn</option>
+                            <option value="info">info</option>
+                            <option value="warn" selected="selected">warn</option>
                             <option value="error">error</option>
                             <option value="fatal">fatal</option>
                         </select>
@@ -159,19 +198,16 @@
                 <li class="nav-item">
 
                     <span>
-                        <button onclick="save()" class="btn btn-outline-info">保存</button>
+                        <button onclick="save()" class="btn btn-outline-info" id="dosave" style="width:60px">保存</button>
                     </span>
                     <span>
-                        <button onclick="submit()" class="btn btn-outline-primary">编译并运行</button>
+                        <button onclick="submit()" class="btn btn-outline-primary" id="dosubmit">编译并运行</button>
                     </span>
                 </li>
             </ul>
             <ul class="navbar-nav" style="width:50%" id="slide">
                 <li class="nav-item" id="movethis">
-                    <img src="{{url_for('static',filename='trex.png')}}" height="50px" width="auto" id="moveimg">
-                    <!-- <span>
-                        <button onclick="save()">保存</button>
-                    </span> -->
+                    <img src="https://www.dutbit.com/cmm/trex.png" height="50px" width="auto" id="moveimg">
                 </li>
             </ul>
         </nav>
@@ -223,10 +259,18 @@
             mode: "text/x-c++src",
             theme: "coda",
         });
+        myCodeMirror.on("change",function(cm){
+            $("#dosave").removeClass("btn-outline-info")
+            $("#dosave").addClass("btn-info")
+        })
         let save = () => {
+            $("#dosave").html("&radic;")
+            setTimeout(()=>{$("#dosave").html("保存")},1000)
             try {
+                $("#dosave").removeClass("btn-info")
+                $("#dosave").addClass("btn-outline-info")
                 localStorage.setItem("cmmcode", myCodeMirror.getValue())
-                msgOK("保存成功")
+                //msgOK("保存成功")
             } catch (error) {
                 msgFail("保存失败：" + error)
             }
@@ -235,14 +279,26 @@
             $("#loggingLevel").toggle()
         }
         let submit = () => {
+            save()
             let codeinput = myCodeMirror.getValue()
             let logging = $('input[name="loggingToggle"]:checked').val();
             let loggingLevel = $("#loggingLevel").val()
+            let stdin = $("#stdin").val()
             let result = {
                 codeinput: codeinput,
                 logging: logging,
-                loggingLevel: loggingLevel
+                loggingLevel: loggingLevel,
+                stdin:stdin
             }
+            console.log(result)
+            if(codeinput.indexOf("scanf")!=-1 && stdin.length===0){
+                msgFail("调用了scanf，但未填写标准输入输出!")
+                return;
+            }
+            $("#outputContent").html('')
+            $("#stdoutput").html('')
+            $("#log").html('')
+            $("#dosubmit").attr("disabled",true);
             fetch('/', {
                 method: 'POST',
                 headers: {
@@ -251,18 +307,25 @@
                 body: JSON.stringify(result)
             }).then(
                 res => {
+                    $("#dosubmit").removeAttr("disabled");
                     if (res.ok) {
                         return Promise.resolve(res.json())
                     } else {
                         return Promise.reject("服务器错误")
                     }
+                }).then(res=>{
+                    $("#log").html(res.log)
+                    if(res.success){
+                        return Promise.resolve(res)
+                    } else {
+                        return Promise.reject(res.data)
+                    }
                 }).then(
                     r => {
+                        msgOK(r.data)
                         console.log(r)
                         $("#outputContent").html(r.pcode)
                         $("#stdoutput").html(r.output)
-                        //$("#graph").attr("src", r.img)
-                        $("#graph").show()
                     }
                 ).catch(
                     err => {

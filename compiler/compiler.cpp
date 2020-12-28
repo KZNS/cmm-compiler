@@ -8,8 +8,8 @@ std::string out_file_name("a.out");
 int load_option(int argc, char *argv[]);
 int main(int argc, char *argv[])
 {
-    logger.set_level("fatal");
-
+    logger.set_level("warn");
+    logger.open("log.txt");
     if (load_option(argc, argv))
     {
         return -1;
@@ -22,16 +22,6 @@ int main(int argc, char *argv[])
     trans.translate(in_file_name, out_file_name);
 
     return 0;
-}
-
-extern "C"{
-    int run(){
-    logger.set_level("fatal");
-    GrammarTranslator trans;
-    trans.load_lexical("language.txt");
-    trans.translate("testfile.txt", "out.txt");
-    return 0;
-}
 }
 int help()
 {

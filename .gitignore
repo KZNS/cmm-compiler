@@ -10,3 +10,10 @@ output.txt
 error.txt
 p*.txt
 *.so
+compiler/to
+compiler/out.txt
+compiler/ou2
+compiler/log.txt
+*.pyc
+*.spec
+*.toc
