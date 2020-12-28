@@ -1,0 +1,34 @@
+$main
+exit 0
+FUNC @fact:
+    arg n:INTTK
+    
+    If0:
+        push n
+        push 1
+        cmpeq
+    jz Else0
+        push 1
+        ret ~
+    jmp Endif0
+    Else0:
+        push n
+        push 1
+        sub
+        $fact
+        push n
+        mul
+        ret ~
+    Endif0:
+ENDFUNC
+FUNC @main:
+    arg
+    
+    var a:INTTK
+    push 5
+    $fact
+    pop a
+    push a
+    print "a="`~:INTTK
+    ret
+ENDFUNC

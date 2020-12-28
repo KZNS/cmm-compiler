@@ -138,7 +138,9 @@ int PcodeInterpreter::do_add(const string dummy)
 }
 int PcodeInterpreter::do_sub(const string dummy)
 { //op_1-op_2
-    int result = get_rtstack_var() - get_rtstack_var();
+    int op_1 = get_rtstack_var();
+    int op_2 = get_rtstack_var();
+    int result = op_2 - op_1;
     runtimeStack.push(result);
     logger.info("subtracted to %d", result);
     return 0;

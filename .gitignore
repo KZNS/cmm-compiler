@@ -17,3 +17,4 @@ compiler/log.txt
 *.pyc
 *.spec
 *.toc
+*.doc
