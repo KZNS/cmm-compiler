@@ -1929,7 +1929,7 @@ int GrammarTranslator::str_const(std::string &str)
 
 int GrammarTranslator::e_word()
 {
-    logger.error("e_word");
+    logger.error("%d: wrong word '%s'", line_number, word.second.c_str());
     print_error(line_number, "a");
     while (word.first == "")
     {
@@ -1939,85 +1939,85 @@ int GrammarTranslator::e_word()
 }
 int GrammarTranslator::e_redifine_identifier()
 {
-    logger.error("e_redifine_identifier");
+    logger.error("%d: redefinition of '%s'", line_number, word.second.c_str());
     print_error(line_number, "b");
     return 0;
 }
 int GrammarTranslator::e_undifine_identifier()
 {
-    logger.error("e_undifine_identifier");
+    logger.error("%d: use of undeclared identifier '%s'", line_number, word.second.c_str());
     print_error(line_number, "c");
     return 0;
 }
 int GrammarTranslator::e_func_param_n()
 {
-    logger.error("e_func_param_n");
+    logger.error("%d: no matching function for call to '%s'", line_number, word.second.c_str());
     print_error(line_number, "d");
     return 0;
 }
 int GrammarTranslator::e_func_param_type()
 {
-    logger.error("e_func_param_type");
+    logger.error("%d: no matching function for call to '%s'", line_number, word.second.c_str());
     print_error(line_number, "e");
     return 0;
 }
 int GrammarTranslator::e_condition_type()
 {
-    logger.error("e_condition_type");
+    logger.error("%d: wrong condition expression type", line_number);
     print_error(line_number, "f");
     return 0;
 }
 int GrammarTranslator::e_return_void()
 {
-    logger.error("e_return_void");
+    logger.error("%d: wrong or missing return void", line_number);
     print_error(line_number, "g");
     return 0;
 }
 int GrammarTranslator::e_return_val()
 {
-    logger.error("e_return_val");
+    logger.error("%d: wrong or missing return value", line_number);
     print_error(line_number, "h");
     return 0;
 }
 int GrammarTranslator::e_array_index()
 {
-    logger.error("e_array_index");
+    logger.error("%d: wrong array index type", line_number);
     print_error(line_number, "i");
     return 0;
 }
 int GrammarTranslator::e_change_const_value()
 {
-    logger.error("e_change_const_value");
+    logger.error("%d: change const value", line_number);
     print_error(line_number, "j");
     return 0;
 }
 int GrammarTranslator::e_semicolon()
 {
-    logger.error("e_semicolon");
+    logger.error("%d: expected ';' in this line", last_line_number);
     print_error(last_line_number, "k");
     return 0;
 }
 int GrammarTranslator::e_right_parenthesis()
 {
-    logger.error("e_right_parenthesis");
+    logger.error("%d: expected ')' in this line", last_line_number);
     print_error(last_line_number, "l");
     return 0;
 }
 int GrammarTranslator::e_right_bracket()
 {
-    logger.error("e_right_bracket");
+    logger.error("%d: expected ']' in this line", last_line_number);
     print_error(last_line_number, "m");
     return 0;
 }
 int GrammarTranslator::e_do_while()
 {
-    logger.error("e_do_while");
+    logger.error("%d: expected 'while' in do/while loop", line_number);
     print_error(line_number, "n");
     return 0;
 }
 int GrammarTranslator::e_const_define_type()
 {
-    logger.error("e_const_define_type");
+    logger.error("%d: wrong initial value type", line_number);
     print_error(line_number, "o");
     return 0;
 }
@@ -2110,12 +2110,12 @@ int GrammarTranslator::roll_back(int step)
 {
     if (step < 0)
     {
-        logger.error("wrong roll back step %d", step);
+        logger.error("wrong roll back step %d while processing line %d", step, line_number);
         return -1;
     }
     if (now_word_id - step < bottom_word_id)
     {
-        logger.error("roll back too much");
+        logger.error("roll back %d staps is too much while rocessing line %d", step, line_number);
         return -1;
     }
     now_word_id -= step;
