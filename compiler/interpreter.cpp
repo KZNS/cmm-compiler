@@ -190,28 +190,40 @@ int PcodeInterpreter::do_cmpne(const string cmd)
 }
 int PcodeInterpreter::do_cmpgt(const string cmd)
 {
-    int result = get_rtstack_var() < get_rtstack_var();
+    int a, b;
+    b = get_rtstack_var();
+    a = get_rtstack_var();
+    int result = a > b;
     runtimeStack.push(result);
     logger.info("cmp gt to %d", result);
     return 0;
 }
 int PcodeInterpreter::do_cmplt(const string cmd)
 {
-    int result = get_rtstack_var() > get_rtstack_var();
+    int a, b;
+    b = get_rtstack_var();
+    a = get_rtstack_var();
+    int result = a < b;
     runtimeStack.push(result);
     logger.info("cmp lt to %d", result);
     return 0;
 }
 int PcodeInterpreter::do_cmpge(const string cmd)
 {
-    int result = get_rtstack_var() >= get_rtstack_var();
+    int a, b;
+    b = get_rtstack_var();
+    a = get_rtstack_var();
+    int result = a >= b;
     runtimeStack.push(result);
     logger.info("cmp >= to %d", result);
     return 0;
 }
 int PcodeInterpreter::do_cmple(const string cmd)
 {
-    int result = get_rtstack_var() <= get_rtstack_var();
+    int a, b;
+    b = get_rtstack_var();
+    a = get_rtstack_var();
+    int result = (a <= b);
     runtimeStack.push(result);
     logger.info("cmp <= to %d", result);
     return 0;
