@@ -999,7 +999,7 @@ int GrammarTranslator::cond_stmt(std::string ret_type, bool &returned)
     stmt(ret_type, return_a);
     change_pcode_indent_deep(-1);
 
-    print_pcode("jmp Endif%s", unique_label.c_str());
+    print_pcode("jmp EndIf%s", unique_label.c_str());
 
     print_pcode("Else%s:", unique_label.c_str());
     change_pcode_indent_deep(1);
@@ -1010,7 +1010,7 @@ int GrammarTranslator::cond_stmt(std::string ret_type, bool &returned)
         stmt(ret_type, return_b);
     }
     change_pcode_indent_deep(-1);
-    print_pcode("Endif%s:", unique_label.c_str());
+    print_pcode("EndIf%s:", unique_label.c_str());
 
     if (return_a && return_b)
     {
@@ -1125,8 +1125,8 @@ int GrammarTranslator::loop_stmt(std::string ret_type, bool &returned)
         print_pcode("jz EndWhile%s", unique_label.c_str());
         change_pcode_indent_deep(1);
         stmt(ret_type, return_a); // returned in while not count
-        print_pcode("jmp While%s", unique_label.c_str());
         change_pcode_indent_deep(-1);
+        print_pcode("jmp While%s", unique_label.c_str());
         print_pcode("EndWhile%s:", unique_label.c_str());
     }
     else if (word.first == "DOTK") // do<stmt>while'('<cond>')'
@@ -1164,8 +1164,8 @@ int GrammarTranslator::loop_stmt(std::string ret_type, bool &returned)
         {
             e_right_parenthesis();
         }
-        print_pcode("jnz Do%s", unique_label.c_str());
         change_pcode_indent_deep(-1);
+        print_pcode("jnz Do%s", unique_label.c_str());
         print_pcode("EndDoWhile%s:", unique_label.c_str());
     }
     else if (word.first == "FORTK") // for'('<ident>=<exp>;<cond>;<ident>=<ident>(+|-)<step>')'<stmt>
@@ -1226,7 +1226,7 @@ int GrammarTranslator::loop_stmt(std::string ret_type, bool &returned)
         }
         // <cond>;
         change_pcode_indent_deep(-1);
-        print_pcode("Forcond%s:", unique_label.c_str());
+        print_pcode("ForCond%s:", unique_label.c_str());
         change_pcode_indent_deep(1);
         cond();
         if (word.first == "SEMICN")
@@ -1238,7 +1238,7 @@ int GrammarTranslator::loop_stmt(std::string ret_type, bool &returned)
             e_semicolon();
         }
         change_pcode_indent_deep(-1);
-        print_pcode("jz Endfor%s", unique_label.c_str());
+        print_pcode("jz EndFor%s", unique_label.c_str());
         change_pcode_indent_deep(1);
 
         //<ident>=<ident>(+|-)<step>
@@ -1318,15 +1318,15 @@ int GrammarTranslator::loop_stmt(std::string ret_type, bool &returned)
         }
         stmt(ret_type, return_a); // returned in for not count
         change_pcode_indent_deep(-1);
-        print_pcode("Forupdate%s:", unique_label.c_str());
+        print_pcode("ForUpdate%s:", unique_label.c_str());
         change_pcode_indent_deep(1);
         print_pcode("push %s", name_b.c_str());
         print_pcode("push %d", x);
         print_pcode("add");
         print_pcode("pop %s", name.c_str());
         change_pcode_indent_deep(-1);
-        print_pcode("jmp Forcond%s", unique_label.c_str());
-        print_pcode("Endfor%s:", unique_label.c_str());
+        print_pcode("jmp ForCond%s", unique_label.c_str());
+        print_pcode("EndFor%s:", unique_label.c_str());
     }
     else
     {
