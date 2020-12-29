@@ -1,0 +1,20 @@
+digraph trie_tree {
+    rankdir = LR
+    node [shape=record]
+
+    1 -> 2 [label="c"]
+    2 -> 3 [label="o"]
+    3 -> 4 [label="n"]
+    4 -> 5 [label="s"]
+    5 -> 6 [label="t"]
+
+    2 -> 7 [label="h"]
+    7 -> 8 [label="a"]
+    8 -> 9 [label="r"]
+
+    1 -> 10 [label="\{"]
+
+    6 [label="6|CONSTTK"]
+    9 [label="9|CHARTK"]
+    10 [label="10|LBRACE"]
+}

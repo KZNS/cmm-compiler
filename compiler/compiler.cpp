@@ -8,8 +8,8 @@ std::string out_file_name("a.out");
 int load_option(int argc, char *argv[]);
 int main(int argc, char *argv[])
 {
-    logger.set_level("fatal");
-
+    logger.set_level("warn");
+    logger.open("log.txt");
     if (load_option(argc, argv))
     {
         return -1;
@@ -32,7 +32,7 @@ int option(int argc, char *argv[], int &x)
 {
     if (strlen(argv[x]) > 2)
     {
-        logger.log("fatal", "unknow option \"%s\"", argv[x]);
+        logger.log("fatal", "unknown option \"%s\"", argv[x]);
         return -1;
     }
     switch (argv[x][1])

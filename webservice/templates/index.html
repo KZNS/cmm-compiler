@@ -8,34 +8,69 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>test</title>
+    <title>CMM</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.59.0/lib/codemirror.min.css">
+    <link rel="stylesheet" href="https://www.dutbit.com/cmm/coda.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.59.0/lib/codemirror.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.59.0/mode/clike/clike.js"></script>
+    <script>
+        let msgOK = (s) => {
+            Toastify({
+                text: s,
+                duration: 3000,
+                backgroundColor: "linear-gradient(to right, #197dc0, #197dc0)",
+            }).showToast();
+        }
+        let msgFail = (s) => {
+            Toastify({
+                text: s,
+                duration: 3000,
+                backgroundColor: "linear-gradient(to right, #EF100F, #EF100F)",
+            }).showToast();
+        }
+    </script>
     <style>
         .model {
             height: calc(100% - 112px);
         }
-
+        .subheading {
+            font-size: medium;
+            margin-left: 5px;
+            margin-top: 5px;
+            padding-bottom: 0%;
+            padding-top: 3px;
+        }
+        .subheadingdiv{
+            background-color:#f1f8ff;
+            padding-top: 0%;
+            margin-top: -5px;
+        }
         .left {
             width: 50%;
             height: 100%;
             float: left;
-            background-color: black;
+            background-color: white;
         }
 
         .right {
             width: 50%;
             height: 100%;
             float: right;
-            background-color: antiquewhite;
+            background-color: whitesmoke;
+            border-top:1px solid rgba(0,0,0,0.1);
         }
 
-        .codeinput {
-            width: 90%;
-            margin-left: 15px;
-            margin-right: 10px;
-            height: 100%;
+        .CodeMirror {
+            border: 1px solid #eee;
+            height: auto;
         }
 
         html,
@@ -56,41 +91,92 @@
         }
 
         .textout {
-            min-height: 400px;
+            height: 85%;
+        }
+        .rightborder {
+            border-right:1px solid rgba(0,0,0,0.1);
+        }
+        .allborder {
+            border:1px solid rgba(0,0,0,0.1);
+        }
+        .textareaborder {
+            margin-top: 0%;
+            border:0;
+            border-top:1px solid rgba(0,0,0,0.1);
+            width:100%;height:auto;background-color: transparent;
+            font-size: 15px;
+            line-height: 1.1;
+        }
+        .row {
+            padding-bottom: 0%;
+            margin-bottom: 0%;
+        }
+        p {
+            word-break:break-all;
         }
     </style>
 </head>
 
 <body>
-    <div style="height: 100%;">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="">
-            <a class="navbar-brand" href="/">CMM COMPILER</a>
+    <div style="height: 100%">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light" style="">
+            <a class="navbar-brand" href="/"><span style="color:#197dc0;font-weight: 500;">CMM</span>&nbsp;<span
+                    style="color:#0099FF">COMPILER</span></a>
         </nav>
         <div class="model">
-            <div class="left">
-                <!--左半边-->
-                <div contenteditable="plaintext-only" style="color:rgb(86,156,179)" onchange="handleChange()"
-                    class="codeinput" id="codeinput" aria-placeholder="hello" tabindex="-1" onkeydown="handlekeydown()">
-                </div>
-            </div>
-            <div class="right">
-                <!--右半边-->
-                <div class="textout">
-                    <h2>
-                        输出
-                    </h2>
-                    <p id="outputContent">
+            <div class="left rightborder" id="codeinput">
 
-                    </p>
-                </div>
-                <hr>
-                <div class="imgout">
-                    graph out
-                    <img src="" alt="graph output" id="graph" style="display: none;height:200px">
+            </div>
+            <div class="right"style="overflow-x:hidden;overflow-y: auto;">
+                <div class="row" style="height: 100%;">
+                    <div class="col-md-6 rightborder"style="height:100%;padding-right:0%">
+                        <div>
+                            <div class="subheadingdiv">
+                                <h5 class="subheading">
+                                    中间代码(PCode)输出
+                                </h5>
+                                <hr style="margin: 0%;">
+                            </div>
+                            <div>
+                                <p id="outputContent">
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" style="height:100%;padding-left:0%">
+                        <div style="height: auto;">
+                            <div class="subheadingdiv">
+                                <h5 class="subheading" style="margin-bottom: 1%;padding-bottom: 5px;">
+                                    标准输入
+                                </h5>
+                            </div>
+                            <textarea class="textareaborder" placeholder=">" rows="5" id="stdin"></textarea>
+                        </div> 
+                        <div style="height:auto">
+                            <hr style="margin: 0%;">
+                            <div class="subheadingdiv">
+                                <h5 class="subheading">
+                                    解释器输出
+                                </h5>
+                                <hr style="margin: 0%;">
+                            </div>
+                            <p id="stdoutput">
+                            </p>
+                        </div>
+                        <div style="height:auto">
+                            <hr style="margin: 0%;">
+                            <div class="subheadingdiv">
+                                <h5 class="subheading">日志输出</h5>
+                                <hr style="margin: 0%;">
+                            </div>
+                            <p id="log"></p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <nav class="navbar navbar-expand-lg fixed-bottom navbar-light bg-light" style="height:56px;text-align:left">
+        <nav class="navbar navbar-expand-lg fixed-bottom navbar-light bg-light" style="height:56px;text-align:left;
+        border-top:1px solid 1px solid rgba(0,0,0,0.1);">
             <ul class="navbar-nav">
                 <li class="nav-item active">
                     <span style="float:left;">
@@ -104,8 +190,8 @@
                     <span style="float:right;margin-right:10px;">
                         <select id="loggingLevel" style="display:none">
                             <option value="debug">debug</option>
-                            <option value="info" selected="selected">info</option>
-                            <option value="warn">warn</option>
+                            <option value="info">info</option>
+                            <option value="warn" selected="selected">warn</option>
                             <option value="error">error</option>
                             <option value="fatal">fatal</option>
                         </select>
@@ -113,56 +199,145 @@
                 </li>
 
             </ul>
-            <ul class="navbar-nav  ml-auto" style="margin-right:51%;">
+            <ul class="navbar-nav  ml-auto" style="margin-right:1%;">
                 <li class="nav-item">
 
                     <span>
-                        <button onclick="save()">保存</button>
+                        <button onclick="save()" class="btn btn-outline-info" id="dosave" style="width:60px">保存</button>
                     </span>
                     <span>
-                        <button onclick="submit()">提交</button>
+                        <button onclick="submit()" class="btn btn-outline-primary" id="dosubmit">编译并运行</button>
                     </span>
                 </li>
             </ul>
-
+            <ul class="navbar-nav" style="width:50%" id="slide">
+                <li class="nav-item" id="movethis">
+                    <img src="https://www.dutbit.com/cmm/trex.png" height="50px" width="auto" id="moveimg">
+                </li>
+            </ul>
         </nav>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
-    <script src="{{url_for('static',filename='comp.js')}}"></script>
     <script>
-        toggleLevel = () => {
+        let $div = $("#movethis");
+        let $img = $("#moveimg")
+        let step = 7
+        let timeout = 20
+        let moveRight = true
+        let keyQueue = new Array()
+        var documentWidth = $(document).width() - $div.position().left - $img.width() - 5;//5是为防止浏览器出现滚动条
+        console.log($div.position())
+        console.log(parseInt($div.css('marginLeft')))
+        var slideWidth = $("#slide").width()
+        var iw = $img.width()
+        let marginl = slideWidth - iw
+        console.log(slideWidth, iw)
+        let moveHandler = (keyCode) => {
+            //一秒40
+            let slideWidth = $("#slide").width()
+            let ml = parseInt($div.css('marginLeft'))
+            let newMl = moveRight ? (ml + step) : (ml - step)
+            if (newMl > slideWidth - step * 4) {
+                moveRight = false
+                newMl = ml - step * 2
+            } else if (newMl < 0) {
+                moveRight = true
+                newMl = ml + step * 2
+            }
+            $div.stop()
+            $div.animate({
+                marginLeft: keyCode !== 13 ? `${newMl}` : 0
+            }, timeout).promise().then(res => {
+                keyQueue.shift()
+            })
+        }
+        $(document).keydown(function (event) {
+            keyQueue.push(event.keyCode)
+            moveHandler(event.keyCode)
+        })
+        let oldCode = localStorage.getItem("cmmcode")
+        if (oldCode) { msgOK("恢复成功") }
+        let oldCodeText = oldCode ? oldCode : ""
+        let myCodeMirror = CodeMirror(document.getElementById("codeinput"), {
+            value: oldCodeText,
+            lineNumbers: true,
+            matchBrackets: true,
+            mode: "text/x-c++src",
+            theme: "coda",
+        });
+        myCodeMirror.on("change",function(cm){
+            $("#dosave").removeClass("btn-outline-info")
+            $("#dosave").addClass("btn-info")
+        })
+        let save = () => {
+            $("#dosave").html("&radic;")
+            setTimeout(()=>{$("#dosave").html("保存")},1000)
+            try {
+                $("#dosave").removeClass("btn-info")
+                $("#dosave").addClass("btn-outline-info")
+                localStorage.setItem("cmmcode", myCodeMirror.getValue())
+                //msgOK("保存成功")
+            } catch (error) {
+                msgFail("保存失败：" + error)
+            }
+        }
+        let toggleLevel = () => {
             $("#loggingLevel").toggle()
         }
-        submit = () => {
-            let codeinput = $("#codeinput").text()
+        let submit = () => {
+            save()
+            let codeinput = myCodeMirror.getValue()
             let logging = $('input[name="loggingToggle"]:checked').val();
             let loggingLevel = $("#loggingLevel").val()
+            let stdin = $("#stdin").val()
             let result = {
                 codeinput: codeinput,
                 logging: logging,
-                loggingLevel: loggingLevel
+                loggingLevel: loggingLevel,
+                stdin:stdin
             }
             console.log(result)
+            if(codeinput.indexOf("scanf")!=-1 && stdin.length===0){
+                msgFail("调用了scanf，但未填写标准输入输出!")
+                return;
+            }
+            $("#outputContent").html('')
+            $("#stdoutput").html('')
+            $("#log").html('')
+            $("#dosubmit").attr("disabled",true);
             fetch('/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(result)
-            }).then(res => res.json()).then(
-                r => {
-                    console.log(r)
-                    $("#outputContent").text(r.data)
-                    $("#graph").attr("src", r.img)
-                    $("#graph").show()
-                }
-            ).catch(err => {
-                console.log(err)
-            })
+            }).then(
+                res => {
+                    $("#dosubmit").removeAttr("disabled");
+                    if (res.ok) {
+                        return Promise.resolve(res.json())
+                    } else {
+                        return Promise.reject("服务器错误")
+                    }
+                }).then(res=>{
+                    $("#log").html(res.log)
+                    if(res.success){
+                        return Promise.resolve(res)
+                    } else {
+                        return Promise.reject(res.data)
+                    }
+                }).then(
+                    r => {
+                        msgOK(r.data)
+                        console.log(r)
+                        $("#outputContent").html(r.pcode)
+                        $("#stdoutput").html(r.output)
+                    }
+                ).catch(
+                    err => {
+                        msgFail(err)
+                    })
         }
-        handlekeydown = (e) => {
+        let handlekeydown = (e) => {
             console.log(e)
         }
     </script>

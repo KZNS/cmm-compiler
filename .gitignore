@@ -9,3 +9,15 @@ testfile.txt
 output.txt
 error.txt
 p*.txt
+*.so
+compiler/to
+compiler/out.txt
+compiler/ou2
+compiler/log.txt
+*.pyc
+*.spec
+*.toc
+*.doc
+compiler/stdin.txt
+compiler/fact
+compiler/stdin.txt

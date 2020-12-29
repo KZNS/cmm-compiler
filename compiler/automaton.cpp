@@ -230,28 +230,42 @@ LexicalAutomaton::LexicalAutomaton()
     node_list.push_back(root);
     last = ' ' - 1;
     inited = false;
+    in_source_code = NULL;
 }
 LexicalAutomaton::~LexicalAutomaton()
 {
-    if (fin.is_open())
-        fin.close();
+    close();
     for (int i = 0; i < (int)node_list.size(); i++)
     {
         delete node_list[i];
     }
 }
+int LexicalAutomaton::open(std::istream &in_stream)
+{
+    close();
+    in_source_code = &in_stream;
+    using_new_stream = false;
+    line_number = 1;
+    return 0;
+}
 int LexicalAutomaton::open(const std::string &file_name)
 {
-    if (fin.is_open())
-        fin.close();
-    fin.open(file_name);
+    close();
+    in_source_code = new std::ifstream(file_name);
+    using_new_stream = true;
     line_number = 1;
     return 0;
 }
 int LexicalAutomaton::close()
 {
-    if (fin.is_open())
-        fin.close();
+    if (in_source_code)
+    {
+        if (using_new_stream)
+        {
+            delete in_source_code;
+        }
+        in_source_code = NULL;
+    }
     return 0;
 }
 int LexicalAutomaton::append_keyword(const std::string &word, const std::string &type)
@@ -313,7 +327,7 @@ Word LexicalAutomaton::get_word(int &new_line_number)
         {
             line_number++;
         }
-        if (!fin.get(c))
+        if (!in_source_code->get(c))
         {
             c = -1;
             break;
@@ -323,7 +337,7 @@ Word LexicalAutomaton::get_word(int &new_line_number)
     {
         t = t->next[c - ' '];
         s += c;
-        if (!fin.get(c))
+        if (!in_source_code->get(c))
         {
             c = -1;
             break;
