@@ -53,42 +53,42 @@
 
 ```text
 .
-├── run.sh       启动脚本
+├── run          启动脚本
 ├── compiler     编译器/解释器部分
 └── webservice   前端UI部分
 ```
 
-编译器部分：
+编译器/解释器部分：
 
 ```text
 .
-├── compiler.exe      编译器可执行文件
-├── language.txt      词法规则
-├── compiler.cpp      编译器入口
-├── automaton.h       词法分析部分
+├── compiler.exe            编译器可执行文件
+├── language.txt            词法规则
+├── compiler.cpp            编译器入口
+├── automaton.h             词法分析部分
 ├── automaton.cpp
-├── translator.h      语法、语义部分
+├── translator.h            语法、语义部分
 ├── translator.cpp
-├── symbol_table.h    符号表部分
+├── symbol_table.h          符号表部分
 ├── symbol_table.cpp
-└── cLogger           log模块
+├── pcode_interpreter.exe   pcode解释器可执行文件
+├── pcode_interpreter.cpp   pcode解释器入口
+├── interpreter.h           解释器部分
+├── interpreter.cpp
+└── cLogger                 log模块
     ├── clogger.cpp
     └── clogger.h
-
 ```
 
 UI部分：
 
 ```text
 .
-├── 1.cpp
-├── app.py
-├── notes.md
-├── placeholder.png
+├── cmm.go              服务器后端
+├── go.mod
+├── go.sum
 ├── requirements.txt
-├── static
-│   └── comp.js
-└── templates
+└── templates           网页模板
     └── index.html
 ```
 
