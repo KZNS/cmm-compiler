@@ -1289,7 +1289,6 @@ int GrammarTranslator::loop_stmt(std::string ret_type, bool &returned)
                     logger.error("%d: %s is an array", line_number, name_b.c_str());
                 }
             }
-            print_pcode("push %s", name_b.c_str());
         }
         else
         {
@@ -1321,6 +1320,7 @@ int GrammarTranslator::loop_stmt(std::string ret_type, bool &returned)
         change_pcode_indent_deep(-1);
         print_pcode("Forupdate%s:", unique_label.c_str());
         change_pcode_indent_deep(1);
+        print_pcode("push %s", name_b.c_str());
         print_pcode("push %d", x);
         print_pcode("add");
         print_pcode("pop %s", name.c_str());
