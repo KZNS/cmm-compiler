@@ -88,6 +88,7 @@ string &trim(string &s)
 PcodeInterpreter::PcodeInterpreter()
 {
     unordered_map<string, int> m;
+    this->out = &cout;
     this->eip.push(0);
     this->old_sp.push(0);
     this->runtimeVarLookup.push(m);
@@ -443,6 +444,8 @@ int PcodeInterpreter::do_jnz(const string cmd)
 int PcodeInterpreter::do_print(const string cmd)
 {
     vector<string> info;
+    string output;
+    stringstream sstream;
     SplitString(cmd, info, "`");
     if (cmd == "a")
     {
@@ -451,29 +454,37 @@ int PcodeInterpreter::do_print(const string cmd)
     {
         if (i.front() == '\"' && i.back() == '\"')
         {
-            cout << i.substr(1, i.length() - 2);
+            sstream << i.substr(1, i.length() - 2);
         }
         else if (i.find('~') != i.npos)
         { //输出栈顶元素并pop
             check_rtstack_size(1);
-            cout << runtimeStack.top();
-            pymodule_output += to_string(runtimeStack.top());
+            sstream << runtimeStack.top();
             runtimeStack.pop();
             //这里后续判断类型
         }
         else
         {
-            cout << runtimeVar[get_var(i)].val;
-            pymodule_output += to_string(runtimeVar[get_var(i)].val);
+            sstream << runtimeVar[get_var(i)].val;
         }
     }
-    cout << endl;
-    pymodule_output += to_string('\n');
+    sstream << endl;
+    // if(this->toFile){
+    //     fout << sstream.rdbuf();
+    //     cout << "used print"<<endl;
+    // } else {
+    //     cout << sstream.rdbuf();
+    // }
+    *(this->out) << sstream.rdbuf();
     return 0;
 }
 int PcodeInterpreter::do_exit(const string cmd)
 {
     logger.info("---bye---");
+    if(this->out!=&cout){
+        delete this->out;
+        this->out = &cout;
+    }
     exit(0);
 }
 int PcodeInterpreter::do_input(const string cmd)
@@ -587,14 +598,26 @@ int PcodeInterpreter::func_call(const string funcName)
     }
     return 0;
 }
-string PcodeInterpreter::interpret(const std::string &in_file_name)
+string PcodeInterpreter::interpret(const std::string &in_file_name, const std::string &out_file_name)
 {
     ifstream myfile(in_file_name);
     string temp;
     if (!myfile.is_open())
     {
-        cout << "failed to open file" << endl;
+        logger.fatal("failed to open file %s",in_file_name.c_str());
         return "";
+    }
+    if(out_file_name!=""){//使用cout
+        //this->toFile = false;
+        this->out = new ofstream(out_file_name);
+    } else {
+        // this->toFile = true;
+        // this->fout.open(out_file_name);
+        // if(fout.fail()){
+        //     logger.fatal("failed to open output file %s",out_file_name.c_str());
+        //     return "";
+        // }
+        // this->fout << "helo";
     }
     while (getline(myfile, temp))
     {
@@ -604,7 +627,6 @@ string PcodeInterpreter::interpret(const std::string &in_file_name)
             continue;
         if (temp.empty())
             continue;
-        //cout << temp << endl;
         vector<string> v;
         SplitString(temp, v, " ");
         this->code.push_back(v);
@@ -613,7 +635,6 @@ string PcodeInterpreter::interpret(const std::string &in_file_name)
             string labelName = v[0].substr(0, v[0].size() - 1);
             if (labelMap.find(labelName) != labelMap.end())
             {
-                printf("duplicate labels error.");
                 logger.error("[%d] Runtime error: duplicate labels error.", eip.top());
                 exit(-7);
             }
@@ -659,12 +680,12 @@ string PcodeInterpreter::interpret(const std::string &in_file_name)
         }
         else
         {
-            logger.warn("[!]second command argument is empty!");
+            logger.info("[!]second command argument is empty!");
             (this->*cmdHandler[cmd[0]])("");
         }
         i++;
         eip.top()++;
     }
-    return pymodule_output;
+    return "";
 }
 #endif

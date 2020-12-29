@@ -32,7 +32,7 @@ int option(int argc, char *argv[], int &x)
 {
     if (strlen(argv[x]) > 2)
     {
-        logger.log("fatal", "unknow option \"%s\"", argv[x]);
+        logger.log("fatal", "unknown option \"%s\"", argv[x]);
         return -1;
     }
     switch (argv[x][1])

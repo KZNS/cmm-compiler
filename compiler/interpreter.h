@@ -2,6 +2,8 @@
 #define INTERPRETER_H
 
 #include "cLogger/clogger.h"
+#include <iostream>
+#include <fstream>
 #include <cstdarg>
 #include <utility>
 #include <vector>
@@ -32,7 +34,8 @@ private:
     //int eip;//eip指针：int
     std::stack<int> eip;
     std::stack<int> old_sp;
-    std::string pymodule_output;
+    bool toFile;
+    std::ostream *out;
     int do_var(const std::string);
     int do_push(const std::string);
     int do_pop(const std::string);
@@ -66,7 +69,7 @@ private:
     int do_jnz(const std::string);
 public:
     PcodeInterpreter();
-    std::string interpret(const std::string &in_file_name);
+    std::string interpret(const std::string &in_file_name,const std::string &out_file_name);
 };
 
 #include "interpreter.cpp"
