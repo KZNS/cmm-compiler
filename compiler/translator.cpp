@@ -619,12 +619,10 @@ int GrammarTranslator::param_table(std::vector<VarProperty> &arg_list)
             tmp << "," << arg_list[i].name << ":" << arg_list[i].type;
         }
         print_pcode(tmp.str().c_str());
-        print_pcode("");
     }
     else
     {
         print_pcode("arg");
-        print_pcode("");
     }
 
     print_grammar("<参数表>");
