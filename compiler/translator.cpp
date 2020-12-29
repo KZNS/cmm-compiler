@@ -675,7 +675,6 @@ int GrammarTranslator::main_f()
         return -1;
     }
     print_pcode("arg");
-    print_pcode("");
     if (word.first == "RPARENT")
     {
         get_word();
