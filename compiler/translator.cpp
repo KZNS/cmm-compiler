@@ -50,7 +50,7 @@ int GrammarTranslator::prog()
         }
         else
         {
-            logger.error("unknown \"%s\"", word.second.c_str());
+            logger.error("%d: unknown \"%s\"", line_number, word.second.c_str());
             return -1;
         }
     }
@@ -1460,7 +1460,6 @@ int GrammarTranslator::factor(std::string &type)
     else if (word.first == "IDENFR") // <ident> | <ident>'['<exp>']'
     {
         name = word.second;
-        get_word();
         vp = table.find_var(name);
         if (vp == NULL)
         {
@@ -1470,6 +1469,7 @@ int GrammarTranslator::factor(std::string &type)
         {
             type = vp->type;
         }
+        get_word();
         if (word.first == "LBRACK")
         {
             get_word();
@@ -2209,7 +2209,7 @@ int GrammarTranslator::translate(std::istream &in_stream, std::ostream &out_stre
     e = prog();
     if (e == -1)
     {
-        logger.error("unknown \"%s\"", word.second.c_str());
+        logger.error("%d: unknown \"%s\"", line_number, word.second.c_str());
         return -1;
     }
 
@@ -2231,7 +2231,7 @@ int GrammarTranslator::translate(const std::string &in_file_name,
     e = prog();
     if (e == -1)
     {
-        logger.error("unknown \"%s\"", word.second.c_str());
+        logger.error("%d: unknown \"%s\"", line_number, word.second.c_str());
         return -1;
     }
 

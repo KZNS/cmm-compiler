@@ -65,7 +65,7 @@ func RunCodeHandler(c *gin.Context) {
 	err2 := res.Run()
 	if err2 != nil {
 		fmt.Println("err:", fmt.Sprint(err2))
-		panic(err2)
+		//panic(err2)
 	}
 	// fmt.Println("result:" + out.String())
 	// return
@@ -75,7 +75,7 @@ func RunCodeHandler(c *gin.Context) {
 	// }
 
 	//检查log是否有error，如果有error则不执行
-	fd, _ = os.Open("compiler/log.txt")
+	fd, _ = os.Open("log.txt")
 	defer fd.Close()
 	log_bytes, _ := ioutil.ReadAll(fd)
 	log := splitstring(string(log_bytes))
@@ -102,7 +102,17 @@ func RunCodeHandler(c *gin.Context) {
 	}
 	_, err := res.CombinedOutput()
 	if err != nil {
-		panic(err)
+		//解释器挂了
+		fd, _ = os.Open("log.txt")
+		defer fd.Close()
+		log_bytes, _ = ioutil.ReadAll(fd)
+		log = splitstring(string(log_bytes))
+		c.JSON(http.StatusOK, gin.H{
+			"success": false,
+			"data":    "解释器错误",
+			"log":     log,
+		})
+		return
 	}
 
 	//读取pcode输出

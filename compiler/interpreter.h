@@ -36,6 +36,7 @@ private:
     std::stack<int> old_sp;
     bool toFile;
     std::ostream *out;
+    std::istream *in;
     int do_var(const std::string);
     int do_push(const std::string);
     int do_pop(const std::string);
@@ -51,6 +52,7 @@ private:
     int func_call(const std::string);
     int get_var(const std::string);
     bool var_exists(const std::string);
+    bool var_exists_new(const std::string);
     void check_rtstack_size(const int);
     int get_rtstack_var();
     int do_sub(const std::string);

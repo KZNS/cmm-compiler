@@ -89,6 +89,7 @@ PcodeInterpreter::PcodeInterpreter()
 {
     unordered_map<string, int> m;
     this->out = &cout;
+    this->in = &cin;
     this->eip.push(0);
     this->old_sp.push(0);
     this->runtimeVarLookup.push(m);
@@ -299,6 +300,34 @@ void PcodeInterpreter::check_rtstack_size(const int n)
         exit(-5);
     }
 }
+bool PcodeInterpreter::var_exists_new(const string varName){
+    string vName;
+    if (varName.find('[') == varName.npos)
+    { //是变量
+        vName = varName;
+    }
+    else
+    { //是数组
+        runtimeStack.push(0);
+        check_rtstack_size(1);
+        int _index = runtimeStack.top();
+        runtimeStack.pop();
+        vName = varName.substr(0, varName.find_first_of('[') + 1) + to_string(_index) + varName.substr(varName.find_first_of(']'));
+    }
+    if(eip.size()==1){
+        if(runtimeVarLookup.top().find(vName) == runtimeVarLookup.top().end() && runtimeGlobLookup.find(vName) == runtimeGlobLookup.end()){
+            return false;
+        }
+        return true;
+    } else {
+        if (runtimeVarLookup.top().find(vName) == runtimeVarLookup.top().end())
+            {
+                return false;
+            }
+        }
+    return true;
+
+}
 bool PcodeInterpreter::var_exists(const string varName)
 {
     string vName;
@@ -314,10 +343,9 @@ bool PcodeInterpreter::var_exists(const string varName)
         runtimeStack.pop();
         vName = varName.substr(0, varName.find_first_of('[') + 1) + to_string(_index) + varName.substr(varName.find_first_of(']'));
     }
-    if (runtimeVarLookup.top().find(vName) == runtimeVarLookup.top().end() && runtimeGlobLookup.find(vName) == runtimeGlobLookup.end())
-    {
-        return false;
-    }
+    if(runtimeVarLookup.top().find(vName) == runtimeVarLookup.top().end() && runtimeGlobLookup.find(vName) == runtimeGlobLookup.end()){
+            return false;
+        }
     return true;
 }
 int PcodeInterpreter::do_arg(const string cmd)
@@ -506,7 +534,7 @@ int PcodeInterpreter::do_input(const string cmd)
     SplitString(cmd, vars, ",");
     for (auto var : vars)
     {
-        cin >> runtimeVar[get_var(var)].val;
+        *(this->in) >> runtimeVar[get_var(var)].val;
         logger.debug("setting %s to %s", runtimeVar[get_var(var)].name.c_str(), to_string(runtimeVar[get_var(var)].val).c_str());
     }
     return 0;
@@ -519,7 +547,7 @@ int PcodeInterpreter::do_var(const string cmd)
     {
         vector<string> attr;
         SplitString(var, attr, ":");
-        if (var_exists(attr[0]))
+        if (var_exists_new(attr[0]))
         {
             logger.error("[%d] Runtime error: duplicate definition of variable %s", eip.top(), var.c_str());
             exit(-1);
@@ -530,10 +558,11 @@ int PcodeInterpreter::do_var(const string cmd)
             for (int i = 0; i < len; i++)
             {
                 string vName = attr[0].substr(0, attr[0].find_first_of('[')) + "[" + to_string(i) + "]";
-                runtimeVarLookup.top()[vName] = runtimeVar.size();
                 if (eip.size() == 1)
                 {
                     runtimeGlobLookup[vName] = runtimeVar.size();
+                } else {
+                    runtimeVarLookup.top()[vName] = runtimeVar.size();
                 }
                 runtimeVar.push_back({attr[1], attr[0], 0});
                 old_sp.top()++;
@@ -542,10 +571,11 @@ int PcodeInterpreter::do_var(const string cmd)
         }
         else
         {
-            runtimeVarLookup.top()[attr[0]] = runtimeVar.size();
             if (eip.size() == 1)
             {
                 runtimeGlobLookup[attr[0]] = runtimeVar.size();
+            } else {
+                runtimeVarLookup.top()[attr[0]] = runtimeVar.size();
             }
             runtimeVar.push_back({attr[1], attr[0], 0});
             old_sp.top()++;
@@ -619,6 +649,7 @@ string PcodeInterpreter::interpret(const std::string &in_file_name, const std::s
         logger.fatal("failed to open file %s",in_file_name.c_str());
         return "";
     }
+    this->in = new ifstream("stdin.txt");
     if(out_file_name!=""){//使用cout
         //this->toFile = false;
         this->out = new ofstream(out_file_name);
