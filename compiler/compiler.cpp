@@ -16,8 +16,13 @@ int main(int argc, char *argv[])
     }
 
     GrammarTranslator trans;
+    int e;
 
-    trans.load_lexical("language.txt");
+    e = trans.load_lexical("language.txt");
+    if (e)
+    {
+        return -1;
+    }
 
     trans.translate(in_file_name, out_file_name);
 

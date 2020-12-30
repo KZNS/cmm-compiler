@@ -2189,9 +2189,16 @@ int GrammarTranslator::load_lexical(const std::string &file_name)
     std::ifstream file;
     file.open(file_name);
 
-    load_lexical(file);
-
-    file.close();
+    if (file.is_open())
+    {
+        load_lexical(file);
+        file.close();
+    }
+    else
+    {
+        logger.error("open %s failed", file_name.c_str());
+        return -1;
+    }
 
     return 0;
 }
